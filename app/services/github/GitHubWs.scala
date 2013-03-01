@@ -1,5 +1,7 @@
 package services.github
 
+import scala.util.matching.Regex
+
 import play.api._
 import play.api.libs.ws._
 import services.auth.OAuth2Token
@@ -69,6 +71,23 @@ object GithubWS {
           case 201 => (result.json \ "id").asOpt[String].map(_.toLong)
           case _ => None
         })
+    }
+
+    // Hack Github API - retrieve the stars number from the gist page!
+    def stars(gistId: Long): Future[Option[Long]] = {
+      val starsHtmlPrefix = "Stars\n            <span class=\"counter\">"
+      WS.url(s"https://gist.github.com/$gistId/stars").get.map { r =>
+        r.status match {
+          case 200 => 
+            r.body.indexOf(starsHtmlPrefix) match {
+              case index if index != -1 => 
+                val str = r.body.drop(index+starsHtmlPrefix.size).takeWhile(_.isDigit)
+                if (str.size == 0) None else Some(str.toInt)
+              case _ => None
+            }
+          case _ => None
+        }
+      }
     }
 
     def star(gistId: Long)(implicit token: OAuth2Token) = {

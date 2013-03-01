@@ -34,12 +34,19 @@ object Api extends GithubOAuthController {
       getLanguageField("answerContent", "content")
     ).reduce
 
+  private val cleanJson = (
+    (__ \ "id").json.pickBranch and
+    (__ \ "description").json.pickBranch
+  ).reduce
+
   def listForks(gistId: Long) = Authenticated { implicit req =>
     Async {
       GithubWS.Gist.forksId(gistId).flatMap{ list =>
         val listJsonFuture = list.map(forkId =>
-          GithubWS.Gist.get(forkId).map(json =>
-            json.transform(fullTransfForks).getOrElse(JsNull)))
+          GithubWS.Gist.get(forkId).map({ json =>
+            json.transform(cleanJson).getOrElse(JsNull)
+          })
+        )
         Future.sequence(listJsonFuture).map(listJson =>
           Ok(Json.toJson(listJson))
         )

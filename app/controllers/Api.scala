@@ -52,5 +52,4 @@ object Api extends GithubOAuthController {
       )
     }
   }
-
 }

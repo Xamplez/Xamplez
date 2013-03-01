@@ -4,7 +4,7 @@ var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: '/index',
+                templateUrl: '/views/index',
                 controller: 'MainCtrl'
             })
             .when('/questions/create', {
@@ -24,5 +24,5 @@ var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
             });
     }])
     .config(['$locationProvider', function($locationProvider) {
-        $locationProvider.html5Mode(false).hashPrefix('!');
+        $locationProvider.html5Mode(true).hashPrefix('!');
     }]);

@@ -6,7 +6,7 @@ import services.github._
 import play.api.libs.concurrent.Execution.Implicits._
 
 object Application extends GithubOAuthController {
-  def main = Action {
+  def main(any: String) = Action {
     Ok(views.html.main())
   }
 

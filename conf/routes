@@ -2,13 +2,16 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                              controllers.Application.main
-GET     /index                         controllers.Application.index
+# Views
+GET     /                              controllers.Application.main(any = "whatever")
+GET     /views/index                   controllers.Application.index
 GET     /auth                          controllers.Application.authenticate
 
-# API Github
+# API
 GET      /api/gists/listForks/:id      controllers.Api.listForks(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file                  controllers.Assets.at(path="/public", file)
+
+# Map all unknow routes to the main so they will be handle by Angular
+GET    /*any                           controllers.Application.main(any)

@@ -1,10 +1,16 @@
 package services.github
 
+import play.api._
 import play.api.libs.ws._
 import services.auth.OAuth2Token
 import play.api.libs.ws.WS.WSRequestHolder
 import play.api.libs.concurrent.Execution.Implicits._
+
 import play.api.libs.json._
+import play.api.libs.json.Json._
+import play.api.libs.functional.syntax._
+import play.api.libs.json.Reads._
+
 import concurrent.Future
 
 object GithubWS {
@@ -33,6 +39,12 @@ object GithubWS {
   }
 
   object Gist {
+    private val cleanJson = (
+      (__ \ "id").json.pickBranch and
+      (__ \ "description").json.pickBranch and
+      (__ \ "created_at").json.pickBranch and
+      (__ \ "updated_at").json.pickBranch
+    ).reduce
 
     /**
      * Create a new Gist with 2 files: the question and an empty answer
@@ -76,6 +88,17 @@ object GithubWS {
         (json \ "forks").as[JsArray].value.map(fork =>
           (fork \ "id").as[String].toLong))
     }
-  }
 
+    def listForks(gistId: Long)(implicit token: OAuth2Token): Future[Seq[JsValue]] = {
+      GithubWS.Gist.forksId(gistId).flatMap{ list =>
+        val listJsonFuture = list.map(forkId =>
+          GithubWS.Gist.get(forkId).map({ json =>
+            json.transform(cleanJson).getOrElse(JsNull)
+          })
+        )
+
+        Future.sequence(listJsonFuture)
+      }
+    }
+  }
 }

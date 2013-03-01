@@ -57,8 +57,8 @@ trait ElasticSearch {
   def insert(json: JsObject): Future[Either[Response, JsValue]] = {
     (json  \ "description").validate[String] map { desc =>
       val withTags = json ++ Json.obj("tags" -> Tag.fetchTags(desc))
-      WS.url(INDEX_URL)
-        .post(withTags)      
+      WS.url(INDEX_URL + "/" + (json \ "id").as[String] )
+        .put(withTags)
         .map { r =>
           if(r.status == 200 || r.status == 201) Right(r.json)
           else Left(r)
@@ -92,12 +92,24 @@ trait ElasticSearch {
       }
   }
 
-  def maxCreated = {
+  def lastCreated = {
     val query = Json.obj(
       "query" -> Json.obj( "match_all" -> Json.obj() ),
       "size" -> 1,
       "sort" -> Json.arr( Json.obj(
         "created_at" -> "desc"
+      ))
+    )
+
+    search(query, true)
+  }
+
+  def lastUpdated = {
+    val query = Json.obj(
+      "query" -> Json.obj( "match_all" -> Json.obj() ),
+      "size" -> 1,
+      "sort" -> Json.arr( Json.obj(
+        "updated_at" -> "desc"
       ))
     )
 

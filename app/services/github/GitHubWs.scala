@@ -89,10 +89,10 @@ object GithubWS {
           (fork \ "id").as[String].toLong))
     }
 
-    def listForks(gistId: Long)(implicit token: OAuth2Token): Future[Seq[JsValue]] = {
+    def listForks(gistId: Long)(implicit token: OAuth2Token): Future[Seq[JsObject]] = {
       fetch(s"/gists/$gistId/forks").get.map(_.json).map(json =>
         ( json ).as[JsArray].value.map({ fork =>
-          fork.transform(cleanJson).getOrElse(JsNull)
+          fork.transform(cleanJson).getOrElse(JsNull).as[JsObject]
         })
       )
     }

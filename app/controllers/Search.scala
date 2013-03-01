@@ -30,7 +30,7 @@ object Search extends Controller {
      val jsObject = request.body.as[JsObject]
      Async(S.insert(jsObject).map {
        case r if r.status == 200 => Ok
-       case r => BadRequest(r.body.toString)
+       case r => InternalServerError(r.json)
      })
    }
 

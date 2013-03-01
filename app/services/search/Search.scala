@@ -2,8 +2,11 @@ package services.search
 
 import scala.concurrent.Future
 
+import play.api._
 import play.api.libs.json._
 import play.api.libs.ws._
+
+import play.api.libs.concurrent.Execution.Implicits._
 
 import models._
 
@@ -12,21 +15,31 @@ trait ElasticSearch {
   import org.elasticsearch.node._
   import org.elasticsearch.node.NodeBuilder._
 
-  import play.api.libs.concurrent.Execution.Implicits._
-
   val ELASTIC_URL = "http://localhost:9200"
   val INDEX_URL = ELASTIC_URL + "/examples/gists"
   val SEARCH_URL = INDEX_URL + "/_search"
 
   private var node: Option[Node] = None
 
-  def start() {
+  def start(implicit app: Application) {
+
+    import org.elasticsearch.common.settings._
+    import org.elasticsearch.common.io.stream._
+    import java.io._
+
     play.Logger.info("Starting ES")
+
+    import org.elasticsearch.common.settings.loader.SettingsLoader
+
+    val settings = Play.resourceAsStream("elasticsearch.yaml").map{ s =>
+      ImmutableSettings.settingsBuilder().loadFromStream("elasticsearch.yaml", s).build
+    }
+
     val n = nodeBuilder()
       .clusterName("play_by_example")
       .local(true)
-      .node()
-    node = Some(n)
+
+    node = Some(settings.map(n.settings _).getOrElse(n).node)
   }
 
   def stop() {
@@ -58,7 +71,7 @@ trait ElasticSearch {
   def tags() = {
     val q = Json.obj(
       "query" -> Json.obj("match_all" -> Json.obj()),
-      "size" -> 0,
+      "size"  -> 0,
       "facets" -> Json.obj(
         "tags" -> Json.obj("terms" -> Json.obj("field" -> "tags"))))
 

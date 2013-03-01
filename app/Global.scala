@@ -13,10 +13,10 @@ import services.search._
 object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
-    Search.start();
-
+    Search.start(app);
     val addForks = Akka.system.actorOf(Props(new actors.AddForks), name = "addForks")
     Akka.system.scheduler.schedule(0.seconds, 500.minutes, addForks, "update")
+
   }
 
   override def onStop(app: Application) {

@@ -1,4 +1,4 @@
-@()
+@(originalGistUrl: String)
 
 <!DOCTYPE html>
 
@@ -16,11 +16,15 @@
         <header>
             <div class="container">
                 <div class="row">
-                    <div class="span6">
+                    <div class="span4">
                         <h1><a href="/">Play By Example</a></h1>
                     </div>
 
-                    <div class="span6">
+                    <div class="span4">
+                      <a href="@originalGistUrl" class="btn btn-primary">Create a snippet</a>
+                    </div>
+
+                    <div class="span4">
                         <form data-ng-submit="search()" class="form-search pull-right">
                             <div class="input-append">
                                 <input type="text" data-ng-model="data.query" class="search-query" placeholder="Looking for a Gist?"/>

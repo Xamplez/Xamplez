@@ -1,3 +1,12 @@
 @()
+
+<div id="tags">
+  <ul>
+    <li class="tag" ng-repeat="tag in tags">
+      <a href="/search?q={{tag.term}}" class="w{{tag.weight}}" title="({{tag.count}} references)">{{tag.term}}</a>
+    </li>
+  </ul>
+</div>
+
 <div id="gist"></div>
 <script type="text/javascript" src="https://gist.github.com/140bytes/962807.json?callback=displayGist"></script>

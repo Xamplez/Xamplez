@@ -67,9 +67,11 @@ trait ElasticSearch {
 
   }
 
-  def search(s: String, pretty: Boolean = true): Future[Either[Response, JsValue]] =
+  def search(s: String, pretty: Boolean = true): Future[Either[Response, JsValue]] = search(buildSearch(s), pretty)
+
+  private def search(query: JsObject, pretty: Boolean ): Future[Either[Response, JsValue]] =
     WS.url(SEARCH_URL)
-      .post(buildSearch(s))
+      .post(query)
       .map { r =>
         if(r.status == 200) Right(r.json)
         else Left(r)
@@ -89,6 +91,19 @@ trait ElasticSearch {
         else Left(r)
       }
   }
+
+  def maxCreated = {
+    val query = Json.obj(
+      "query" -> Json.obj( "match_all" -> Json.obj() ),
+      "size" -> 1,
+      "sort" -> Json.arr( Json.obj(
+        "created_at" -> "desc"
+      ))
+    )
+
+    search(query, true)
+  }
+
 }
 
 object Search extends ElasticSearch

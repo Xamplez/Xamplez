@@ -9,14 +9,6 @@ GET     /auth                          controllers.Application.authenticate
 
 # API Github
 GET      /api/gists/listForks/:id      controllers.Api.listForks(id: Long)
-GET      /api/gists/question/:id       controllers.Api.getQuestion(id: Long)
-
-# QUESTIONS
-GET     /api/questions/create          controllers.Questions.createView
-GET     /api/questions/:id             controllers.Questions.get(id: Long)
-PUT     /api/questions                 controllers.Questions.create
-GET     /api/questions                 controllers.Questions.listView
-GET     /api/question                  controllers.Questions.readView
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

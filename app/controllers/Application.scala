@@ -10,8 +10,16 @@ object Application extends GithubOAuthController {
     Ok(views.html.main())
   }
 
+  def notFound(any: String) = Action {
+    NotFound("404")
+  }
+
   def index = Action {
     Ok(views.html.index())
+  }
+
+  def search = Action {
+    Ok(views.html.search())
   }
 
 }

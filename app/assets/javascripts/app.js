@@ -1,23 +1,16 @@
 'use strict';
 
 var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
+    .constant("apiUrl", "http://localhost:9000\:9000/api")
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider
             .when('/', {
                 templateUrl: '/views/index',
                 controller: 'MainCtrl'
             })
-            .when('/questions/create', {
-                templateUrl: '/api/questions/create',
-                controller: 'QuestionCtrl'
-            })
-            .when('/questions/:id', {
-              templateUrl: '/api/question',
-              controller: 'QuestionCtrl'
-            })
-            .when('/questions', {
-              templateUrl: '/api/questions',
-              controller: 'QuestionCtrl'
+            .when('/search/:q', {
+                templateUrl: '/views/search',
+                controller: 'SearchCtrl'
             })
             .otherwise({
                 redirectTo: '/'
@@ -26,3 +19,9 @@ var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
     .config(['$locationProvider', function($locationProvider) {
         $locationProvider.html5Mode(true).hashPrefix('!');
     }]);
+
+function displayGist(gist) {
+    $("#gist")
+        .append(gist.div)
+        .append('<link rel="stylesheet" media="screen" href="'+gist.stylesheet+'">')
+}

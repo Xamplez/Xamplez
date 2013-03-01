@@ -90,15 +90,11 @@ object GithubWS {
     }
 
     def listForks(gistId: Long)(implicit token: OAuth2Token): Future[Seq[JsValue]] = {
-      GithubWS.Gist.forksId(gistId).flatMap{ list =>
-        val listJsonFuture = list.map(forkId =>
-          GithubWS.Gist.get(forkId).map({ json =>
-            json.transform(cleanJson).getOrElse(JsNull)
-          })
-        )
-
-        Future.sequence(listJsonFuture)
-      }
+      fetch(s"/gists/$gistId/forks").get.map(_.json).map(json =>
+        ( json ).as[JsArray].value.map({ fork =>
+          fork.transform(cleanJson).getOrElse(JsNull)
+        })
+      )
     }
   }
 }

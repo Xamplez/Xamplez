@@ -43,6 +43,21 @@ trait ElasticSearch {
         if(r.status == 200) Right(r.json)
         else Left(r)
       }
+
+  def tags() = {
+    val q = Json.obj(
+      "query" -> Json.obj("match_all" -> Json.obj()),
+      "size" -> 0,
+      "facets" -> Json.obj(
+        "tags" -> Json.obj("terms" -> Json.obj("field" -> "tags"))))
+
+    WS.url(SEARCH_URL)
+      .post(q)
+      .map { r =>
+        if(r.status == 200) Right(r.json)
+        else Left(r)
+      }
+  }
 }
 
 object Search extends ElasticSearch

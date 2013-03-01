@@ -34,4 +34,14 @@ object Search extends Controller {
      })
    }
 
+
+   def tags = Action { implicit request =>
+     val r = S.tags().map(
+       _.fold(
+         err => InternalServerError(err.json \ "error"),
+         r => Ok(r)))
+
+     Async(r)
+   }
+
 }

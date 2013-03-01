@@ -11,6 +11,7 @@ GET     /auth                          controllers.Application.authenticate
 # Search API
 GET     /api/search                    controllers.Search.search(q: String)
 POST    /api/search                    controllers.Search.insert
+GET     /api/tags                   controllers.Search.tags
 
 # 404 API in case of unknown url
 GET     /api/*any                      controllers.Application.notFound(any)

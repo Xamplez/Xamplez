@@ -5,8 +5,7 @@ var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: '/views/index',
-                controller: 'MainCtrl'
+                templateUrl: '/views/index'
             })
             .when('/search', {
                 templateUrl: '/views/search',

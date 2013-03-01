@@ -8,7 +8,7 @@ var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
                 templateUrl: '/views/index',
                 controller: 'MainCtrl'
             })
-            .when('/search/:q', {
+            .when('/search', {
                 templateUrl: '/views/search',
                 controller: 'SearchCtrl'
             })

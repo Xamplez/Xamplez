@@ -8,23 +8,15 @@ GET     /views/index                   controllers.Application.index
 GET     /views/search                  controllers.Application.search
 GET     /auth                          controllers.Application.authenticate
 
-# API
-GET     /api/gists/listForks/:id       controllers.Api.listForks(id: Long)
-GET     /api/*any                      controllers.Application.notFound(any)
-
 # Search API
-GET     /search                        controllers.Search.search(q: String)
-POST    /search                        controllers.Search.insert
+GET     /api/search                    controllers.Search.search(q: String)
+POST    /api/search                    controllers.Search.insert
 
-# QUESTIONS
-GET     /api/questions/create          controllers.Questions.createView
-GET     /api/questions/:id             controllers.Questions.get(id: Long)
-PUT     /api/questions                 controllers.Questions.create
-GET     /api/questions                 controllers.Questions.listView
-GET     /api/question                  controllers.Questions.readView
+# 404 API in case of unknown url
+GET     /api/*any                      controllers.Application.notFound(any)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                  controllers.Assets.at(path="/public", file)
 
-# Map all unknow routes to the main so they will be handle by Angular
+# Map all unknown routes to the main so they will be handle by Angular
 GET    /*any                           controllers.Application.main(any)

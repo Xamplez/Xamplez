@@ -25,7 +25,12 @@ class AddForks extends Actor {
         response <- Future.sequence( forks.map( json => services.search.Search.insert(json) ) )
       }yield( response )
 
-      log.debug( Await.result( response, 10.seconds).map( r => r.body ).toString )
+      log.debug( Await.result( response, 10.seconds ).map{ r =>
+        r.fold(
+          err => err.json \ "error",
+          r => r
+        ) 
+      }.toString )
     }
   }
 

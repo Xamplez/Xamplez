@@ -27,11 +27,14 @@ object Search extends Controller {
 
 
    def insert = Action(parse.json) { implicit request =>
-     val jsObject = request.body.as[JsObject]
-     Async(S.insert(jsObject).map {
-       case r if r.status == 200 => Ok
-       case r => InternalServerError(r.json)
-     })
+    val jsObject = request.body.as[JsObject]
+      val r = S.insert(jsObject).map(
+       _.fold(
+         err => InternalServerError(err.json \ "error"),
+         r => Ok(r))
+      )
+
+    Async(r)
    }
 
 

@@ -54,10 +54,17 @@ trait ElasticSearch {
           "fields" -> Seq("description", "tags^10"),
           "query"  -> query)))
 
-  def insert(json: JsObject) = {
-    val desc = (json  \ "description").as[String]
-    val withTags = json ++ Json.obj("tags" -> Tag.fetchTags(desc))
-    WS.url(INDEX_URL).post(withTags)
+  def insert(json: JsObject): Future[Either[Response, JsValue]] = {
+    (json  \ "description").validate[String] map { desc =>
+      val withTags = json ++ Json.obj("tags" -> Tag.fetchTags(desc))
+      WS.url(INDEX_URL)
+        .post(withTags)      
+        .map { r =>
+          if(r.status == 200 || r.status == 201) Right(r.json)
+          else Left(r)
+        }
+    } recoverTotal { e => Future(Right(Json.obj())) }
+
   }
 
   def search(s: String, pretty: Boolean = true): Future[Either[Response, JsValue]] =

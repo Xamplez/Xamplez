@@ -21,8 +21,11 @@
                     </div>
 
                     <div class="span6">
-                        <form data-ng-submit="search()">
-                            <input type="text" data-ng-model="data.query"/>
+                        <form data-ng-submit="search()" class="form-search pull-right">
+                            <div class="input-append">
+                                <input type="text" data-ng-model="data.query" class="search-query" placeholder="Looking for a Gist?"/>
+                                <button class="btn" type="submit">Search</button>
+                            </div>
                         </form>
                     </div>
                 </div>

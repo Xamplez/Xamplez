@@ -20,7 +20,8 @@ var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
     }]);
 
 function displayGist(gist) {
-    $("#gist")
+    var gistId = gist.div.match(/^<div id="(gist[0-9]+)"/);
+    angular.element("#"+gistId[1])
         .append(gist.div)
         .append('<link rel="stylesheet" media="screen" href="'+gist.stylesheet+'">')
 }

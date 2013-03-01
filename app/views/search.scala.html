@@ -1,2 +1,7 @@
 @()
-<h1>Search {{query}}</h1>
+<div class="search">
+    <h1>Search: {{data.result.hits.total}} results in {{data.result.took}}ms</h1>
+
+    <div id="results"><ul></ul></div>
+    <div id="resultScripts"></div>
+</div>

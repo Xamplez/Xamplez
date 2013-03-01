@@ -21,7 +21,19 @@ var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
 
 function displayGist(gist) {
     var gistId = gist.div.match(/^<div id="(gist[0-9]+)"/);
+    var $content = angular.element(gist.div);
+
+    $content.find(".gist-file").each(function(index) {
+        var fileName = angular.element(this).find(".gist-meta a:nth-child(2)").text();
+        var extension = fileName.substring(fileName.lastIndexOf(".")+1);
+        if (extension == "md" || extension == "txt" || extension == "markdown") {
+            angular.element(this).addClass("remove");
+        }
+    });
+
+    $content.find(".gist-file.remove").remove();
+
     angular.element("#"+gistId[1])
-        .append(gist.div)
+        .append($content)
         .append('<link rel="stylesheet" media="screen" href="'+gist.stylesheet+'">')
 }

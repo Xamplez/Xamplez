@@ -19,13 +19,14 @@ object Tag extends Function1[String, Tag]{
   def create(name: String) = Tag(name.toLowerCase)
 
   object TagParser extends RegexParsers {
+    //override val skipWhitespace = false
 
     def hash: Parser[String] = Tag.hash
-    def hashname: Parser[String] = """[a-zA-Z0-9._]+""".r
+    def hashname: Parser[String] = "[a-zA-Z0-9._]+[^.#\\s]".r
     def hashtag: Parser[Tag] = hash ~> hashname ^^ { t => Tag.create(t) }
-    def excapedHash: Parser[String] = hash ~ hash ^^ { _ => Tag.hash }
-    def content: Parser[String] = ("""[^"""+Tag.hash+"""]+""").r
-    def string: Parser[Seq[Either[String, Tag]]] = (excapedHash ^^ { Left(_) } | hashtag ^^ { Right(_) } | content ^^ { Left(_) } )*
+    def escapedHash: Parser[String] = hash ~ hash ^^ { _ => Tag.hash }
+    def content: Parser[String] = (s"[^${Tag.hash}]").r
+    def string: Parser[Seq[Either[String, Tag]]] = (escapedHash ^^ { Left(_) } | hashtag ^^ { Right(_) } | content ^^ { Left(_) } )*
 
     def apply(input: String): Seq[Either[String, Tag]] = parseAll(string, input) match {
       case Success(result, _) => result

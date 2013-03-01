@@ -6,7 +6,10 @@ import services.search._
 object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
-    play.Logger.info("Starting")
     Search.start();
+  }
+
+  override def onStop(app: Application) {
+    Search.stop();
   }
 }

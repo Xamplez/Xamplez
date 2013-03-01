@@ -18,10 +18,21 @@ trait ElasticSearch {
   val INDEX_URL = ELASTIC_URL + "/examples/gists"
   val SEARCH_URL = INDEX_URL + "/_search"
 
-  def start() = nodeBuilder()
+  private var node: Option[Node] = None
+
+  def start() {
+    play.Logger.info("Starting ES")
+    val n = nodeBuilder()
       .clusterName("play_by_example")
       .local(true)
       .node()
+    node = Some(n)
+  }
+
+  def stop() {
+    play.Logger.info("Stopping ES")
+    for(n <- node) n.stop
+  }
 
   private def buildSearch(query: String) =
     Json.obj("query" ->

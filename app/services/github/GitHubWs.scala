@@ -57,7 +57,8 @@ object GithubWS {
       (__ \ "id").json.pickBranch and
       (__ \ "description").json.pickBranch and
       (__ \ "created_at").json.pickBranch and
-      (__ \ "updated_at").json.pickBranch
+      (__ \ "updated_at").json.pickBranch and
+      (__ \ "author_login").json.copyFrom( (__ \ "user" \ "login").json.pick )
     ).reduce
 
     /**

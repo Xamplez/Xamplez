@@ -6,7 +6,7 @@ app.controller('IndexCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistServi
     popularOptions: {
       selector: "#popularGists",
       scriptSelector: "#popularGists",
-      classes: "right"
+      classes: ""
     }
   }
 
@@ -14,13 +14,12 @@ app.controller('IndexCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistServi
     Search.query({q: "json"}, function(result) {
       $scope.data.populars = _.map(result.hits.hits, function(hit){ return hit._source; });
       $scope.nextPopular();
-      $scope.popularsInterval = setInterval($scope.nextPopular, 5000);
-
+      $scope.startPopulars();
     });
   });
 
   $scope.$on('$destroy', function() {
-    clearInterval($scope.popularsInterval);
+    $scope.stopPopulars();
   });
 
   $scope.nextPopular = function() {
@@ -43,6 +42,14 @@ app.controller('IndexCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistServi
       GistService.display(nextPopular, $scope.data.popularOptions);
       $scope.data.currentPopular = nextPopularIndex;
     }
+  }
+
+  $scope.startPopulars = function() {
+    $scope.popularsInterval = setInterval($scope.nextPopular, 5000);
+  }
+
+  $scope.stopPopulars = function() {
+    clearInterval($scope.popularsInterval);
   }
 
   $scope.search = function() {

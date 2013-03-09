@@ -1,16 +1,21 @@
 @import "bootstrap/bootstrap";
+@import "bootstrap/responsive";
 @import "angularui/angular-ui.min";
 @import "github/markdown";
 @import "github/gist";
 
 @import "playbyexample/search";
 
+form {
+  margin: 0px !important;
+}
+
 header {
-  height: 60px;
-  line-height: 60px;
+  @headerLineHeight: 60px;
   border-bottom: 5px solid #800;
 
   h1 {
+    line-height: @headerLineHeight - 20px;
     font-family: 'Lobster', cursive;
 
     a {
@@ -24,8 +29,17 @@ header {
     }
   }
 
+  .row > div {
+    line-height: @headerLineHeight;
+  }
+
   .form-search .input-append .btn {
     vertical-align: middle;
+  }
+
+  .btn-block {
+    margin: 10px auto;
+    width: 90%;
   }
 }
 
@@ -34,19 +48,21 @@ header {
 }
 
 #tags {
-  width: 50%;
   margin: 10px auto;
   padding: 10px;
   font-size: 30px;
   line-height: 1.2em;
+
   ul, li {
     list-style: none;
     margin: 0; 
     padding: 0;
   }
+
   .tag {
     display: inline; 
     margin-right: 5px;
+
     .w0 { font-size: 0.5em; }
     .w1 { font-size: 0.6em; }
     .w2 { font-size: 0.7em; }
@@ -60,5 +76,34 @@ header {
     a {
       color: #000;
     }
+  }
+}
+
+.gistContainer {
+  .description {
+    background-color: #eaeaea;
+    color: #666;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+
+
+    &.left {
+      margin-left: -100%;
+      padding-left: 100%;
+    }
+
+    &.right {
+      margin-right: -100%;
+      padding-right: 102%;
+    }
+  }
+
+  [data-toggle=collapse] {
+    cursor: pointer;
+  }
+
+  .gist > .gist-file:first-child {
+    border-top-width: 0px;
   }
 }

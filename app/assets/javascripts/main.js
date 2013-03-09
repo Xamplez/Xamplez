@@ -1,11 +1,51 @@
-app.controller('MainCtrl', ['$scope', '$location', 'Tags', function($scope, $location, Tags) {
-	$scope.data = {
-		query: ""
-	}
+app.controller('MainCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistService', function($scope, $location, Tags, Search, GistService) {
 
-	$scope.search = function() {
-		$location.path('/search').search({q: $scope.data.query})
-	}
+
+  $scope.data = {
+    query: "",
+    currentPopular: -1,
+    populars: [],
+    popularOptions: {
+      selector: "#popularGists",
+      scriptSelector: "#popularGists",
+      classes: "right"
+    }
+  }
+
+  $scope.$on("$viewContentLoaded", function() {
+    Search.query({q: "json"}, function(result) {
+      $scope.data.populars = _.map(result.hits.hits, function(hit){ return hit._source; });
+      $scope.nextPopular();
+      setInterval($scope.nextPopular, 5000);
+
+    });
+  });
+
+  $scope.nextPopular = function() {
+    var $popularGists = angular.element("#popularGists");
+    var nextPopularIndex = ($scope.data.currentPopular + 1) % $scope.data.populars.length;
+    var nextPopular = $scope.data.populars[nextPopularIndex];
+    var $firstPopular = $popularGists.children().eq(0);
+
+    if ($firstPopular.length && $firstPopular.animate) {
+      $firstPopular.animate({opacity: 0}, {
+        duration: 400,
+        done: function() {
+          GistService.remove($scope.data.populars[$scope.data.currentPopular]);
+          GistService.display(nextPopular, $scope.data.popularOptions);
+          $scope.data.currentPopular = nextPopularIndex;
+        }
+      });
+    }
+    else if (!$firstPopular.length) {
+      GistService.display(nextPopular, $scope.data.popularOptions);
+      $scope.data.currentPopular = nextPopularIndex;
+    }
+  }
+
+  $scope.search = function() {
+    $location.path('/search').search({q: $scope.data.query})
+  }
 
   function clamp (edge0, edge1, x) {
     return (x - edge0)/(edge1 - edge0);
@@ -33,8 +73,8 @@ app.controller('MainCtrl', ['$scope', '$location', 'Tags', function($scope, $loc
 }])
 
 app.factory('Tags', ['$resource', 'config', function($resource, config) {
-    return $resource(config.api + "/tags", {}, {
+  return $resource(config.api + "/tags", {}, {
 
-    });
+  });
 }]);
 

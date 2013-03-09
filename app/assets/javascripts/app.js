@@ -32,5 +32,5 @@ function displayGist(gist) {
     });
 
     $content.find(".gist-file.remove").remove();
-    angular.element("#"+gistId+"Container").append($content);
+    angular.element("#"+gistId+"Container .gistWrapper").append($content);
 }

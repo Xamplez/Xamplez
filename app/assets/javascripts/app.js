@@ -1,23 +1,28 @@
 'use strict';
 
 var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
-    .constant("config", {api: "http://localhost:9000\:9000/api", gistApi: "https://gist.github.com", gitHubApi: "https://api.github.com"})
-    .config(['$routeProvider', function($routeProvider) {
-        $routeProvider
-            .when('/', {
-                templateUrl: '/views/index'
-            })
-            .when('/search', {
-                templateUrl: '/views/search',
-                controller: 'SearchCtrl'
-            })
-            .otherwise({
-                redirectTo: '/'
-            });
-    }])
-    .config(['$locationProvider', function($locationProvider) {
-        $locationProvider.html5Mode(true).hashPrefix('!');
-    }]);
+  .constant("config", {api: "http://localhost:9000\:9000/api", gistApi: "https://gist.github.com", gitHubApi: "https://api.github.com"})
+  .config(['$routeProvider', function($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: '/views/index',
+        controller: 'IndexCtrl'
+      })
+      .when('/search', {
+        templateUrl: '/views/search',
+        controller: 'SearchCtrl'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
+  }])
+  .config(['$locationProvider', function($locationProvider) {
+    $locationProvider.html5Mode(true).hashPrefix('!');
+  }]);
+
+app.controller('AppCtrl', ['$scope', '$location', function($scope, $location) {
+
+}]);
 
 function displayGist(gist) {
     var $content = angular.element(gist.div);

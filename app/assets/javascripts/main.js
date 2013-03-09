@@ -1,6 +1,4 @@
-app.controller('MainCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistService', function($scope, $location, Tags, Search, GistService) {
-
-
+app.controller('IndexCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistService', function($scope, $location, Tags, Search, GistService) {
   $scope.data = {
     query: "",
     currentPopular: -1,
@@ -16,9 +14,13 @@ app.controller('MainCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistServic
     Search.query({q: "json"}, function(result) {
       $scope.data.populars = _.map(result.hits.hits, function(hit){ return hit._source; });
       $scope.nextPopular();
-      setInterval($scope.nextPopular, 5000);
+      $scope.popularsInterval = setInterval($scope.nextPopular, 5000);
 
     });
+  });
+
+  $scope.$on('$destroy', function() {
+    clearInterval($scope.popularsInterval);
   });
 
   $scope.nextPopular = function() {
@@ -29,7 +31,7 @@ app.controller('MainCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistServic
 
     if ($firstPopular.length && $firstPopular.animate) {
       $firstPopular.animate({opacity: 0}, {
-        duration: 400,
+        duration: 500,
         done: function() {
           GistService.remove($scope.data.populars[$scope.data.currentPopular]);
           GistService.display(nextPopular, $scope.data.popularOptions);

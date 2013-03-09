@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
-    .constant("apiUrl", "http://localhost:9000\:9000/api")
+    .constant("config", {api: "http://localhost:9000\:9000/api", gistApi: "https://gist.github.com", gitHubApi: "https://api.github.com"})
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider
             .when('/', {
@@ -20,8 +20,8 @@ var app = angular.module('app', ['ngResource', 'ui', 'ui.bootstrap'])
     }]);
 
 function displayGist(gist) {
-    var gistId = gist.div.match(/^<div id="(gist[0-9]+)"/);
     var $content = angular.element(gist.div);
+    var gistId = $content.attr("id");
 
     $content.find(".gist-file").each(function(index) {
         var fileName = angular.element(this).find(".gist-meta a:nth-child(2)").text();
@@ -32,8 +32,5 @@ function displayGist(gist) {
     });
 
     $content.find(".gist-file.remove").remove();
-
-    angular.element("#"+gistId[1])
-        .append($content)
-        .append('<link rel="stylesheet" media="screen" href="'+gist.stylesheet+'">')
+    angular.element("#"+gistId+"Container").append($content);
 }

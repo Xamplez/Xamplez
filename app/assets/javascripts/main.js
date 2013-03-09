@@ -32,8 +32,8 @@ app.controller('MainCtrl', ['$scope', '$location', 'Tags', function($scope, $loc
 
 }])
 
-app.factory('Tags', ['$resource', 'apiUrl', function($resource, apiUrl) {
-    return $resource(apiUrl + "/tags", {}, {
+app.factory('Tags', ['$resource', 'config', function($resource, config) {
+    return $resource(config.api + "/tags", {}, {
 
     });
 }]);

@@ -36,7 +36,7 @@ trait ElasticSearch {
     }
 
     val n = nodeBuilder()
-      .clusterName("play_by_example")
+      .clusterName("xamplez")
       .local(true)
 
     node = Some(settings.map(n.settings _).getOrElse(n).node)

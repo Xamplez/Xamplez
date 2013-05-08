@@ -18,15 +18,19 @@ import scala.util.matching.Regex
 import concurrent.Future
 
 object GithubWS {
-  lazy val clientId = Play.application.configuration.getString("github.clientId").get
-  lazy val clientSecret = Play.application.configuration.getString("github.clientSecret").get
+  lazy val clientId = Play.application.configuration.getString("github.clientId")
+  lazy val clientSecret = Play.application.configuration.getString("github.clientSecret")
 
 
   def fetch(url: String, accept: String = "application/json"): WSRequestHolder = {
-    WS.url("https://api.github.com" + url)
-      .withQueryString("client_id" -> clientId)
-      .withQueryString("client_secret" -> clientSecret)
-      .withHeaders("Accept" -> accept)
+    val ws = WS.url("https://api.github.com" + url).withHeaders("Accept" -> accept)
+    (clientId, clientSecret) match {
+      case (Some(id),Some(secret)) => {
+          ws.withQueryString("client_id" -> id)
+            .withQueryString("client_secret" -> secret)
+        }
+      case _ => ws
+    }
   }
 
   def fetchWithToken(url: String, accept: String = "application/json")(implicit token: OAuth2Token): WSRequestHolder = {

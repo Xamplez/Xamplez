@@ -1,9 +1,8 @@
-## Play By Example (Hackday #01 Zenexity) 
+## Xamplez (Hackday #01 Zenexity) 
 
 ### Prerequisites
 
- * Play 2.1 RC2 (or sbt > 0.12.1)
- * MongoDB
+ * Play 2.1
 
 ### Notes
 

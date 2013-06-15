@@ -31,7 +31,7 @@ class AddForks extends Actor {
   private def filter( forks: Seq[JsObject], lastCreated : Option[String], lastUpdated : Option[String] ) = {
     forks.filter{ json =>
       lastCreated.map{ d => (json \ "created_at").as[String] > d }.getOrElse(true) ||
-        lastUpdated.map{ d => (json \ "updated_at").as[String] > d }.getOrElse(false)
+      lastUpdated.map{ d => (json \ "updated_at").as[String] > d }.getOrElse(false)
     }
   }
 

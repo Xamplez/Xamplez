@@ -120,16 +120,18 @@ object GithubWS {
     }
 
     def forksId(gistId: Long)(implicit token: OAuth2Token) = {
-      get(gistId).map(json =>
-        (json \ "forks").as[JsArray].value.map(fork =>
-          (fork \ "id").as[String].toLong))
+      get(gistId).map{ json =>
+        (json \ "forks").as[JsArray].value.map{ fork =>
+          (fork \ "id").as[String].toLong
+        }
+      }
     }
 
     def listForks(gistId: Long): Future[Seq[JsObject]] = {
       fetch(s"/gists/$gistId/forks").get.map(_.json).map(json =>
-        ( json ).as[JsArray].value.map({ fork =>
+        ( json ).as[JsArray].value.map{ fork =>
           fork.transform(cleanJson).getOrElse(JsNull).as[JsObject]
-        })
+        }
       )
     }
   }

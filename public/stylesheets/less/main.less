@@ -1,50 +1,85 @@
-@import "bootstrap/bootstrap";
-@import "bootstrap/responsive";
-@import "angularui/angular-ui.min";
+@import "bootstrap/less/bootstrap";
+@import "font-awesome/less/font-awesome";
+
 @import "github/markdown";
 @import "github/gist";
 
 @import "playbyexample/search";
 
+@FontAwesomePath: "fonts/fontawesome";
+
+@green-play: #92d13d;
+
+body {
+  overflow-x: hidden;
+}
+
 form {
   margin: 0px !important;
 }
 
+.form-search .input-append .btn {
+  vertical-align: middle;
+}
+
 header {
-  @headerLineHeight: 60px;
-  border-bottom: 5px solid #800;
+  border-top: 5px solid @green-play;
+  padding: 20px;
 
-  h1 {
-    line-height: @headerLineHeight - 20px;
-    font-family: 'Lobster', cursive;
-
-    a {
-      color: #800;
-      font-family: 'Lobster', cursive;
-
-      &:hover {
-        color: #a00;
-        text-decoration: none;
-      }
-    }
+  .logo {
+    width: auto;
+    height: 50px;
   }
 
-  .row > div {
-    line-height: @headerLineHeight;
-  }
-
-  .form-search .input-append .btn {
+  .logo + span {
+    font-size: 30px;
     vertical-align: middle;
-  }
-
-  .btn-block {
-    margin: 10px auto;
-    width: 90%;
+    font-style: italic;
   }
 }
 
-#view {
-  margin-top: 20px;
+.ribbon {
+  margin: 0px -50%;
+  text-align: center;
+  padding: 20px;
+
+  &.ribbon-main {
+    padding-bottom: 100px;
+    color: #fff;
+    background-color: @green-play;
+  }
+}
+
+section.main {
+  position: relative;
+  top: -75px;
+  background-color: #fff;
+}
+
+section.main .col:first-child {
+  box-shadow: -15px 0px 15px -15px #444;
+}
+
+section.main .col:last-child {
+  box-shadow: 15px 0px 15px -15px #444;
+}
+
+.home {
+  .main {
+    > .col {
+      padding: 0px 30px 50px
+    }
+
+    h3 {
+      font-style: italic;
+      color: #777;
+      text-align: center;
+    }
+
+    p {
+      text-align: justify;
+    }
+  }
 }
 
 #tags {

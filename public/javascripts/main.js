@@ -64,8 +64,8 @@ app.controller('IndexCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistServi
 
   $scope.tags = Tags.query({}).$then(function (e) {
     var _tags = _.chain(e.data.facets.tags.terms).sortBy(function (tag) { return -tag.count }).take(MAX_TAGS);
-    var min = _tags.last().value();
-    var max = _tags.first().value();
+    var min = _tags.last(1).value();
+    var max = _tags.first(1).value();
     return _tags
       .sortBy(function (tag) { return tag.term })
       .map(function (tag, i) {

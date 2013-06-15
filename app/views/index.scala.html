@@ -1,21 +1,32 @@
 @()
-<div class="row">
-    <div class="span6">
-        <h2>Tags</h2>
-        <div id="tags" class="well">
-            <ul>
-                <li class="tag" ng-repeat="tag in tags">
-                    <a href="/search?q={{tag.term}}" class="w{{tag.weight}}" title="({{tag.count}} references)">{{tag.term}}</a>
-                </li>
-            </ul>
+
+<div class="home">
+    <section class="ribbon ribbon-main ribbon-green">
+        <h2>What kind of developer are you right now?</h2>
+    </section>
+
+    <section class="row main">
+        <div class="col col-lg-6">
+            <h3>I'm an artist!</h3>
+            <p>
+                What are you waiting for? Click on the following button, read the Gist if it's your first time, and start crafting your next masterpiece!
+            </p>
+            <a href="@Application.originalGistUrl" class="btn btn-primary btn-large btn-block">Create a snippet</a>
         </div>
 
-        <h2>Stats</h2>
-        <p>TODO</p>
-    </div>
-
-    <div class="span6">
-        <h2>Popular gists</h2>
-        <div id="popularGists" data-ng-mouseenter="stopPopulars()" data-ng-mouseleave="startPopulars()"></div>
-    </div>
+        <div class="col col-lg-6">
+            <h3>I'm an adventurer!</h3>
+            <p>
+                That's the spirit! Just start typing on the following input and let the journey began inside a world of awesome code snippets.
+            </p>
+            <form name="searchForm">
+                <div class="input-group">
+                    <input type="text" class="input-large">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-primary btn-large">Search</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </section>
 </div>

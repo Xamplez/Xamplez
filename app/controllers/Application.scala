@@ -12,7 +12,7 @@ object Application extends GithubOAuthController {
   val originalGistUrl = "https://gist.github.com/"+Play.application.configuration.getString("gist.root").get
 
   def main(any: String) = Action {
-    Ok(views.html.main(originalGistUrl))
+    Ok(views.html.main())
   }
 
   def notFound(any: String) = Action {

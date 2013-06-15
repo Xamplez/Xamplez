@@ -4,6 +4,8 @@ import scala.concurrent.Future
 
 import play.api._
 import play.api.libs.json._
+import play.api.libs.json.Reads._
+import play.api.libs.functional.syntax._
 import play.api.libs.ws._
 
 import play.api.libs.concurrent.Execution.Implicits._
@@ -18,6 +20,8 @@ trait ElasticSearch {
   val ELASTIC_URL = "http://localhost:9200"
   val INDEX_URL = ELASTIC_URL + "/examples/gists"
   val SEARCH_URL = INDEX_URL + "/_search"
+
+  val CLUSTER_NAME = "play_by_example"
 
   private var node: Option[Node] = None
 
@@ -35,9 +39,7 @@ trait ElasticSearch {
       ImmutableSettings.settingsBuilder().loadFromStream("elasticsearch.yaml", s).build
     }
 
-    val n = nodeBuilder()
-      .clusterName("play_by_example")
-      .local(true)
+    val n = nodeBuilder().clusterName(CLUSTER_NAME).local(true)
 
     node = Some(settings.map(n.settings _).getOrElse(n).node)
   }
@@ -48,28 +50,37 @@ trait ElasticSearch {
   }
 
   private def buildSearch(query: String) =
-    Json.obj("query" ->
-      Json.obj(
+    Json.obj("query" -> Json.obj(
       "query_string" -> Json.obj(
-          "fields" -> Seq("description", "tags^10"),
-          "query"  -> query)))
+        "fields" -> Seq("description", "tags^10"),
+        "query"  -> query
+      )
+    ))
+
+  val descIdReader = (
+    (__ \ "description").read[String] and
+    (__ \ "id").read[String]
+  ).tupled
 
   def insert(json: JsObject): Future[Either[Response, JsValue]] = {
-    (json  \ "description").validate[String] map { desc =>
+    descIdReader.reads(json).map { case (desc, id) =>
       val withTags = json ++ Json.obj("tags" -> Tag.fetchTags(desc))
-      WS.url(INDEX_URL + "/" + (json \ "id").as[String] )
+      play.Logger.debug(s"Search : inserting $withTags")
+      WS.url(s"$INDEX_URL/$id")
         .put(withTags)
         .map { r =>
           if(r.status == 200 || r.status == 201) Right(r.json)
           else Left(r)
         }
     } recoverTotal { e => Future(Right(Json.obj())) }
-
   }
 
-  def search(s: String, pretty: Boolean = true): Future[Either[Response, JsValue]] = search(buildSearch(s), pretty)
+  def search(q: String, pretty: Boolean = true): Future[Either[Response, JsValue]] = {
+    play.Logger.debug(s"Search : query $q")
+    search(buildSearch(q), pretty)
+  }
 
-  private def search(query: JsObject, pretty: Boolean ): Future[Either[Response, JsValue]] =
+  private def search(query: JsObject, pretty: Boolean): Future[Either[Response, JsValue]] =
     WS.url(SEARCH_URL)
       .post(query)
       .map { r =>
@@ -77,44 +88,37 @@ trait ElasticSearch {
         else Left(r)
       }
 
-  def tags() = {
-    val q = Json.obj(
-      "query" -> Json.obj("match_all" -> Json.obj()),
-      "size"  -> 0,
-      "facets" -> Json.obj(
-        "tags" -> Json.obj("terms" -> Json.obj("field" -> "tags"))))
+  val queryTags = Json.obj(
+    "query" -> Json.obj("match_all" -> Json.obj()),
+    "size"  -> 0,
+    "facets" -> Json.obj(
+      "tags" -> Json.obj("terms" -> Json.obj("field" -> "tags"))
+    )
+  )
 
-    WS.url(SEARCH_URL)
-      .post(q)
-      .map { r =>
-        if(r.status == 200) Right(r.json)
-        else Left(r)
-      }
-  }
+  def tags = search(queryTags, true)
 
-  def lastCreated = {
-    val query = Json.obj(
-      "query" -> Json.obj( "match_all" -> Json.obj() ),
-      "size" -> 1,
-      "sort" -> Json.arr( Json.obj(
+  val queryLastCreated = Json.obj(
+    "query" -> Json.obj( "match_all" -> Json.obj() ),
+    "size" -> 1,
+    "sort" -> Json.arr(
+      Json.obj(
         "created_at" -> "desc"
-      ))
+      )
     )
+  )
 
-    search(query, true)
-  }
+  def lastCreated = search(queryLastCreated, true)
 
-  def lastUpdated = {
-    val query = Json.obj(
-      "query" -> Json.obj( "match_all" -> Json.obj() ),
-      "size" -> 1,
-      "sort" -> Json.arr( Json.obj(
-        "updated_at" -> "desc"
-      ))
-    )
+  val queryLastUpdated = Json.obj(
+    "query" -> Json.obj( "match_all" -> Json.obj() ),
+    "size" -> 1,
+    "sort" -> Json.arr( Json.obj(
+      "updated_at" -> "desc"
+    ))
+  )
 
-    search(query, true)
-  }
+  def lastUpdated = search(queryLastUpdated, true)
 
 }
 

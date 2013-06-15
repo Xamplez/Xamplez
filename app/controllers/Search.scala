@@ -15,36 +15,36 @@ import concurrent.Future
 
 object Search extends Controller {
 
-  def search(q: String) = Action { implicit req =>
-
-     val result = S.search(q)
-     Async(result.map{ r =>
-       r.fold(
-         resp => InternalServerError(resp.body),
-         json => Ok(json))
-     })
-   }
-
-
-   def insert = Action(parse.json) { implicit request =>
-    val jsObject = request.body.as[JsObject]
-      val r = S.insert(jsObject).map(
-       _.fold(
-         err => InternalServerError(err.json \ "error"),
-         r => Ok(r))
+  def search(q: String) = Action {
+    Async{
+      S.search(q).map(
+        _.fold(
+          resp => InternalServerError(resp.body),
+          json => Ok(json))
       )
+    }
+  }
 
-    Async(r)
-   }
+  def insert = Action(parse.json) { request =>
+    val jsObject = request.body.as[JsObject]
+    Async{
+      S.insert(jsObject).map(
+        _.fold(
+          err => InternalServerError(err.json \ "error"),
+          r => Ok(r)
+        )
+      )
+    }
+  }
 
-
-   def tags = Action { implicit request =>
-     val r = S.tags().map(
-       _.fold(
-         err => InternalServerError(err.json \ "error"),
-         r => Ok(r)))
-
-     Async(r)
-   }
+  def tags = Action { request =>
+    Async {
+      S.tags.map(
+        _.fold(
+          err => InternalServerError(err.json \ "error"),
+          r => Ok(r))
+      )
+    }
+  }
 
 }

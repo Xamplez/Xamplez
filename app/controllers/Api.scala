@@ -10,7 +10,7 @@ import play.api.libs.json.Json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import concurrent.Future
-
+/*
 object Api extends GithubOAuthController {
 
   private def getLanguageField(name: String, field: String) = (__ \ name).json.copyFrom(
@@ -52,4 +52,4 @@ object Api extends GithubOAuthController {
       )
     }
   }
-}
+}*/

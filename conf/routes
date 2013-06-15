@@ -11,7 +11,7 @@ GET     /auth                          controllers.Application.authenticate
 # Search API
 GET     /api/search                    controllers.Search.search(q: String)
 POST    /api/search                    controllers.Search.insert
-GET     /api/tags                   controllers.Search.tags
+GET     /api/tags                      controllers.Search.tags
 
 # 404 API in case of unknown url
 GET     /api/*any                      controllers.Application.notFound(any)
@@ -20,4 +20,4 @@ GET     /api/*any                      controllers.Application.notFound(any)
 GET     /assets/*file                  controllers.Assets.at(path="/public", file)
 
 # Map all unknown routes to the main so they will be handle by Angular
-GET    /*any                           controllers.Application.main(any)
+GET     /*any                          controllers.Application.main(any)

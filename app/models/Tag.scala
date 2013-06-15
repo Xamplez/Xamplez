@@ -12,7 +12,7 @@ case class Tag(name: String) extends AnyVal
 
 object Tag {
   implicit val tagReads = Json.reads[Tag]
-  implicit val tagWrites = Json.writes[Tag]
+  implicit val tagWrites = Writes{ t: Tag => JsString(t.name) }
 
   val hash = "#"
 

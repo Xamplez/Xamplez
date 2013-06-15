@@ -4,7 +4,8 @@
 @import "github/markdown";
 @import "github/gist";
 
-@import "playbyexample/search";
+@import "app/home";
+@import "app/search";
 
 @FontAwesomePath: "fonts/fontawesome";
 
@@ -25,6 +26,15 @@ form {
 header {
   border-top: 5px solid @green-play;
   padding: 20px;
+
+  a {
+    color: #454545;
+
+    &:hover {
+      color: #454545;
+      text-decoration: none;
+    }
+  }
 
   .logo {
     width: auto;
@@ -54,91 +64,6 @@ section.main {
   position: relative;
   top: -75px;
   background-color: #fff;
-}
-
-section.main .col:first-child {
-  box-shadow: -15px 0px 15px -15px #444;
-}
-
-section.main .col:last-child {
-  box-shadow: 15px 0px 15px -15px #444;
-}
-
-.home {
-  .main {
-    > .col {
-      padding: 0px 30px 50px
-    }
-
-    h3 {
-      font-style: italic;
-      color: #777;
-      text-align: center;
-    }
-
-    p {
-      text-align: justify;
-    }
-  }
-}
-
-#tags {
-  margin: 10px auto;
-  padding: 10px;
-  font-size: 30px;
-  line-height: 1.2em;
-
-  ul, li {
-    list-style: none;
-    margin: 0; 
-    padding: 0;
-  }
-
-  .tag {
-    display: inline; 
-    margin-right: 5px;
-
-    .w0 { font-size: 0.5em; }
-    .w1 { font-size: 0.6em; }
-    .w2 { font-size: 0.7em; }
-    .w3 { font-size: 0.8em; }
-    .w4 { font-size: 0.9em; }
-    .w5 { font-size: 1.0em; }
-    .w6 { font-size: 1.1em; }
-    .w7 { font-size: 1.2em; }
-    .w8 { font-size: 1.3em; }
-    .w9 { font-size: 1.4em; }
-    a {
-      color: #000;
-    }
-  }
-}
-
-.gistContainer {
-  .description {
-    background-color: #eaeaea;
-    color: #666;
-    font-size: 16px;
-    padding: 10px;
-    border: 1px solid #ddd;
-
-
-    &.left {
-      margin-left: -100%;
-      padding-left: 100%;
-    }
-
-    &.right {
-      margin-right: -100%;
-      padding-right: 102%;
-    }
-  }
-
-  [data-toggle=collapse] {
-    cursor: pointer;
-  }
-
-  .gist > .gist-file:first-child {
-    border-top-width: 0px;
-  }
+  padding-top: 20px;
+  box-shadow: 15px 0 15px -15px #444 , -15px 0 15px -15px #444;
 }

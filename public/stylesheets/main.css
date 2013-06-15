@@ -6571,58 +6571,12 @@ a .icon-flip-vertical:before {
 .gist-syntax .il {
   color: #009999;
 }
-#results ul {
-  list-style-type: none;
-}
-body {
-  overflow-x: hidden;
-}
-form {
-  margin: 0px !important;
-}
-.form-search .input-append .btn {
-  vertical-align: middle;
-}
-header {
-  border-top: 5px solid #92d13d;
-  padding: 20px;
-}
-header .logo {
-  width: auto;
-  height: 50px;
-}
-header .logo + span {
-  font-size: 30px;
-  vertical-align: middle;
-  font-style: italic;
-}
-.ribbon {
-  margin: 0px -50%;
-  text-align: center;
-  padding: 20px;
-}
-.ribbon.ribbon-main {
-  padding-bottom: 100px;
-  color: #fff;
-  background-color: #92d13d;
-}
-section.main {
-  position: relative;
-  top: -75px;
-  background-color: #fff;
-}
-section.main .col:first-child {
-  box-shadow: -15px 0px 15px -15px #444444;
-}
-section.main .col:last-child {
-  box-shadow: 15px 0px 15px -15px #444444;
-}
 .home .main > .col {
-  padding: 0px 30px 50px;
+  padding: 0px 30px;
 }
 .home .main h3 {
   font-style: italic;
-  color: #777;
+  color: #454545;
   text-align: center;
 }
 .home .main p {
@@ -6684,17 +6638,52 @@ section.main .col:last-child {
   padding: 10px;
   border: 1px solid #ddd;
 }
-.gistContainer .description.left {
-  margin-left: -100%;
-  padding-left: 100%;
-}
-.gistContainer .description.right {
-  margin-right: -100%;
-  padding-right: 102%;
-}
-.gistContainer [data-toggle=collapse] {
-  cursor: pointer;
-}
 .gistContainer .gist > .gist-file:first-child {
   border-top-width: 0px;
+}
+body {
+  overflow-x: hidden;
+}
+form {
+  margin: 0px !important;
+}
+.form-search .input-append .btn {
+  vertical-align: middle;
+}
+header {
+  border-top: 5px solid #92d13d;
+  padding: 20px;
+}
+header a {
+  color: #454545;
+}
+header a:hover {
+  color: #454545;
+  text-decoration: none;
+}
+header .logo {
+  width: auto;
+  height: 50px;
+}
+header .logo + span {
+  font-size: 30px;
+  vertical-align: middle;
+  font-style: italic;
+}
+.ribbon {
+  margin: 0px -50%;
+  text-align: center;
+  padding: 20px;
+}
+.ribbon.ribbon-main {
+  padding-bottom: 100px;
+  color: #fff;
+  background-color: #92d13d;
+}
+section.main {
+  position: relative;
+  top: -75px;
+  background-color: #fff;
+  padding-top: 20px;
+  box-shadow: 15px 0 15px -15px #444444, -15px 0 15px -15px #444444;
 }

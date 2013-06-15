@@ -6,7 +6,7 @@ var app = angular.module('app', ['ngResource'])
     $routeProvider
       .when('/', {
         templateUrl: '/views/index',
-        controller: 'IndexCtrl'
+        controller: 'HomeCtrl'
       })
       .when('/search', {
         templateUrl: '/views/search',
@@ -20,9 +20,6 @@ var app = angular.module('app', ['ngResource'])
     $locationProvider.html5Mode(true).hashPrefix('!');
   }]);
 
-app.controller('AppCtrl', ['$scope', '$location', function($scope, $location) {
-
-}]);
 
 function displayGist(gist) {
     var $content = angular.element(gist.div);

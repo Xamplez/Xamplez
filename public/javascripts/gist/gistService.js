@@ -1,16 +1,3 @@
-app.controller('GistCtrl', ['$scope', function($scope) {
-
-}])
-
-app.factory('gist', ['$resource', function($resource) {
-  return $resource('https://api.github.com/gists/:id', {}, {
-    'get' : {
-      method : 'GET',
-      isArray : false
-    }
-  });
-}]);
-
 app.service('GistService', function() {
   this.display = function(gist, userOptions) {
     this.normalize(gist);
@@ -52,4 +39,4 @@ app.service('GistService', function() {
   this.getScriptId = function(gist) {
     return "gist" + gist.id + "Script";
   }
-})
+});

@@ -1,6 +1,5 @@
-app.controller('IndexCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistService', function($scope, $location, Tags, Search, GistService) {
+app.controller('HomeCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistService', function($scope, $location, Tags, Search, GistService) {
   $scope.data = {
-    query: "",
     currentPopular: -1,
     populars: [],
     popularOptions: {
@@ -8,7 +7,7 @@ app.controller('IndexCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistServi
       scriptSelector: "#popularGists",
       classes: ""
     }
-  }
+  };
 
   $scope.$on("$viewContentLoaded", function() {
     Search.query({q: "json"}, function(result) {
@@ -52,10 +51,6 @@ app.controller('IndexCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistServi
     clearInterval($scope.popularsInterval);
   }
 
-  $scope.search = function() {
-    $location.path('/search').search({q: $scope.data.query})
-  }
-
   function clamp (edge0, edge1, x) {
     return (x - edge0)/(edge1 - edge0);
   }
@@ -79,11 +74,4 @@ app.controller('IndexCtrl', ['$scope', '$location', 'Tags', 'Search', 'GistServi
       .value();
   });
 
-}])
-
-app.factory('Tags', ['$resource', 'config', function($resource, config) {
-  return $resource(config.api + "/tags", {}, {
-
-  });
 }]);
-

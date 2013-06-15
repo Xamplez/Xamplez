@@ -6652,26 +6652,45 @@ form {
 }
 header {
   border-top: 5px solid #92d13d;
-  padding: 20px;
 }
 header a {
+  position: relative;
   color: #454545;
+  display: inline-block;
+  padding: 20px;
+  box-sizing: border-box;
+}
+header a::before {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-top: 0px solid #92d13d;
+  -webkit-transition: all 250ms;
+  -moz-transition: all 250ms;
+  -o-transition: all 250ms;
+  transition: all 250ms;
 }
 header a:hover {
   color: #454545;
   text-decoration: none;
+  background: rgba(235, 235, 235, 0.3);
+}
+header a:hover::before {
+  border-top: 5px solid #92d13d;
 }
 header .logo {
   width: auto;
   height: 50px;
 }
 header .logo + span {
-  font-size: 30px;
+  font-size: 40px;
   vertical-align: middle;
   font-style: italic;
+  font-weight: bold;
 }
 .ribbon {
-  margin: 0px -50%;
   text-align: center;
   padding: 20px;
 }
@@ -6686,4 +6705,9 @@ section.main {
   background-color: #fff;
   padding-top: 20px;
   box-shadow: 15px 0 15px -15px #444444, -15px 0 15px -15px #444444;
+}
+@media (min-width: 768px) {
+  .ribbon {
+    margin: 0px -50%;
+  }
 }

@@ -10,9 +10,9 @@ import play.api.Play.current
 
 case class Tag(name: String) extends AnyVal
 
-object Tag extends Function1[String, Tag]{
-  implicit val tagReads = (__ \ "name").read[String].map( n => Tag(n) )
-  implicit val tagWrites = Writes{ t: Tag => JsString(t.name) }
+object Tag {
+  implicit val tagReads = Json.reads[Tag]
+  implicit val tagWrites = Json.writes[Tag]
 
   val hash = "#"
 

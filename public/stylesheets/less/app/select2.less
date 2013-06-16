@@ -1,0 +1,26 @@
+.select2-container {
+	width: 100% !important;
+}
+
+.input-group {
+	.select2-container:first-child [class^="select2-choice"] {
+		.border-right-radius(0);
+	}
+
+	.select2-container:last-child [class^="select2-choice"] {
+		.border-left-radius(0);
+	}
+}
+
+.input-large [class^="select2-choice"] {
+  padding: @padding-large-vertical @padding-large-horizontal;
+  font-size: @font-size-large;
+  border-radius: @border-radius-large;
+}
+
+.input-small [class^="select2-choice"] {
+  min-height: @input-height-small;
+  padding: @padding-small-vertical @padding-small-horizontal;
+  font-size: @font-size-small;
+  border-radius: @border-radius-small;
+}

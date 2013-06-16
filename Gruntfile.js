@@ -161,6 +161,22 @@ module.exports = function (grunt) {
           dest: "<%= config.dir.public.scripts %>/vendors/lodash/"
         }]
       },
+      bowerSelect2: {
+        files: [{
+          expand: true,
+          cwd: "<%= config.dir.components.root %>/select2/",
+          src: ["*.js"],
+          dest: "<%= config.dir.public.scripts %>/vendors/select2/"
+        },{
+          expand: true,
+          cwd: "<%= config.dir.components.root %>/select2/",
+          src: ["*.gif", "*.png"],
+          dest: "<%= config.dir.public.images %>/vendors/select2/"
+        },{
+          src: "<%= config.dir.components.root %>/select2/select2.css",
+          dest: "<%= config.dir.public.styles %>/less/vendors/select2/select2.less"
+        }]
+      },
       bowerAngular: {
         files: [{
           expand: true,
@@ -199,6 +215,14 @@ module.exports = function (grunt) {
           cwd: "<%= config.dir.components.root %>/angular-bootstrap/",
           src: ["*.js"],
           dest: "<%= config.dir.public.scripts %>/vendors/angular-ui/bootstrap/"
+        }]
+      },
+      bowerAngularUiSelect2: {
+        files: [{
+          expand: true,
+          cwd: "<%= config.dir.components.root %>/angular-ui-select2/src",
+          src: ["*.js"],
+          dest: "<%= config.dir.public.scripts %>/vendors/angular-ui/select2/"
         }]
       }
     },
@@ -265,11 +289,13 @@ module.exports = function (grunt) {
           "copy:bowerJQuery",
           "copy:bowerModernizr",
           "copy:bowerLodash",
+          "copy:bowerSelect2",
           "copy:bowerAngular",
           "copy:bowerRestangular",
           "copy:bowerAngularHttpAuth",
           "copy:bowerAngularUiUtils",
-          "copy:bowerAngularUiBootstrap"
+          "copy:bowerAngularUiBootstrap",
+          "copy:bowerAngularUiSelect2"
         ]
       }
     },

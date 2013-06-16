@@ -32,8 +32,14 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
     }
   ];
 
-
   $scope.sentence = $scope.sentences[_.random(0, $scope.sentences.length - 1)];
+
+  if ($location.search().q) {
+    $scope.searchData.query = $scope.queryFromString($location.search().q);
+  }
+
+
+  // EXPERIMENTS:
 
   // function indexOfSentence () {
   //   return _.indexOf($scope.sentences, $scope.sentence);

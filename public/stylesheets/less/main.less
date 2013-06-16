@@ -1,13 +1,24 @@
 @import "bootstrap/less/bootstrap";
 @import "font-awesome/less/font-awesome";
+@import "vendors/select2/select2";
+@import "select2-bootstrap/lib/select2-bootstrap.less";
 
 @import "github/markdown";
 @import "github/gist";
 
 @import "app/home";
 @import "app/search";
+@import "app/select2";
 
 @FontAwesomePath: "fonts/fontawesome";
+
+// Hack for Select2-Bootstrap based on Bootstrap 2.3
+@baseFontSize: @font-size-base;
+@baseLineHeight: @line-height-base;
+@inputBorder: @input-border;
+@inputBorderRadius: @input-border-radius;
+@inputBackground: @input-bg;
+@errorText: @state-danger-text;
 
 @green-play: #92d13d;
 @gray-play: #454545;
@@ -83,8 +94,12 @@ section.main {
   position: relative;
   top: -75px;
   background-color: #fff;
-  padding-top: 20px;
+  padding: 20px;
   box-shadow: 15px 0 15px -15px #444 , -15px 0 15px -15px #444;
+
+  .row + .row {
+    margin-top: 30px; 
+  }
 }
 
 @media (min-width: 768px) {

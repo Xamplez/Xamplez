@@ -47,4 +47,13 @@ object Search extends Controller {
     }
   }
 
+  def lastCreated = Action { request =>
+    Async {
+      S.lastCreated.map(
+        _.fold(
+          err => InternalServerError(err.json \ "error"),
+          r => Ok(r))
+      )
+    }
+  }
 }

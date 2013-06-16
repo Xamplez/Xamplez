@@ -149,7 +149,7 @@ trait ElasticSearch {
 
   val queryLastCreated = Json.obj(
     "query" -> Json.obj( "match_all" -> Json.obj() ),
-    "size" -> 1,
+    "size" -> 100,
     "sort" -> Json.arr(
       Json.obj(
         "created_at" -> "desc"
@@ -161,7 +161,7 @@ trait ElasticSearch {
 
   val queryLastUpdated = Json.obj(
     "query" -> Json.obj( "match_all" -> Json.obj() ),
-    "size" -> 1,
+    "size" -> 100,
     "sort" -> Json.arr( Json.obj(
       "updated_at" -> "desc"
     ))

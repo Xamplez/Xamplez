@@ -38,7 +38,7 @@ class AddForks extends Actor {
   private def logResponse( response: Seq[Either[Response, JsValue]] ) = {
     log.debug(
       response.map(_.fold(
-        err => err.json \ "error",
+        err => "Error:"+err.body,
         r => r
       )).toString
     )
@@ -50,10 +50,12 @@ class AddForks extends Actor {
         lastCreated <- extractField(services.search.Search.lastCreated, "created_at")
         lastUpdated <- extractField(services.search.Search.lastUpdated, "updated_at" )
         forks       <- GithubWS.Gist.listForks(rootId)
-        response    <- Future.sequence( 
-                         filter(forks, lastCreated, lastUpdated
-                       ).map( json => services.search.Search.insert(json) ) )
-      } yield ( response )).map(logResponse(_))
+        response    <- Future.sequence(
+                         filter(forks, lastCreated, lastUpdated).map{ json =>
+                           services.search.Search.insert(json)
+                         }
+                       )
+      } yield ( response )).foreach(logResponse(_))
     }
   }
 

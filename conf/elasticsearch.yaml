@@ -3,3 +3,6 @@
 #  data: /var/data/elasticsearch
 network :
   host : localhost
+
+cluster:
+  name: play_by_example

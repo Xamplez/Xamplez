@@ -10,6 +10,7 @@
 @FontAwesomePath: "fonts/fontawesome";
 
 @green-play: #92d13d;
+@gray-play: #454545;
 
 body {
   overflow-x: hidden;
@@ -25,14 +26,32 @@ form {
 
 header {
   border-top: 5px solid @green-play;
-  padding: 20px;
 
   a {
-    color: #454545;
+    position: relative;
+    color: @gray-play;
+    display: inline-block;
+    padding: 20px;
+    box-sizing: border-box;
+
+    &::before {
+      content: " ";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-top: 0px solid @green-play;
+      .transition(all 250ms);
+    }
 
     &:hover {
-      color: #454545;
+      color: @gray-play;
       text-decoration: none;
+      background: rgba(235, 235, 235, 0.3);
+
+      &::before {
+        border-top: 5px solid @green-play;
+      }
     }
   }
 
@@ -42,14 +61,14 @@ header {
   }
 
   .logo + span {
-    font-size: 30px;
+    font-size: 40px;
     vertical-align: middle;
     font-style: italic;
+    font-weight: bold;
   }
 }
 
 .ribbon {
-  margin: 0px -50%;
   text-align: center;
   padding: 20px;
 
@@ -66,4 +85,10 @@ section.main {
   background-color: #fff;
   padding-top: 20px;
   box-shadow: 15px 0 15px -15px #444 , -15px 0 15px -15px #444;
+}
+
+@media (min-width: 768px) {
+  .ribbon {
+    margin: 0px -50%;
+  }
 }

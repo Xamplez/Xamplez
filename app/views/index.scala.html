@@ -20,6 +20,11 @@
             </div>
         </div>
 
+        <div class="row tags">
+            <div class="col col-lg-2 tag" data-ng-repeat="tag in searchData.tags">
+                <a data-ng-href="/?q={{tag.term}}">#{{tag.term}}</a>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col col-lg-12">

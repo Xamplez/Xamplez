@@ -1,10 +1,23 @@
-app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', function($scope, $location, Search, GistService) {
+app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags', function($scope, $location, Search, GistService, Tags) {
 
 	$scope.searchData = {
 		query: [],
 		tags: []
 	};
 	$scope.searchResults = [];
+	$scope.searchOptions = {
+		tags: []
+	};
+
+	Tags.query({}).$then(function (e) {
+		var tags = _(e.data.facets.tags.terms)
+			.sortBy(function (tag) { return -tag.count })
+			.value();
+		$scope.searchData.tags = tags.slice(0, 6);
+		$scope.searchOptions.tags = _.map( tags, function (tag) {
+			return "#" + tag.term;
+		});
+	});
 
 	$scope.$watch("searchData.query", function(newValue, oldValue) {
 		$scope.search();

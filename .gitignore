@@ -17,3 +17,4 @@ data
 components
 node_modules
 public/javascripts/vendors
+conf/local.conf

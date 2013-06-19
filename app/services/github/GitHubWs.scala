@@ -65,11 +65,22 @@ object GithubWS {
       (__ \ "author_login").json.copyFrom( (__ \ "user" \ "login").json.pick )
     ).reduce
 
+    private val cleanJsonWithFiles = (
+      (__ \ "id").json.pickBranch and
+      (__ \ "description").json.pickBranch and
+      (__ \ "created_at").json.pickBranch and
+      (__ \ "updated_at").json.pickBranch and
+      (__ \ "author_login").json.copyFrom( (__ \ "user" \ "login").json.pick ) and
+      (__ \ "files").json.copyFrom(
+        (__ \ "files").json.pick[JsObject].map{ obj => JsArray(obj.fields.map(_._1).map(JsString(_))) }
+      )
+    ).reduce
+
     /**
      * Create a new Gist with 2 files: the question and an empty answer
      * @return The Gist ID if success, otherwise None
      */
-    def create(question: String, extension: String, author: String)(implicit token: OAuth2Token): Future[Option[Long]] = {
+    def create(question: String, extension: String, author: String): Future[Option[Long]] = {
       val data = Json.obj(
         "description" -> s"PlayByExample: $question",
         "public" -> true,
@@ -107,19 +118,19 @@ object GithubWS {
       }
     }
 
-    def star(gistId: Long)(implicit token: OAuth2Token) = {
+    def star(gistId: Long) = {
       fetch(s"/gists/$gistId/star").put("")
     }
 
-    def unstar(gistId: Long)(implicit token: OAuth2Token) = {
+    def unstar(gistId: Long) = {
       fetch(s"/gists/$gistId/star").delete()
     }
 
-    def get(gistId: Long)(implicit token: OAuth2Token) = {
+    def get(gistId: Long): Future[JsValue] = {
       fetch(s"/gists/$gistId").get.map(_.json)
     }
 
-    def forksId(gistId: Long)(implicit token: OAuth2Token) = {
+    def forksId(gistId: Long): Future[Seq[Long]] = {
       get(gistId).map{ json =>
         (json \ "forks").as[JsArray].value.map{ fork =>
           (fork \ "id").as[String].toLong
@@ -128,11 +139,21 @@ object GithubWS {
     }
 
     def listForks(gistId: Long): Future[Seq[JsObject]] = {
-      fetch(s"/gists/$gistId/forks").get.map(_.json).map(json =>
-        ( json ).as[JsArray].value.map{ fork =>
+      forksId(gistId).flatMap{ ids =>
+        Future.sequence(ids.map{ id =>
+          get(id).map{ fork =>
+            fork.transform(cleanJsonWithFiles).getOrElse(JsNull).as[JsObject]
+          }
+        })
+      }
+    }
+
+    def listForksOld(gistId: Long): Future[Seq[JsObject]] = {
+      fetch(s"/gists/$gistId/forks").get.map(_.json).map{ json =>
+        json.as[JsArray].value.map{ fork =>
           fork.transform(cleanJson).getOrElse(JsNull).as[JsObject]
         }
-      )
+      }
     }
   }
 }

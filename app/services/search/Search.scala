@@ -5,13 +5,17 @@ import scala.concurrent.duration._
 
 import play.api._
 import play.api.libs.json._
+import play.api.libs.json.syntax._
 import play.api.libs.functional.syntax._
+import play.api.libs.json.extensions._
 import play.api.libs.ws._
 
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Play.current
 
 import models._
+
+import scala.util.matching._
 
 trait ElasticSearch {
 
@@ -108,12 +112,31 @@ trait ElasticSearch {
 
   val descIdReader = (
     (__ \ "description").read[String] and
-    (__ \ "id").read[String]
+    (__ \ "id").read[String] and
+    (__ \ "files").read[Seq[String]]
   ).tupled
 
+  // Magical string interpolation to pattern match regex
+  implicit class Regex(sc: StringContext) {
+    def r = new scala.util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ => "x"): _*)
+  }
+
+  private def getLangs(files: Seq[String]): Seq[String] = {
+    files.filter{
+      case r"\w*LICENSE.txt" => false
+      case r"\w*\.md$$" => false
+      case r"\w*\.[^\.]+$$" => true
+      case _ => false
+    }.map{ file =>
+      file.split("\\.(?=[^\\.]+$)")(1)
+    }
+  }
+
   def insert(json: JsObject): Future[Either[Response, JsValue]] = {
-    descIdReader.reads(json).map { case (desc, id) =>
-      val withTags = json ++ Json.obj("tags" -> Tag.fetchTags(desc))
+    descIdReader.reads(json).map { case (desc, id, files) =>
+      val tags = Tag.fetchTags(desc)
+      val langs = getLangs(files)
+      val withTags = json.delete(__ \ "files").as[JsObject] ++ Json.obj("tags" -> (tags.map(_.name) ++ langs))
       play.Logger.debug(s"Search : inserting $withTags")
       WS.url(s"$INSERT_URL/$id")
         .put(withTags)

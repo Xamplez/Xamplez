@@ -55,7 +55,7 @@ class AddForks extends Actor {
                            services.search.Search.insert(json)
                          }
                        )
-      } yield ( response )).foreach(logResponse(_))
+      } yield (response)).foreach(logResponse(_))
     }
   }
 

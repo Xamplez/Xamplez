@@ -6,7 +6,8 @@ import java.util.Date
 
 case class OAuth2Token(
   accessToken: String,
-  tokenType: String)
+  tokenType: String
+)
 
 object OAuth2Token {
 

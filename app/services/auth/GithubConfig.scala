@@ -7,7 +7,8 @@ case class OAuth2Infos(
   clientSecret: String,
   urlAuthorize: String,
   urlAccessToken: String,
-  scope: String)
+  scope: String
+)
 
 /**
  * Generic configuration required in the OAuth2 proccess

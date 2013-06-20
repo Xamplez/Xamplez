@@ -22,15 +22,17 @@ object GithubWS {
   lazy val clientSecret = Play.application.configuration.getString("github.clientSecret")
 
 
-  def fetch(url: String, accept: String = "application/json"): WSRequestHolder = {
+  def fetch(url: String, accept: String = "application/json", authenticated: Boolean = true): WSRequestHolder = {
     val ws = WS.url("https://api.github.com" + url).withHeaders("Accept" -> accept)
-    (clientId, clientSecret) match {
-      case (Some(id),Some(secret)) => {
-          ws.withQueryString("client_id" -> id)
-            .withQueryString("client_secret" -> secret)
-        }
-      case _ => ws
-    }
+    if( authenticated ){
+      (clientId, clientSecret) match {
+        case (Some(id),Some(secret)) => {
+            ws.withQueryString("client_id" -> id)
+              .withQueryString("client_secret" -> secret)
+          }
+        case _ => ws
+      }
+    }else{ws}
   }
 
   def fetchWithToken(url: String, accept: String = "application/json")(implicit token: OAuth2Token): WSRequestHolder = {
@@ -126,8 +128,14 @@ object GithubWS {
       fetch(s"/gists/$gistId/star").delete()
     }
 
-    def get(gistId: Long): Future[JsValue] = {
-      fetch(s"/gists/$gistId").get.map(_.json)
+    def get(gistId: Long, authenticated: Boolean = true): Future[JsValue] = {
+      fetch(s"/gists/$gistId", authenticated = authenticated).get.map(_.json)
+    }
+
+    def getFileUrl(gistId: Long, fileName: String, authenticated: Boolean = true ): Future[String] = {
+      get(gistId, authenticated = authenticated).map{ json =>
+        (json \ "files" \ fileName \ "raw_url").as[String]
+      }
     }
 
     def forksId(gistId: Long): Future[Seq[Long]] = {

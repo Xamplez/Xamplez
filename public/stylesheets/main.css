@@ -4415,13 +4415,6 @@ a.list-group-item.active > .badge,
 .visible-sm {
   display: block !important;
 }
-tr.visible-sm {
-  display: table-row !important;
-}
-th.visible-sm,
-td.visible-sm {
-  display: table-cell !important;
-}
 .visible-md {
   display: none !important;
 }
@@ -4434,22 +4427,8 @@ td.visible-sm {
 .hidden-md {
   display: block !important;
 }
-tr.hidden-md {
-  display: table-row !important;
-}
-th.hidden-md,
-td.hidden-md {
-  display: table-cell !important;
-}
 .hidden-lg {
   display: block !important;
-}
-tr.hidden-lg {
-  display: table-row !important;
-}
-th.hidden-lg,
-td.hidden-lg {
-  display: table-cell !important;
 }
 @media (min-width: 768px) and (max-width: 991px) {
   .visible-sm {
@@ -4458,38 +4437,17 @@ td.hidden-lg {
   .visible-md {
     display: block !important;
   }
-  tr.visible-md {
-    display: table-row !important;
-  }
-  th.visible-md,
-  td.visible-md {
-    display: table-cell !important;
-  }
   .visible-lg {
     display: none !important;
   }
   .hidden-sm {
     display: block !important;
   }
-  tr.hidden-sm {
-    display: table-row !important;
-  }
-  th.hidden-sm,
-  td.hidden-sm {
-    display: table-cell !important;
-  }
   .hidden-md {
     display: none !important;
   }
   .hidden-lg {
     display: block !important;
-  }
-  tr.hidden-lg {
-    display: table-row !important;
-  }
-  th.hidden-lg,
-  td.hidden-lg {
-    display: table-cell !important;
   }
 }
 @media (min-width: 992px) {
@@ -4502,32 +4460,11 @@ td.hidden-lg {
   .visible-lg {
     display: block !important;
   }
-  tr.visible-lg {
-    display: table-row !important;
-  }
-  th.visible-lg,
-  td.visible-lg {
-    display: table-cell !important;
-  }
   .hidden-sm {
     display: block !important;
   }
-  tr.hidden-sm {
-    display: table-row !important;
-  }
-  th.hidden-sm,
-  td.hidden-sm {
-    display: table-cell !important;
-  }
   .hidden-md {
     display: block !important;
-  }
-  tr.hidden-md {
-    display: table-row !important;
-  }
-  th.hidden-md,
-  td.hidden-md {
-    display: table-cell !important;
   }
   .hidden-lg {
     display: none !important;
@@ -4539,13 +4476,6 @@ td.hidden-lg {
 @media print {
   .visible-print {
     display: block !important;
-  }
-  tr.visible-print {
-    display: table-row !important;
-  }
-  th.visible-print,
-  td.visible-print {
-    display: table-cell !important;
   }
   .hidden-print {
     display: none !important;
@@ -7049,14 +6979,14 @@ select.select2 {
   border: none;
 }
 .gistContainer .description .author {
-  margin-left: 20px;
+  margin-right: 10px;
   font-style: italic;
 }
-.gistContainer .description .langs {
-  float: right;
-}
 .gistContainer .description .gist-link {
-  margin-right: 20px;
+  margin-right: 5px;
+}
+.gistContainer .description hr {
+  margin: 5px 0px;
 }
 .gist {
   color: #000;
@@ -7325,6 +7255,9 @@ select.select2 {
 .home .main p {
   text-align: justify;
 }
+.tags {
+  margin: 15px 0px;
+}
 .tags .tag {
   text-align: center;
 }
@@ -7335,55 +7268,6 @@ select.select2 {
 .tags .tag a:hover {
   color: #92d13d;
   text-decoration: none;
-}
-#tags {
-  margin: 10px auto;
-  padding: 10px;
-  font-size: 30px;
-  line-height: 1.2em;
-}
-#tags ul,
-#tags li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-#tags .tag {
-  display: inline;
-  margin-right: 5px;
-}
-#tags .tag .w0 {
-  font-size: 0.5em;
-}
-#tags .tag .w1 {
-  font-size: 0.6em;
-}
-#tags .tag .w2 {
-  font-size: 0.7em;
-}
-#tags .tag .w3 {
-  font-size: 0.8em;
-}
-#tags .tag .w4 {
-  font-size: 0.9em;
-}
-#tags .tag .w5 {
-  font-size: 1.0em;
-}
-#tags .tag .w6 {
-  font-size: 1.1em;
-}
-#tags .tag .w7 {
-  font-size: 1.2em;
-}
-#tags .tag .w8 {
-  font-size: 1.3em;
-}
-#tags .tag .w9 {
-  font-size: 1.4em;
-}
-#tags .tag a {
-  color: #000;
 }
 #book-title {
   font-family: georgia, "times new roman", times, serif;
@@ -7486,6 +7370,231 @@ footer p {
   font-size: 12px;
   border-radius: 3px;
 }
+.langs .arduino {
+  background-color: #bd79d1;
+}
+.langs .java {
+  background-color: #b07219;
+}
+.langs .vhdl {
+  background-color: #543978;
+}
+.langs .scala {
+  background-color: #7dd3b0;
+}
+.langs .emacslisp {
+  background-color: #c065db;
+}
+.langs .delphi {
+  background-color: #b0ce4e;
+}
+.langs .ada {
+  background-color: #02f88c;
+}
+.langs .viml {
+  background-color: #199c4b;
+}
+.langs .perl {
+  background-color: #0298c3;
+}
+.langs .lua {
+  background-color: #fa1fa1;
+}
+.langs .rebol {
+  background-color: #358a5b;
+}
+.langs .verilog {
+  background-color: #848bf3;
+}
+.langs .factor {
+  background-color: #636746;
+}
+.langs .ioke {
+  background-color: #078193;
+}
+.langs .r {
+  background-color: #198ce7;
+}
+.langs .erlang {
+  background-color: #949e0e;
+}
+.langs .nu {
+  background-color: #c9df40;
+}
+.langs .autohotkey {
+  background-color: #6594b9;
+}
+.langs .clojure {
+  background-color: #db5855;
+}
+.langs .shell {
+  background-color: #5861ce;
+}
+.langs .assembly {
+  background-color: #a67219;
+}
+.langs .parrot {
+  background-color: #f3ca0a;
+}
+.langs .csharp {
+  background-color: #5a25a2;
+}
+.langs .turing {
+  background-color: #45f715;
+}
+.langs .applescript {
+  background-color: #3581ba;
+}
+.langs .eiffel {
+  background-color: #946d57;
+}
+.langs .commonlisp {
+  background-color: #3fb68b;
+}
+.langs .dart {
+  background-color: #cccccc;
+}
+.langs .supercollider {
+  background-color: #46390b;
+}
+.langs .coffeescript {
+  background-color: #244776;
+}
+.langs .xquery {
+  background-color: #2700e2;
+}
+.langs .haskell {
+  background-color: #29b544;
+}
+.langs .racket {
+  background-color: #ae17ff;
+}
+.langs .elixir {
+  background-color: #6e4a7e;
+}
+.langs .haxe {
+  background-color: #346d51;
+}
+.langs .ruby {
+  background-color: #701516;
+}
+.langs .self {
+  background-color: #0579aa;
+}
+.langs .fantom {
+  background-color: #dbded5;
+}
+.langs .groovy {
+  background-color: #e69f56;
+}
+.langs .c {
+  background-color: #555;
+}
+.langs .javascript {
+  background-color: #f15501;
+}
+.langs .d {
+  background-color: #fcd46d;
+}
+.langs .ooc {
+  background-color: #b0b77e;
+}
+.langs .cplusplus {
+  background-color: #f34b7d;
+}
+.langs .dylan {
+  background-color: #3ebc27;
+}
+.langs .nimrod {
+  background-color: #37775b;
+}
+.langs .standardml {
+  background-color: #dc566d;
+}
+.langs .objective-c {
+  background-color: #f15501;
+}
+.langs .nemerle {
+  background-color: #0d3c6e;
+}
+.langs .mirah {
+  background-color: #c7a938;
+}
+.langs .boo {
+  background-color: #d4bec1;
+}
+.langs .objective-j {
+  background-color: #ff0c5a;
+}
+.langs .rust {
+  background-color: #dea584;
+}
+.langs .prolog {
+  background-color: #74283c;
+}
+.langs .ecl {
+  background-color: #8a1267;
+}
+.langs .gosu {
+  background-color: #82937f;
+}
+.langs .fortran {
+  background-color: #4d41b1;
+}
+.langs .coldfusion {
+  background-color: #ed2cd6;
+}
+.langs .ocaml {
+  background-color: #3be133;
+}
+.langs .fancy {
+  background-color: #7b9db4;
+}
+.langs .puredata {
+  background-color: #f15501;
+}
+.langs .python {
+  background-color: #3581ba;
+}
+.langs .tcl {
+  background-color: #e4cc98;
+}
+.langs .arc {
+  background-color: #ca2afe;
+}
+.langs .puppet {
+  background-color: #cc5555;
+}
+.langs .io {
+  background-color: #a9188d;
+}
+.langs .max {
+  background-color: #ce279c;
+}
+.langs .go {
+  background-color: #8d04eb;
+}
+.langs .asp {
+  background-color: #6a40fd;
+}
+.langs .visualbasic {
+  background-color: #945db7;
+}
+.langs .php {
+  background-color: #6e03c1;
+}
+.langs .scheme {
+  background-color: #1e4aec;
+}
+.langs .vala {
+  background-color: #3581ba;
+}
+.langs .smalltalk {
+  background-color: #596706;
+}
+.langs .matlab {
+  background-color: #bb92ac;
+}
 body {
   overflow-x: hidden;
 }
@@ -7556,9 +7665,6 @@ section.main {
   background-color: #fff;
   padding: 20px;
   box-shadow: 15px 0 15px -15px #444444, -15px 0 15px -15px #444444;
-}
-section.main .row + .row {
-  margin-top: 30px;
 }
 section.main h3 {
   margin-top: 10px;

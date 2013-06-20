@@ -1,4 +1,4 @@
-app.service('GistService', function() {
+app.service('GistService', ["Colors", function(Colors) {
   this.display = function(gist, userOptions) {
     this.normalize(gist);
     var options = {};
@@ -8,11 +8,18 @@ app.service('GistService', function() {
     angular.element(options.selector).append(options.prefix +
       '<div id="'+ this.getContainerId(gist) +'" class="gistContainer">'+
         '<div class="description '+ options.classes +'">'+
-          '<span class="gist-link"><a href="https://gist.github.com/'+ gist.author_login + '/' + gist.id + '"> Gist '+ gist.id +'</a></span>' +
-          gist.taggedDescription +
-          '<span class="author">By <a href="https://github.com/'+ gist.author_login + '"> '+ gist.author_login +'</a></span>' +
-          '<span data-toggle="collapse" data-target="#'+ this.getContainerId(gist) + ' .gistWrapper"></span>'+
-          '<span class="langs">'+ gist.langs + '</span>' +
+          '<div class="row"><div class="col-12">' +
+            '<span class="gist-link"><a href="https://gist.github.com/'+ gist.author_login + '/' + gist.id + '"> Gist '+ gist.id +'</a></span>' +
+            '<span class="author">by <a href="https://github.com/'+ gist.author_login + '"> '+ gist.author_login +'</a></span>' +
+            '<div class="langs pull-right">'+
+              _.map(gist.langs, function (lang) { return '<span class="label ' + lang.toLowerCase() + '">' + lang + '</span>' }).join() +
+            '</div>' +
+          '</div></div>' +
+          '<hr/>' +
+          '<div class="row"><div class="col-12">' +
+            gist.taggedDescription +
+            '<span data-toggle="collapse" data-target="#'+ this.getContainerId(gist) + ' .gistWrapper"></span>'+
+          '</div></div>' +
         '</div>' +
         '<div class="gistWrapper collapse in"></div>' +
       '</div>'+options.suffix);
@@ -50,4 +57,4 @@ app.service('GistService', function() {
   this.getScriptId = function(gist) {
     return "gist" + gist.id + "Script";
   }
-});
+}]);

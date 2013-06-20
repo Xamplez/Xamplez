@@ -113,26 +113,37 @@ trait ElasticSearch {
     def r = new scala.util.matching.Regex(sc.parts.mkString, sc.parts.tail.map(_ => "x"): _*)
   }
 
-  private def getLangs(files: Seq[String]): Seq[String] = {
+  val ext2Lang = Map(
+    "scala" -> ("scala", false),
+    "java" -> ("java", false),
+    "py" -> ("python", true)
+  )
+
+  private def getLangs(files: Seq[String]): (Seq[String], Seq[String]) = {
     files.filter{
       case r"\w*LICENSE.txt" => false
       case r"\w*\.md$$" => false
+      case r"\w*\.txt$$" => false
       case r"\w*\.[^\.]+$$" => true
       case _ => false
     }.map{ file =>
       file.split("\\.(?=[^\\.]+$)")(1)
+    }.foldLeft(Seq[String](), Seq[String]()){
+      case ((langs, tagLangs), file) =>
+        val (lg, keep) = ext2Lang(file)
+        (langs :+ lg, if(keep) (tagLangs :+ file :+ lg) else (tagLangs :+ file))
     }
   }
 
   def insert(json: JsObject): Future[Either[Response, JsValue]] = {
     descIdReader.reads(json).map { case (desc, id, files) =>
       val tags = Tag.fetchTags(desc)
-      val langs = getLangs(files)
+      val (langs, tagLangs) = getLangs(files)
       val fullJson =
         json.delete(__ \ "files").as[JsObject] ++
         Json.obj(
           "langs" -> langs,
-          "tags" -> (tags.map(_.name) ++ langs)
+          "tags" -> (tags.map(_.name) ++ tagLangs)
         )
 
       play.Logger.debug(s"Search : inserting $fullJson")
@@ -168,9 +179,14 @@ trait ElasticSearch {
 
   val queryTags = Json.obj(
     "query" -> Json.obj("match_all" -> Json.obj()),
-    "size"  -> 0,
+    "size"  -> 1000,
     "facets" -> Json.obj(
-      "tags" -> Json.obj("terms" -> Json.obj("field" -> "tags"))
+      "tags" -> Json.obj(
+        "terms" -> Json.obj(
+          "field" -> "tags",
+          "size" -> 1000
+        )
+      )
     )
   )
 

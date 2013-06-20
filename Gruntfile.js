@@ -161,6 +161,14 @@ module.exports = function (grunt) {
           dest: "<%= config.dir.public.scripts %>/vendors/lodash/"
         }]
       },
+      bowerD3: {
+        files: [{
+          expand: true,
+          cwd: "<%= config.dir.components.root %>/d3/",
+          src: ["d3.js", "d3.min.js"],
+          dest: "<%= config.dir.public.scripts %>/vendors/d3/"
+        }]
+      },
       bowerSelect2: {
         files: [{
           expand: true,
@@ -289,6 +297,7 @@ module.exports = function (grunt) {
           "copy:bowerJQuery",
           "copy:bowerModernizr",
           "copy:bowerLodash",
+          "copy:bowerD3",
           "copy:bowerSelect2",
           "copy:bowerAngular",
           "copy:bowerRestangular",

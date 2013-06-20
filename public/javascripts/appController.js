@@ -10,7 +10,8 @@ app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags
 	};
 
 	Tags.query({}).$then(function (e) {
-		var tags = _(e.data.facets.tags.terms)
+		$scope.tags = e.data.facets.tags.terms;
+		var tags = _($scope.tags)
 			.sortBy(function (tag) { return -tag.count })
 			.value();
 		$scope.searchData.tags = tags.slice(0, 6);

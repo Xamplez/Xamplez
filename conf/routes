@@ -5,6 +5,7 @@
 # Views
 GET     /                              controllers.Application.main(any = "whatever")
 GET     /views/index                   controllers.Application.index
+GET     /views/stats                   controllers.Application.stats
 GET     /views/search                  controllers.Application.search
 GET     /auth                          controllers.Application.authenticate
 

@@ -8,6 +8,10 @@ var app = angular.module('app', ['ngResource', 'ui.select2'])
         templateUrl: '/views/index',
         controller: 'HomeCtrl'
       })
+      .when('/stats', {
+        templateUrl: '/views/stats',
+        controller: 'StatsCtrl'
+      })
       .when('/search', {
         templateUrl: '/views/search',
         controller: 'SearchCtrl'

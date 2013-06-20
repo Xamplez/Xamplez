@@ -7048,6 +7048,16 @@ select.select2 {
   background-color: transparent;
   border: none;
 }
+.gistContainer .description .author {
+  margin-left: 20px;
+  font-style: italic;
+}
+.gistContainer .description .langs {
+  float: right;
+}
+.gistContainer .description .gist-link {
+  margin-right: 20px;
+}
 .gist {
   color: #000;
 }

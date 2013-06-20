@@ -24,6 +24,14 @@ var app = angular.module('app', ['ngResource', 'ui.select2'])
 function displayGist(gist) {
     var $content = angular.element(gist.div);
     var gistId = $content.attr("id");
+    // var owner = gist.owner;
+    // var files = _(gist.files).filter(function(file){
+    //   var extension = file.substring(file.lastIndexOf(".")+1);
+    //   if (extension == "md" || extension == "txt" || extension == "markdown") return false;
+    //   else return true;
+    // }).map(function(file){
+    //   return file.substring(file.lastIndexOf(".")+1);
+    // }).value();
 
     $content.find(".gist-file").each(function(index) {
         var fileName = angular.element(this).find(".gist-meta a:nth-child(2)").text();

@@ -83,8 +83,8 @@ trait ElasticSearch {
     } else {
       play.Logger.info(s"Creating index: $INDEX_NAME")
       val resp = Await.result(
-        getIndex(INDEX_NAME).flatMap{ 
-          case Left(error) => 
+        getIndex(INDEX_NAME).flatMap{
+          case Left(error) =>
             if(error.contains("IndexMissingException")) createIndex(INDEX_NAME)
             else throw new RuntimeException("Could create index: "+error)
           case Right(settings) => play.Logger.info(s"Index already existing: $settings"); Future.successful()
@@ -101,14 +101,6 @@ trait ElasticSearch {
       for(n <- node) n.stop
     }
   }
-
-  private def buildSearch(query: String) =
-    Json.obj("query" -> Json.obj(
-      "query_string" -> Json.obj(
-        "fields" -> Seq("description", "tags^10"),
-        "query"  -> query
-      )
-    ))
 
   val descIdReader = (
     (__ \ "description").read[String] and
@@ -136,10 +128,16 @@ trait ElasticSearch {
     descIdReader.reads(json).map { case (desc, id, files) =>
       val tags = Tag.fetchTags(desc)
       val langs = getLangs(files)
-      val withTags = json.delete(__ \ "files").as[JsObject] ++ Json.obj("tags" -> (tags.map(_.name) ++ langs))
-      play.Logger.debug(s"Search : inserting $withTags")
+      val fullJson =
+        json.delete(__ \ "files").as[JsObject] ++
+        Json.obj(
+          "langs" -> langs,
+          "tags" -> (tags.map(_.name) ++ langs)
+        )
+
+      play.Logger.debug(s"Search : inserting $fullJson")
       WS.url(s"$INSERT_URL/$id")
-        .put(withTags)
+        .put(fullJson)
         .map { r =>
           if(r.status == 200 || r.status == 201) Right(r.json)
           else Left(r)
@@ -147,10 +145,13 @@ trait ElasticSearch {
     } recoverTotal { e => Future(Right(Json.obj())) }
   }
 
-  def search(q: String, pretty: Boolean = true): Future[Either[Response, JsValue]] = {
-    play.Logger.debug(s"Search : query $q")
-    search(buildSearch(q), pretty)
-  }
+  private def buildSearch(query: String) =
+    Json.obj("query" -> Json.obj(
+      "query_string" -> Json.obj(
+        "fields" -> Seq("description", "tags^10"),
+        "query"  -> query
+      )
+    ))
 
   private def search(query: JsObject, pretty: Boolean): Future[Either[Response, JsValue]] =
     WS.url(SEARCH_URL)
@@ -159,6 +160,11 @@ trait ElasticSearch {
         if(r.status == 200) Right(r.json)
         else Left(r)
       }
+
+  def search(q: String, pretty: Boolean = true): Future[Either[Response, JsValue]] = {
+    play.Logger.debug(s"Search : query $q")
+    search(buildSearch(q), pretty)
+  }
 
   val queryTags = Json.obj(
     "query" -> Json.obj("match_all" -> Json.obj()),

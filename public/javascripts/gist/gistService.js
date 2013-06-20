@@ -4,7 +4,18 @@ app.service('GistService', function() {
     var options = {};
     angular.extend(options, {prefix: "", suffix: "", classes: "left"}, userOptions);
     // TODO: Add a +/- icon to show/hide a gist inside the span in the .description element
-    angular.element(options.selector).append(options.prefix + '<div id="'+ this.getContainerId(gist) +'" class="gistContainer"><div class="description '+ options.classes +'">'+ gist.taggedDescription +'<span data-toggle="collapse" data-target="#'+ this.getContainerId(gist) +' .gistWrapper"></span></div><div class="gistWrapper collapse in"></div></div>'+options.suffix);
+    // TODO: ADD DIRECT LINK TO GIST IN HEADER
+    angular.element(options.selector).append(options.prefix +
+      '<div id="'+ this.getContainerId(gist) +'" class="gistContainer">'+
+        '<div class="description '+ options.classes +'">'+
+          '<span class="gist-link"><a href="https://gist.github.com/'+ gist.author_login + '/' + gist.id + '"> Gist '+ gist.id +'</a></span>' +
+          gist.taggedDescription +
+          '<span class="author">By <a href="https://github.com/'+ gist.author_login + '"> '+ gist.author_login +'</a></span>' +
+          '<span data-toggle="collapse" data-target="#'+ this.getContainerId(gist) + ' .gistWrapper"></span>'+
+          '<span class="langs">'+ gist.langs + '</span>' +
+        '</div>' +
+        '<div class="gistWrapper collapse in"></div>' +
+      '</div>'+options.suffix);
     angular.element(options.scriptSelector).append('<div id="'+ this.getScriptId(gist) +'"><script type="text/javascript" src="'+ gist.url +'.json?callback=displayGist"></script></div>')
   }
 

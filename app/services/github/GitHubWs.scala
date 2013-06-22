@@ -138,6 +138,18 @@ object GithubWS {
       }
     }
 
+    def getFile(gistId: Long, fileName: String, authenticated: Boolean = true ): Future[String] = {
+      getFileUrl(gistId, fileName, authenticated).map { url =>
+        io.Source.fromURL(url).mkString
+      }
+    }
+
+    def postFile(gistId: Long, fileName: String, content: String ) = {
+      fetch(s"/gists/$gistId").post(
+        Json.obj( "files" -> Json.obj(  fileName -> Json.obj("content" -> content) ) )
+      )
+    }
+
     def forksId(gistId: Long): Future[Seq[Long]] = {
       get(gistId).map{ json =>
         (json \ "forks").as[JsArray].value.map{ fork =>

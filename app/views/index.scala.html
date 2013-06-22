@@ -7,27 +7,27 @@
 
     <section class="main">
         <div class="row">
-            <div class="col col-lg-6">
+            <div class="col-sm-6">
                 <h3>{{sentence.createTitle}}</h3>
                 <p>{{sentence.createDescription}}</p>
                 <a href="@Application.ROOT_GIST_URL" class="btn btn-default btn-large btn-block">Create a snippet</a>
             </div>
 
-            <div class="col col-lg-6">
+            <div class="col-sm-6">
                 <h3>{{sentence.searchTitle}}</h3>
                 <p>{{sentence.searchDescription}}</p>
-                <div data-ng-include="'searchFormTemplate'"></div>
+                <div data-ng-include="'/templates/searchForm'"></div>
             </div>
         </div>
 
         <div class="row tags">
-            <div class="col col-lg-2 tag" data-ng-repeat="tag in searchData.tags">
+            <div class="col-lg-2 tag" data-ng-repeat="tag in searchData.tags">
                 <a data-ng-href="/?q=%23{{tag.term}}">#{{tag.term}}</a>
             </div>
         </div>
 
         <div class="row">
-            <div class="col col-lg-12">
+            <div class="col-12">
                 <div id="results"><ul class="list-unstyled"></ul></div>
                 <div id="resultScripts"></div>
             </div>

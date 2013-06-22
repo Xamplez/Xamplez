@@ -31,7 +31,6 @@ app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags
 			$location.search("q", query);
 
 			$scope.searchResults = Search.query({q: query}, function() {
-				console.log($scope.searchResults);
 		    angular.forEach($scope.searchResults.hits.hits, function(value) {
 		      var options = {
 		        selector: "#results ul",

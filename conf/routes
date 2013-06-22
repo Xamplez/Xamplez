@@ -5,6 +5,7 @@
 # Views
 GET     /                              controllers.Application.main(any = "whatever")
 GET     /views/index                   controllers.Application.index
+GET     /views/gist                    controllers.Application.gist
 GET     /views/stats                   controllers.Application.stats
 GET     /views/search                  controllers.Application.search
 GET     /auth                          controllers.Application.authenticate
@@ -14,6 +15,7 @@ GET     /api/search                    controllers.Search.search(q: String)
 POST    /api/search                    controllers.Search.insert
 GET     /api/tags                      controllers.Search.tags
 GET     /api/lastcreated               controllers.Search.lastCreated
+GET     /api/gists/:id                 controllers.Gists.findById(id: String)
 
 
 # 404 API in case of unknown url

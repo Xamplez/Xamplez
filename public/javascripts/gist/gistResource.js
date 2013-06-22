@@ -1,8 +1,5 @@
-app.factory('Gist', ['$resource', function($resource) {
-  return $resource('https://api.github.com/gists/:id', {}, {
-    'get' : {
-      method : 'GET',
-      isArray : false
-    }
+app.factory('Gists', ['$resource', 'config', function($resource, config) {
+  return $resource(config.api + "/gists/:id", {id: '@id'}, {
+  	
   });
 }]);

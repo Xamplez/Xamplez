@@ -2,7 +2,7 @@
 
 var app = angular.module('app', ['ngResource', 'ui.select2'])
   .constant("config", {api: "http://localhost:9000\:9000/api", gistApi: "https://gist.github.com", gitHubApi: "https://api.github.com"})
-  .config(['$routeProvider', function($routeProvider) {
+  .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: '/views/index',
@@ -16,12 +16,20 @@ var app = angular.module('app', ['ngResource', 'ui.select2'])
         templateUrl: '/views/search',
         controller: 'SearchCtrl'
       })
+      .when('/:id', {
+        templateUrl: '/views/gist',
+        controller: 'GistCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
   }])
-  .config(['$locationProvider', function($locationProvider) {
+  .config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('!');
+  }])
+  .run(['$rootScope', '$log', '$location', function ($rootScope, $log, $location) {
+    $rootScope.$log = $log;
+    $rootScope.$location = $location;
   }]);
 
 

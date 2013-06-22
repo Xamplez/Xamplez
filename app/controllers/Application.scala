@@ -24,6 +24,10 @@ object Application extends GithubOAuthController {
     Ok(views.html.index())
   }
 
+  def gist = Action {
+    Ok(views.html.gist())
+  }
+
   def stats = Action {
     Ok(views.html.stats())
   }

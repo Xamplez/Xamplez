@@ -18,10 +18,10 @@ object Global extends GlobalSettings {
     val url = ( conf.getLong("config.external.gist"), conf.getString("config.external.url") ) match {
       case (Some(id), _ ) =>{
         try{
-          Some(Await.result(Gist.getFileUrl(id, "application.conf", false), 5.seconds))
+          Some(Await.result(Gist.getFileUrl(id, "application.conf", false), 10.seconds))
         }catch{
           case e: Exception => {
-            play.Logger.error("Failed to load file application.conf from gist : %s".format(id))
+            play.Logger.error("Failed to load file application.conf from gist : %s; %s".format(id, e.getMessage))
             None
           }
         }

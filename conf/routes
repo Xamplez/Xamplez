@@ -15,7 +15,7 @@ GET     /api/search                    controllers.Search.search(q: String)
 POST    /api/search                    controllers.Search.insert
 GET     /api/tags                      controllers.Search.tags
 GET     /api/lastcreated               controllers.Search.lastCreated
-GET     /api/gists/:id                 controllers.Gists.findById(id: String)
+GET     /api/gists/:id                 controllers.Gists.findById(id: Long)
 
 
 # 404 API in case of unknown url

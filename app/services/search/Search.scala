@@ -214,6 +214,12 @@ trait ElasticSearch {
 
   def lastUpdated = search(queryLastUpdated, true)
 
+  def queryById(id: Long) = Json.obj(
+    "query" -> Json.obj( "ids" -> Json.obj( "values" -> Json.arr(id.toString)) ),
+    "size" -> 1
+  )
+
+  def byId(id: Long) = search(queryById(id), true)
 }
 
 object Search extends ElasticSearch

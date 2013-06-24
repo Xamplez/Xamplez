@@ -8,11 +8,26 @@ import play.api.libs.json._
 import play.api.libs.json.Json._
 import play.api.libs.functional.syntax._
 
+import services.search.{Search => EsSearch}
+
 object Gists extends Controller {
 
-	// TODO: return the JSON of the corresponding gist
-	def findById(id: String) = Action {
-		Ok(Json.obj())
+	def findById(id: Long) = Action {
+		Async{
+	    EsSearch.byId(id).map{ e =>
+	    	e.fold(
+	    		{ r => BadRequest("%s - %s".format(r.status, r.body) ) },
+	    		{ json =>
+	    			( json \ "hits" \ "hits").as[Seq[JsValue]] match {
+	    				case head :: _ => Ok(head)
+	    				case _ => NotFound(id.toString)
+	    			} 
+	    		}
+	    	)
+	    } recover {
+	    	case e: Exception => BadRequest("Failed to load data : %s".format(e.getMessage))
+	    }
+	  }
 	}
 
 }

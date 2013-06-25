@@ -18,8 +18,9 @@ import scala.util.matching.Regex
 import concurrent.Future
 
 object GithubWS {
-  lazy val clientId = Play.application.configuration.getString("github.clientId")
-  lazy val clientSecret = Play.application.configuration.getString("github.clientSecret")
+  lazy val clientId = Play.application.configuration.getString("github.client.id")
+  lazy val clientSecret = Play.application.configuration.getString("github.client.secret")
+  lazy val clientToken = Play.application.configuration.getString("github.client.token")
 
 
   def fetch(url: String, accept: String = "application/json", authenticated: Boolean = true): WSRequestHolder = {
@@ -132,22 +133,28 @@ object GithubWS {
       fetch(s"/gists/$gistId", authenticated = authenticated).get.map(_.json)
     }
 
-    def getFileUrl(gistId: Long, fileName: String, authenticated: Boolean = true ): Future[String] = {
+    def getFileUrl(gistId: Long, fileName: String, authenticated: Boolean = true ): Future[Option[String]] = {
       get(gistId, authenticated = authenticated).map{ json =>
-        (json \ "files" \ fileName \ "raw_url").as[String]
+        (json \ "files" \ fileName \ "raw_url").asOpt[String]
       }
     }
 
-    def getFile(gistId: Long, fileName: String, authenticated: Boolean = true ): Future[String] = {
+    def getFile(gistId: Long, fileName: String, authenticated: Boolean = true ): Future[Option[String]] = {
       getFileUrl(gistId, fileName, authenticated).map { url =>
-        io.Source.fromURL(url).mkString
+        url.map{ u => io.Source.fromURL(u).mkString }
       }
     }
 
-    def postFile(gistId: Long, fileName: String, content: String ) = {
-      fetch(s"/gists/$gistId").post(
-        Json.obj( "files" -> Json.obj(  fileName -> Json.obj("content" -> content) ) )
-      )
+    def putFile(gistId: Long, fileName: String, content: String ): Future[_] = {
+      clientToken.map{ token =>
+        fetch(s"/gists/$gistId", authenticated = false)
+          .withQueryString("access_token" -> token)
+          .post( Json.obj( "files" -> Json.obj(  fileName -> Json.obj("content" -> content) ) )
+        )
+      }.getOrElse{
+        play.Logger.error("Failed to update $fileName : set key github.client.token")
+        throw new RuntimeException("Failed to update $fileName : missing key github.client.token")
+      }
     }
 
     def forksId(gistId: Long): Future[Seq[Long]] = {

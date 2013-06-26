@@ -175,10 +175,21 @@ object GithubWS {
       }
     }
 
-    def listForksOld(gistId: Long): Future[Seq[JsObject]] = {
-      fetch(s"/gists/$gistId/forks").get.map(_.json).map{ json =>
-        json.as[JsArray].value.map{ fork =>
-          fork.transform(cleanJson).getOrElse(JsNull).as[JsObject]
+    def fetchForks(forks: Seq[Long]): Future[Seq[JsObject]] = {
+      Future.sequence( forks.map{ id =>
+        get(id).map{ fork => 
+          fork.transform(cleanJsonWithFiles).getOrElse(JsNull).as[JsObject] 
+        }
+      })
+    }
+
+    def listNewForks(gistId: Long, lastCreated : Option[String], lastUpdated : Option[String] ): Future[Seq[Long]] = {
+      fetch(s"/gists/$gistId/forks").get.map(_.json).map{ js =>
+        js.as[Seq[JsValue]].filter{ json =>
+          lastCreated.map{ d => (json \ "created_at").as[String] > d }.getOrElse(true) ||
+            lastUpdated.map{ d => (json \ "updated_at").as[String] > d }.getOrElse(false)
+        }.map{ json =>
+          (json \ "id").as[String].toLong
         }
       }
     }

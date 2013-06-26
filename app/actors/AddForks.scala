@@ -49,7 +49,8 @@ class AddForks extends Actor {
       (for{
         lastCreated <- extractField(services.search.Search.lastCreated, "created_at")
         lastUpdated <- extractField(services.search.Search.lastUpdated, "updated_at" )
-        forks       <- GithubWS.Gist.listForks(rootId)
+        forksId     <- GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
+        forks       <- GithubWS.Gist.fetchForks(forksId)
         response    <- Future.sequence(
                          filter(forks, lastCreated, lastUpdated).map{ json =>
                            services.search.Search.insert(json)

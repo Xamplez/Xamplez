@@ -145,7 +145,7 @@ object GithubWS {
       }
     }
 
-    def putFile(gistId: Long, fileName: String, content: String ): Future[_] = {
+    def putFile(gistId: Long, fileName: String, content: String ): Future[Response] = {
       clientToken.map{ token =>
         fetch(s"/gists/$gistId", authenticated = false)
           .withQueryString("access_token" -> token)

@@ -16,6 +16,7 @@ POST    /api/search                    controllers.Search.insert
 GET     /api/tags                      controllers.Search.tags
 GET     /api/lastcreated               controllers.Search.lastCreated
 GET     /api/gists/:id                 controllers.Gists.findById(id: Long)
+DELETE  /api/gists/:id                 controllers.Gists.blacklist(id: Long)
 
 
 # 404 API in case of unknown url

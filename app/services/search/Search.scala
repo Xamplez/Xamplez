@@ -156,6 +156,11 @@ trait ElasticSearch {
     } recoverTotal { e => Future(Right(Json.obj())) }
   }
 
+  def delete(id: Long): Future[Response] = {
+    play.Logger.debug(s"Search : deleting $id")
+    WS.url(s"$INSERT_URL/$id").delete
+  }
+
   private def buildSearch(query: String) =
     Json.obj("query" -> Json.obj(
       "query_string" -> Json.obj(

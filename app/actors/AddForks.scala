@@ -6,6 +6,7 @@ import concurrent.Future
 import play._
 import play.api.libs.ws._
 import play.api.libs.concurrent.Execution.Implicits._
+import services.BlackList
 import services.github.GithubWS
 
 import play.api.libs.json._
@@ -40,11 +41,12 @@ class AddForks extends Actor {
   def receive = {
     case "update" => {
       (for{
-        lastCreated <- extractField(services.search.Search.lastCreated, "created_at")
-        lastUpdated <- extractField(services.search.Search.lastUpdated, "updated_at" )
-        forksId     <- GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
-        forks       <- GithubWS.Gist.fetchForks(forksId)
-        response    <- Future.sequence( forks.map{ json => services.search.Search.insert(json) })
+        lastCreated     <- extractField(services.search.Search.lastCreated, "created_at")
+        lastUpdated     <- extractField(services.search.Search.lastUpdated, "updated_at" )
+        forksId         <- GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
+        blacklistId     <- BlackList.ids
+        forks           <- GithubWS.Gist.fetchForks(forksId.filter{ id => !blacklistId.contains(id) })
+        response        <- Future.sequence( forks.map{ json => services.search.Search.insert(json) })
       } yield (response)).foreach(logResponse(_))
     }
   }

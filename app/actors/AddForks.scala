@@ -28,13 +28,6 @@ class AddForks extends Actor {
     }
   }
 
-  private def filter( forks: Seq[JsObject], lastCreated : Option[String], lastUpdated : Option[String] ) = {
-    forks.filter{ json =>
-      lastCreated.map{ d => (json \ "created_at").as[String] > d }.getOrElse(true) ||
-      lastUpdated.map{ d => (json \ "updated_at").as[String] > d }.getOrElse(false)
-    }
-  }
-
   private def logResponse( response: Seq[Either[Response, JsValue]] ) = {
     log.debug(
       response.map(_.fold(
@@ -51,11 +44,7 @@ class AddForks extends Actor {
         lastUpdated <- extractField(services.search.Search.lastUpdated, "updated_at" )
         forksId     <- GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
         forks       <- GithubWS.Gist.fetchForks(forksId)
-        response    <- Future.sequence(
-                         filter(forks, lastCreated, lastUpdated).map{ json =>
-                           services.search.Search.insert(json)
-                         }
-                       )
+        response    <- Future.sequence( forks.map{ json => services.search.Search.insert(json) })
       } yield (response)).foreach(logResponse(_))
     }
   }

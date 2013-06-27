@@ -175,23 +175,25 @@ object GithubWS {
       }
     }
 
-    def fetchForks(forks: Seq[Long]): Future[Seq[JsObject]] = {
+    def fetchForks(forks: Set[Long]): Future[Seq[JsObject]] = {
       play.Logger.debug("Fetch forks : %s".format(forks.toString))
-      Future.sequence( forks.map{ id =>
+      Future.sequence( forks.toSeq.map{ id =>
         get(id).map{ fork =>
-          fork.transform(cleanJsonWithFiles).getOrElse(Json.obj()).as[JsObject]
+          fork.transform(cleanJsonWithFiles).asOpt
+        } recover {
+          case e: Exception => play.Logger.warn("Failed to load gist %s : %s".format(id, e.getMessage)); None
         }
-      })
+      }).map( _.flatten )
     }
 
-    def listNewForks(gistId: Long, lastCreated : Option[String], lastUpdated : Option[String] ): Future[Seq[Long]] = {
+    def listNewForks(gistId: Long, lastCreated : Option[String], lastUpdated : Option[String] ): Future[Set[Long]] = {
       fetch(s"/gists/$gistId/forks").get.map(_.json).map{ js =>
         js.as[Seq[JsValue]].filter{ json =>
           lastCreated.map{ d => (json \ "created_at").as[String] > d }.getOrElse(true) ||
             lastUpdated.map{ d => (json \ "updated_at").as[String] > d }.getOrElse(false)
         }.map{ json =>
           (json \ "id").as[String].toLong
-        }
+        }.toSet
       }
     }
   }

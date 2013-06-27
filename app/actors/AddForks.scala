@@ -29,12 +29,35 @@ class AddForks extends Actor {
     }
   }
 
-  private def logResponse( response: Seq[Either[Response, JsValue]] ) = {
+  private def logResponse( response: Seq[Either[String, JsValue]] ) = {
     log.debug(
       response.map(_.fold(
-        err => "Error:"+err.body,
+        err => err,
         r => r
       )).toString
+    )
+  }
+
+  private def insert( gists: Seq[JsObject] ): Future[Seq[Either[String, JsValue]]] = {
+    play.Logger.debug("Inserting %s gists".format(gists.size))
+    Future.sequence(
+      gists.map{ json =>
+        try{
+          services.search.Search.insert(json).map{ response =>
+            response.left.map{ r => "Failed to save gist, %s - %s".format(r.status, r.body) }
+          } recover {
+            case e: Exception => {
+              play.Logger.error("FAILURE recover : %s".format(e.getMessage));
+              Left("Failed to save gist, %s".format(e.getMessage))
+            }
+          }
+        }catch{
+          case e: Exception => {
+            play.Logger.error("FAILURE TRY CATCH : %s".format(e.getMessage));
+            Future(Left("Failed to save gist, %s".format(e.getMessage)))
+          }
+        }
+      }
     )
   }
 
@@ -45,8 +68,8 @@ class AddForks extends Actor {
         lastUpdated     <- extractField(services.search.Search.lastUpdated, "updated_at" )
         forksId         <- GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
         blacklistId     <- BlackList.ids
-        forks           <- GithubWS.Gist.fetchForks(forksId.filter{ id => !blacklistId.contains(id) })
-        response        <- Future.sequence( forks.map{ json => services.search.Search.insert(json) })
+        forks           <- GithubWS.Gist.fetchForks(forksId -- blacklistId)
+        response        <- insert(forks)
       } yield (response)).map{ r =>
         logResponse(r)
       } recover {

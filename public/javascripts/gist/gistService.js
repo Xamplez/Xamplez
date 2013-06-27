@@ -9,7 +9,7 @@ app.factory('GistService', ["Colors", function(Colors) {
       '<div id="'+ getContainerId(gist) +'" class="gistContainer">'+
         '<div class="description '+ options.classes +'">'+
           '<div class="row"><div class="col-12">' +
-            '<span class="gist-link"><a href="https://gist.github.com/'+ gist.author_login + '/' + gist.id + '"> Gist '+ gist.id +'</a></span>' +
+            '<span class="gist-link"><a href="/' + gist.id + '">Gist '+ gist.id +'</a></span>' +
             '<span class="author">by <a href="https://github.com/'+ gist.author_login + '"> '+ gist.author_login +'</a></span>' +
             '<div class="langs pull-right">'+
               _.map(gist.langs, function (lang) { return '<span class="label ' + lang.toLowerCase() + '">' + lang + '</span>' }).join() +
@@ -47,7 +47,7 @@ app.factory('GistService', ["Colors", function(Colors) {
   };
 
   function normalizeDescription (gist) {
-    gist.taggedDescription = gist.description.replace(/(#([a-zA-Z0-9_\.]*[a-zA-Z0-9]+))/g , '<a href="/search?q=$2">$1</a>');
+    gist.taggedDescription = gist.description.replace(/(#([a-zA-Z0-9_\.]*[a-zA-Z0-9]+))/g , '<a href="/?q=%23$2">$1</a>');
   };
 
   function getContainerId (gist) {

@@ -48,7 +48,7 @@ header {
     vertical-align: middle;
     font-weight: bold;
     font-size: 18px;
-    padding: 30px;
+    padding: 24px;
 
     &::before {
       content: " ";
@@ -69,6 +69,11 @@ header {
         border-top: 5px solid @green-play;
       }
     }
+  }
+
+  .icons a {
+    display: block;
+    text-align: center;
   }
 
   .logo {
@@ -115,4 +120,12 @@ section.main {
   .ribbon {
     margin: 0px -50%;
   }
+}
+
+.mirror {
+  display: inline-block;
+  -webkit-transform: rotateY( 180deg );
+   -moz-transform: rotateY( 180deg );
+     -o-transform: rotateY( 180deg );
+        transform: rotateY( 180deg );
 }

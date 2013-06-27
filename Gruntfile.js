@@ -132,7 +132,7 @@ module.exports = function (grunt) {
       bowerFontAwesome: {
         files: [{
           expand: true,
-          cwd: "<%= config.dir.components.root %>/font-awesome/build/assets/font-awesome/font/",
+          cwd: "<%= config.dir.components.root %>/font-awesome/font/",
           src: ["*"],
           dest: "<%= config.dir.public.fonts %>/fontawesome/"
         }]

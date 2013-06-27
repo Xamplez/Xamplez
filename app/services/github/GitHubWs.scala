@@ -153,7 +153,7 @@ object GithubWS {
         )
       }.getOrElse{
         play.Logger.error("Failed to update $fileName : set key github.client.token")
-        throw new RuntimeException("Failed to update $fileName : missing key github.client.token")
+        Future.failed(new RuntimeException("Failed to update $fileName : missing key github.client.token"))
       }
     }
 
@@ -177,8 +177,8 @@ object GithubWS {
 
     def fetchForks(forks: Seq[Long]): Future[Seq[JsObject]] = {
       Future.sequence( forks.map{ id =>
-        get(id).map{ fork => 
-          fork.transform(cleanJsonWithFiles).getOrElse(Json.obj()).as[JsObject] 
+        get(id).map{ fork =>
+          fork.transform(cleanJsonWithFiles).getOrElse(Json.obj()).as[JsObject]
         }
       })
     }

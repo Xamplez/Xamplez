@@ -23,8 +23,7 @@ trait BlackListService{
 		 	ids.getOrElse(Set.empty).map( _.toLong )
 		} recover {
 			case e: Exception => {
-				println("e:"+e)
-				play.Logger.error("Failed to load blacklist : %s".format(e.getMessage))
+				play.Logger.warn("Failed to load blacklist : %s".format(e.getMessage))
 				Set.empty
 			}
 		}

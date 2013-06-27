@@ -25,7 +25,9 @@ trait GistBackedProperties{
 				str.map{ u => Json.parse(u).asOpt[T]( (__ \ key).read[T] ) }.getOrElse(None)
 			}
 		}.getOrElse{
-			throw new RuntimeException("Failed to fetch key : missing key config.external.gist")
+			//throw new RuntimeException("Failed to fetch key : missing key config.external.gist")
+			play.Logger.warn("Failed to fetch key : missing key config.external.gist")
+			Future.successful(None)
 		}
 	}
 
@@ -45,7 +47,7 @@ trait GistBackedProperties{
 				Gist.putFile(id, fileName, Json.prettyPrint(merged)).map{ _ => value }
 			}.flatMap(identity)
 		}.getOrElse{
-			throw new RuntimeException("Failed to fetch key : missing key config.external.gist")
+			Future.failed(throw new RuntimeException("Failed to fetch key : missing key config.external.gist"))
 		}
 	}
 
@@ -62,7 +64,7 @@ trait GistBackedProperties{
 				}.getOrElse( Future[Option[T]](None) )
 			}.flatMap(identity)
 		}.getOrElse{
-			throw new RuntimeException("Failed to fetch key : missing key config.external.gist")
+			Future.failed(throw new RuntimeException("Failed to fetch key : missing key config.external.gist"))
 		}
 	}
 }

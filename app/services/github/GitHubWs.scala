@@ -185,14 +185,12 @@ object GithubWS {
 
     def listNewForks(gistId: Long, lastCreated : Option[String], lastUpdated : Option[String] ): Future[Seq[Long]] = {
       fetch(s"/gists/$gistId/forks").get.map(_.json).map{ js =>
-        val resp = js.as[Seq[JsValue]].filter{ json =>
+        js.as[Seq[JsValue]].filter{ json =>
           lastCreated.map{ d => (json \ "created_at").as[String] > d }.getOrElse(true) ||
             lastUpdated.map{ d => (json \ "updated_at").as[String] > d }.getOrElse(false)
         }.map{ json =>
           (json \ "id").as[String].toLong
         }
-        println("RESP:"+resp)
-        resp
       }
     }
   }

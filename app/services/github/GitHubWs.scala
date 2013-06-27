@@ -176,6 +176,7 @@ object GithubWS {
     }
 
     def fetchForks(forks: Seq[Long]): Future[Seq[JsObject]] = {
+      play.Logger.debug("Fetch forks : %s".format(forks.toString))
       Future.sequence( forks.map{ id =>
         get(id).map{ fork =>
           fork.transform(cleanJsonWithFiles).getOrElse(Json.obj()).as[JsObject]

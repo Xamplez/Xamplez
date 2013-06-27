@@ -47,7 +47,11 @@ class AddForks extends Actor {
         blacklistId     <- BlackList.ids
         forks           <- GithubWS.Gist.fetchForks(forksId.filter{ id => !blacklistId.contains(id) })
         response        <- Future.sequence( forks.map{ json => services.search.Search.insert(json) })
-      } yield (response)).foreach(logResponse(_))
+      } yield (response)).map{ r =>
+        logResponse(r)
+      } recover {
+        case e: Exception => play.Logger.error("Failed to update the gists : %s".format(e.getMessage) )
+      }
     }
   }
 

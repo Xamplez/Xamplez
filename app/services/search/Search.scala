@@ -103,7 +103,7 @@ trait ElasticSearch {
   }
 
   val descIdReader = (
-    (__ \ "description").read[String] and
+    (__ \ "description").readNullable[String] and
     (__ \ "id").read[String] and
     (__ \ "files").read[Seq[String]]
   ).tupled
@@ -136,24 +136,28 @@ trait ElasticSearch {
   }
 
   def insert(json: JsObject): Future[Either[Response, JsValue]] = {
-    descIdReader.reads(json).map { case (desc, id, files) =>
-      val tags = Tag.fetchTags(desc)
-      val (langs, tagLangs) = getLangs(files)
-      val fullJson =
-        json.delete(__ \ "files").as[JsObject] ++
-        Json.obj(
-          "langs" -> langs,
-          "tags" -> (tags.map(_.name) ++ tagLangs)
-        )
+    descIdReader.reads(json).map{
+      case (Some(desc), id, files) if desc.length>0 =>
+        val tags = Tag.fetchTags(desc)
+        val (langs, tagLangs) = getLangs(files)
+        val fullJson =
+          json.delete(__ \ "files").as[JsObject] ++
+          Json.obj(
+            "langs" -> langs,
+            "tags" -> (tags.map(_.name) ++ tagLangs)
+          )
 
-      play.Logger.debug(s"Search : inserting $fullJson")
-      WS.url(s"$INSERT_URL/$id")
-        .put(fullJson)
-        .map { r =>
-          if(r.status == 200 || r.status == 201) Right(r.json)
-          else Left(r)
-        }
-    } recoverTotal { e => Future(Right(Json.obj())) }
+        play.Logger.debug(s"Search : inserting $fullJson")
+        WS.url(s"$INSERT_URL/$id")
+          .put(fullJson)
+          .map { r =>
+            if(r.status == 200 || r.status == 201) Right(r.json)
+            else Left(r)
+          }
+      case (_, id, _) =>
+        play.Logger.warn(s"Search : can't insert $json because description is null or empty")
+        Future(Right(Json.obj()))
+    }.recoverTotal{ e => Future(Right(Json.obj())) }
   }
 
   def delete(id: Long): Future[Response] = {

@@ -5,10 +5,16 @@ app.factory('GistService', ["Colors", function(Colors) {
     angular.extend(options, {prefix: "", suffix: "", classes: "left"}, userOptions);
     // TODO: Add a +/- icon to show/hide a gist inside the span in the .description element
     // TODO: ADD DIRECT LINK TO GIST IN HEADER
+    var stars; 
+    if(gist.stars>0)
+      stars = '<i class="icon-star icon-4 star"></i>' + gist.stars
+    else stars = '<i class="icon-star-empty icon-4 star"></i>' + gist.stars
+
     angular.element(options.selector).append(options.prefix +
       '<div id="'+ getContainerId(gist) +'" class="gistContainer">'+
         '<div class="description '+ options.classes +'">'+
           '<div class="row"><div class="col-12">' +
+            '<span class="label gist-stars">'+stars+'</span>'+
             '<span class="gist-link"><a href="/' + gist.id + '">Gist '+ gist.id +'</a></span>' +
             '<span class="author">by <a href="https://github.com/'+ gist.author_login + '"> '+ gist.author_login +'</a></span>' +
             '<div class="langs pull-right">'+

@@ -42,19 +42,12 @@ class AddForks extends Actor {
     play.Logger.debug("Inserting %s gists".format(gists.size))
     Future.sequence(
       gists.map{ json =>
-        try{
-          services.search.Search.insert(json).map{ response =>
-            response.left.map{ r => "Failed to save gist, %s - %s".format(r.status, r.body) }
-          } recover {
-            case e: Exception => {
-              play.Logger.error("FAILURE recover : %s".format(e.getMessage));
-              Left("Failed to save gist, %s".format(e.getMessage))
-            }
-          }
-        }catch{
+        services.search.Search.insert(json).map{ response =>
+          response.left.map{ r => "Failed to index gist, %s - %s".format(r.status, r.body) }
+        } recover {
           case e: Exception => {
-            play.Logger.error("FAILURE TRY CATCH : %s".format(e.getMessage));
-            Future(Left("Failed to save gist, %s".format(e.getMessage)))
+            play.Logger.error("FAILURE recover : %s".format(e.getMessage));
+            Left("Failed to index gist, %s".format(e.getMessage))
           }
         }
       }
@@ -68,13 +61,16 @@ class AddForks extends Actor {
         lastUpdated     <- extractField(services.search.Search.lastUpdated, "updated_at" )
         forksId         <- GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
         blacklistId     <- BlackList.ids
-        forks           <- GithubWS.Gist.fetchForks(forksId -- blacklistId)
+        whiteIds = forksId -- blacklistId
+        forks           <- GithubWS.Gist.fetchForks(whiteIds)
+        stars           <- GithubWS.Gist.fetchStars(whiteIds)
         response        <- insert(forks)
       } yield (response)).map{ r =>
         logResponse(r)
       } recover {
         case e: Exception => play.Logger.error("Failed to update the gists : %s".format(e.getMessage) )
       }
+
     }
   }
 

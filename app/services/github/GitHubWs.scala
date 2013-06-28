@@ -181,9 +181,20 @@ object GithubWS {
         get(id).map{ fork =>
           fork.transform(cleanJsonWithFiles).asOpt
         } recover {
-          case e: Exception => play.Logger.warn("Failed to load gist %s : %s".format(id, e.getMessage)); None
+          case e: Exception => 
+            play.Logger.warn("Failed to load gist %s : %s".format(id, e.getMessage)); 
+            None
         }
       }).map( _.flatten )
+    }
+
+    def fetchStars(ids: Set[Long]): Future[Seq[JsObject]] = {
+      Future.sequence( ids.toSeq.map{ id =>
+        stars(id).map{ 
+          case Some(nb) => Json.obj("stars"-> nb)
+          case None => Json.obj("stars" -> 0)
+        }
+      } )
     }
 
     def listNewForks(gistId: Long, lastCreated : Option[String], lastUpdated : Option[String] ): Future[Set[Long]] = {

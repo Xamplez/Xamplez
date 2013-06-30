@@ -7,6 +7,7 @@ GET     /                              controllers.Application.main(any = "whate
 GET     /views/index                   controllers.Application.index
 GET     /views/gist                    controllers.Application.gist
 GET     /views/stats                   controllers.Application.stats
+GET     /views/about                   controllers.Application.about
 GET     /auth                          controllers.Application.authenticate
 
 # Search API

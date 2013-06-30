@@ -28,8 +28,13 @@
 
         <div class="row">
             <div class="col-12">
-                <div id="results"><ul class="list-unstyled"></ul></div>
-                <div id="resultScripts"></div>
+                <ul class="list-unstyled">
+                    <li data-ng-repeat="gist in searchResults.hits.hits">
+                        <gist value="gist"></gist>
+                    </li>
+                </ul>
+                <div id="results2"><ul class="list-unstyled"></ul></div>
+                <div id="resultScripts2"></div>
             </div>
         </div>
 

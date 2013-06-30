@@ -29,25 +29,11 @@ app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags
 
 		if (query) {
 			$location.search("q", query);
-
-			$scope.searchResults = Search.query({q: query}, function() {
-		    angular.forEach($scope.searchResults.hits.hits, function(value) {
-		      var options = {
-		        selector: "#results ul",
-		        scriptSelector: "#resultScripts",
-		        classes: "left",
-		        prefix: "<li>",
-		        suffix: "</li>"
-		      };
-
-		      GistService.display(value._source, $scope, options);
-		    })
-		  });
+			$scope.searchResults = Search.query({q: query});
 		}
 	};
 
 	$scope.queryFromString = function (queryString) {
-		console.log(queryString);
 		return _.map( queryString.split(" "), function (tag) {
 			return {
 				id: tag,

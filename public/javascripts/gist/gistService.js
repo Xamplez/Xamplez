@@ -1,24 +1,25 @@
-app.factory('GistService', ["Colors", function(Colors) {
-  function display (gist, userOptions) {
-    normalize(gist);
-    var options = {};
-    angular.extend(options, {prefix: "", suffix: "", classes: "left"}, userOptions);
-    // TODO: Add a +/- icon to show/hide a gist inside the span in the .description element
-    // TODO: ADD DIRECT LINK TO GIST IN HEADER
-    var stars; 
-    if(gist.stars>0)
-      stars = '<i class="icon-star icon-4 star"></i>' + gist.stars
-    else stars = '<i class="icon-star-empty icon-4 star"></i>' + gist.stars
+app.factory('GistService', ["$http", "$compile", "Colors", function($http, $compile, Colors) {
 
-    angular.element(options.selector).append(options.prefix +
-      '<div id="'+ getContainerId(gist) +'" class="gistContainer">'+
+  function buildGistHeader(gist, scope, options) {
+    var stars;
+    /*var updown =
+        '<span class="stars-updown">'+
+        '<i class="icon-caret-up stars-up" ng-click="isStarred('+gist.id+')"></i>'+
+        '<i class="icon-caret-down stars-down" ng-click="isStarred('+gist.id+')"></i>'+
+        '</span>';*/
+    if(gist.stars>0)
+      stars = gist.stars + '<i class="icon-star icon-4 star"></i>'/* + updown*/;
+    else stars = gist.stars + '<i class="icon-star-empty icon-4 star"></i>'/* + updown*/;
+
+    var compiled = /*$compile(*/angular.element(options.prefix +
+      '<div id="'+ getContainerId(gist) +'" class="gistContainer" data-ng-controller="GistCtrl">'+
         '<div class="description '+ options.classes +'">'+
           '<div class="row"><div class="col-12">' +
-            '<span class="label gist-stars">'+stars+'</span>'+
             '<span class="gist-link"><a href="/' + gist.id + '">Gist '+ gist.id +'</a></span>' +
             '<span class="author">by <a href="https://github.com/'+ gist.author_login + '"> '+ gist.author_login +'</a></span>' +
+            '<div class="pull-right"><span class="label gist-stars">'+stars+'</span></div>'+
             '<div class="langs pull-right">'+
-              _.map(gist.langs, function (lang) { return '<span class="label ' + lang.toLowerCase() + '">' + lang + '</span>' }).join() +
+              _.map(gist.langs, function (lang) { return '<span class="label gist-lang ' + lang.toLowerCase() + '">' + lang + '</span>' }).join() +
             '</div>' +
           '</div></div>' +
           '<hr/>' +
@@ -28,8 +29,29 @@ app.factory('GistService', ["Colors", function(Colors) {
           '</div></div>' +
         '</div>' +
         '<div class="gistWrapper collapse in"></div>' +
-      '</div>'+options.suffix);
-    angular.element(options.scriptSelector).append('<div id="'+ getScriptId(gist) +'"><script type="text/javascript" src="'+ gist.url +'.json?callback=displayGist"></script></div>')
+      '</div>'+options.suffix)/*)*/;
+
+    return compiled/*(scope)*/;
+  }
+
+  function buildGistBody(gist, scope, options) {
+    return angular.element(
+      '<div id="'+ getScriptId(gist) +'">'+
+        '<script type="text/javascript" src="'+ gist.url +'.json?callback=displayGist"></script>'+
+      '</div>'
+    );
+  }
+
+  function display (gist, scope, userOptions) {
+    normalize(gist);
+    var options = {};
+    angular.extend(options, {prefix: "", suffix: "", classes: "left"}, userOptions);
+
+    var header = buildGistHeader(gist, scope, options);
+    var body = buildGistBody(gist, scope, options);
+
+    angular.element(options.selector).append(header);
+    angular.element(options.scriptSelector).append(body);
   };
 
   function remove (gist) {
@@ -37,6 +59,13 @@ app.factory('GistService', ["Colors", function(Colors) {
     angular.element("#" + getContainerId(gist)).remove(); // TODO: removing also prefix and suffix if possible
     angular.element("#" + getScriptId(gist)).remove();
   };
+
+  function isStarred (id) {
+    $http.jsonp("https://api.github.com/gists/"+id+"/star")
+         .success(function(data, status) {
+           console.log("status", status);
+         });
+  }
 
   function normalize (gist) {
     normalizeId(gist);
@@ -66,6 +95,7 @@ app.factory('GistService', ["Colors", function(Colors) {
 
   return {
     display: display,
-    remove: remove
+    remove: remove,
+    isStarred: isStarred
   }
 }]);

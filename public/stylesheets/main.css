@@ -7056,8 +7056,25 @@ select.select2 {
   margin-left: 5px;
   margin-right: 5px;
 }
+.gistContainer .description .gist-stars {
+  font-size: 100%;
+  margin-left: 5px;
+}
 .gistContainer .description .star {
-  margin-right: 5px;
+  margin-left: 4px;
+}
+.gistContainer .description .stars-up {
+  font-size: 140%;
+}
+.gistContainer .description .stars-down {
+  font-size: 140%;
+}
+.gistContainer .description .stars-down:hover,
+.gistContainer .description .stars-up:hover {
+  color: #428bca;
+}
+.gistContainer .description .gist-lang {
+  font-size: 100%;
 }
 .gistContainer .description hr {
   margin: 5px 0px;

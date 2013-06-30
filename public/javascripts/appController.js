@@ -40,7 +40,7 @@ app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags
 		        suffix: "</li>"
 		      };
 
-		      GistService.display(value._source, options);
+		      GistService.display(value._source, $scope, options);
 		    })
 		  });
 		}

@@ -14,7 +14,7 @@ app.controller('SearchCtrl', ['$scope', '$routeParams', "Search", "GistService",
         suffix: "</li>"
       };
 
-      GistService.display(value._source, options);
+      GistService.display(value._source, $scope, options);
     })
   });
 }]);

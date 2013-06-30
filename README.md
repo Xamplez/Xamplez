@@ -1,19 +1,6 @@
-## Xamplez (Hackday #01 Zenexity) 
+## Play Framework's fork of Xamplez.io
 
-### Prerequisites
+PlayByExamples is about code snippets concerning Play Framework.
+It's a fork of core project https://github.com/Xamplez/Xamplez and the instance is running on play.xamplez.io.
 
- * Play 2.1
-
-### Notes
-
-* For Github authentication, please use `http://localhost:9000` as main url (otherwise, redirectUri will faill)
-
-### Contributes
-
-You will need npm, grunt and bower. Then do:
-
-- fork the project
-- go to its root
-- `npm install`
-- `grunt bower`
-- `grunt`
+Xamplez Team

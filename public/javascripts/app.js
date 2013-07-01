@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('app', ['ngResource', 'ui.select2'])
-  .constant("config", {api: "http://localhost:9000\:9000/api", gistApi: "https://gist.github.com", gitHubApi: "https://api.github.com"})
+  .constant("config", {api: "/api", gistApi: "https://gist.github.com", gitHubApi: "https://api.github.com"})
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/', {

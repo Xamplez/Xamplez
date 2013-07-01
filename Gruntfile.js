@@ -169,6 +169,14 @@ module.exports = function (grunt) {
           dest: "<%= config.dir.public.scripts %>/vendors/d3/"
         }]
       },
+      bowerD3LayoutCloud: {
+        files: [{
+          expand: true,
+          cwd: "<%= config.dir.components.root %>/d3-layout-cloud/",
+          src: ["d3.layout.cloud.js"],
+          dest: "<%= config.dir.public.scripts %>/vendors/d3/layout-cloud/"
+        }]
+      },
       bowerSelect2: {
         files: [{
           expand: true,
@@ -298,6 +306,7 @@ module.exports = function (grunt) {
           "copy:bowerModernizr",
           "copy:bowerLodash",
           "copy:bowerD3",
+          "copy:bowerD3LayoutCloud",
           "copy:bowerSelect2",
           "copy:bowerAngular",
           "copy:bowerRestangular",

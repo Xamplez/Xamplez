@@ -13,7 +13,8 @@ var app = angular.module('app', ['ngResource', 'ui.select2'])
         controller: 'StatsCtrl'
       })
       .when('/about', {
-        templateUrl: '/views/about'
+        templateUrl: '/views/about',
+        controller: 'AboutCtrl'
       })
       .when('/:id', {
         templateUrl: '/views/gist',

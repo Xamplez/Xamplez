@@ -41,4 +41,15 @@ object Gists extends Controller {
 	  }
 	}
 
+	def comments(id: Long) = Action {
+	  Async{
+	  	services.github.GithubWS.Gist.comments(id).map { c =>
+	  		c match {
+	  			case Some(str) => Ok(str)
+	  			case _ => BadRequest("")
+	  		}
+	  	}
+	  }
+	}
+
 }

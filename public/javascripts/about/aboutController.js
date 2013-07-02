@@ -1,6 +1,8 @@
-app.controller("AboutCtrl", ["$scope", function ($scope) {
+app.controller("AboutCtrl", ["$scope", "ReposGitHub", function ($scope, ReposGitHub) {
 
-	var fill = d3.scale.category20();
+  $scope.contributors = ReposGitHub.contributors();
+  
+  var fill = d3.scale.category20();
 
   d3.layout.cloud().size([600, 600])
     .words([

@@ -20,10 +20,21 @@
         </div>
 
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 contributors">
                 <h3>A huge thanks to all contributors of the project!</h3>
 
+                {{contributors}}
 
+                <ul class="media-list" data-ng-repeat="c in contributors | orderBy:'-total'">
+                  <li class="media">
+                    <a class="pull-left" data-ng-href="{{c.author.html_url}}">
+                      <img class="media-object" data-ng-src="{{c.author.avatar_url}}">
+                    </a>
+                    <div class="media-body">
+                      <h4 class="media-heading">{{c.author.login}}</h4>
+                    </div>
+                  </li>
+                </ul>
             </div>
         </div>
 

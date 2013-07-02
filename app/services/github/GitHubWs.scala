@@ -103,6 +103,27 @@ object GithubWS {
         })
     }
 
+    // Hack Github API - retrieve the comments from the gist page!
+    def comments(gistId: Long): Future[Option[String]] = {
+      val commentsStartHtml = "<div id=\"comments\" class=\"new-comments\">"
+      val commentsEndHtml = "</div>\n      <p class=\"uncommentable\">"
+      WS.url(s"https://gist.github.com/$gistId").get.map { r =>
+        r.status match {
+          case 200 => {
+            val indexCommentsStartHtml = r.body.indexOf(commentsStartHtml)
+            val indexCommentsEndHtml = r.body.indexOf(commentsEndHtml, indexCommentsStartHtml)
+
+            if (indexCommentsStartHtml > -1 && indexCommentsEndHtml > indexCommentsStartHtml) {
+              Some(r.body.drop(indexCommentsStartHtml).take(indexCommentsEndHtml - indexCommentsStartHtml + 6))
+            } else {
+              None
+            }
+          }
+          case _ => None
+        }
+      }
+    }
+
     // Hack Github API - retrieve the stars number from the gist page!
     def stars(gistId: Long): Future[Option[Long]] = {
       val starsHtmlPrefix = "Stars\n            <span class=\"counter\">"

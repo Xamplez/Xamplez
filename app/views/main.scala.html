@@ -69,9 +69,19 @@
         <script src="@routes.Assets.at("javascripts/gist/gistResource.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/gist/gistService.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/gist/gistDirective.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/github/gistsResource.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/github/reposResource.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/stats/statsController.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/stats/bubbleCloud.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/util/colorsService.js")" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            app.constant("PlayConfig", {
+                api: "/api",
+                gistApi: "https://gist.github.com",
+                gitHubApi: "https://api.github.com"
+            })
+        </script>
 
         <script src="http://localhost:35729/livereload.js"></script>
 

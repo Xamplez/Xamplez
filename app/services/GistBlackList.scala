@@ -16,10 +16,10 @@ import play.api.Play.current
 import services.github.GithubWS._
 import services.search.Search
 
-trait BlackListService{
+trait GistBlackListService{
 
 	def ids: Future[Set[Long]] = {
-		Properties.get[Set[String]]("blacklist").map { ids =>
+		GistProperties.get[Set[String]]("blacklist").map { ids =>
 		 	ids.getOrElse(Set.empty).map( _.toLong )
 		} recover {
 			case e: Exception => {
@@ -33,10 +33,10 @@ trait BlackListService{
 		for{
 			ids 	 <- ids
 			response <- Search.delete(id)
-			removed  <- Properties.set("blacklist", (ids + id).map(_.toString))
+			removed  <- GistProperties.set("blacklist", (ids + id).map(_.toString))
 		}yield( response )
 	}
 
 }
 
-object BlackList extends BlackListService
+object GistBlackList extends GistBlackListService

@@ -115,5 +115,10 @@
                 <div class="gistWrapper"></div>
             </div>
         </script>
+
+        <script type="text/javascript">
+            var customvars = 
+                @Html(services.GistConfig.getConfigAsJson("custom.vars").get.toString)
+        </script>
     </body>
 </html>

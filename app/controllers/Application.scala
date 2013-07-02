@@ -9,8 +9,8 @@ import play.api.Play.current
 
 object Application extends GithubOAuthController {
 
-  val ROOT_GIST = Play.application.configuration.getString("gist.root").get
-  val ROOT_GIST_URL = s"https://gist.github.com/$ROOT_GIST"
+  lazy val ROOT_GIST = Play.application.configuration.getString("gist.root").get
+  lazy val ROOT_GIST_URL = s"https://gist.github.com/$ROOT_GIST"
 
   def main(any: String) = Action {
     Ok(views.html.main())

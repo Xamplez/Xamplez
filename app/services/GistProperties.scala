@@ -71,4 +71,29 @@ trait GistBackedProperties{
 	}
 }
 
-object Properties extends GistBackedProperties
+object GistProperties extends GistBackedProperties
+
+object GistConfig {
+	import scala.collection.JavaConverters._
+	import com.typesafe.config._
+	import ConfigValueType._
+
+	def convert(cv: ConfigValue): JsValue = cv.valueType match {
+		case STRING  => JsString(cv.unwrapped.asInstanceOf[String])
+		case BOOLEAN => JsBoolean(cv.unwrapped.asInstanceOf[Boolean])
+		case NULL    => JsNull
+		case NUMBER  => JsNumber(BigDecimal(cv.unwrapped.toString))
+		case OBJECT  => cv.asInstanceOf[java.util.Map[String, ConfigValue]].asScala.foldLeft(Json.obj()){
+			case (obj, (k,v)) => obj + (k-> convert(v))
+		}
+		case LIST    => cv.asInstanceOf[java.util.List[ConfigValue]].asScala.foldLeft(Json.arr()){
+			case (arr, v) => arr :+ convert(v)
+		}
+	}
+	
+	implicit val configValueWriter = Writes[com.typesafe.config.ConfigValue]( cv => convert(cv) )
+
+	def getConfigAsJson(field: String): Option[JsObject] = {
+		Play.application.configuration.getObject(field).map(Json.toJson(_).as[JsObject])
+	}
+}

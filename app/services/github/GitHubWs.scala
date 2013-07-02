@@ -22,15 +22,14 @@ object GithubWS {
   lazy val clientSecret = Play.application.configuration.getString("github.client.secret")
   lazy val clientToken = Play.application.configuration.getString("github.client.token")
 
-
-  def fetch(url: String, accept: String = "application/json", authenticated: Boolean = true): WSRequestHolder = {
+  def fetch(url: String, accept: String = "application/json", authenticated: Boolean = true, client_id: Option[String] = clientId, client_secret: Option[String] = clientSecret): WSRequestHolder = {
     val ws = WS.url("https://api.github.com" + url).withHeaders("Accept" -> accept)
     if( authenticated ){
-      (clientId, clientSecret) match {
-        case (Some(id),Some(secret)) => {
+      (client_id, client_secret) match {
+        case (Some(id),Some(secret)) =>
             ws.withQueryString("client_id" -> id)
               .withQueryString("client_secret" -> secret)
-          }
+
         case _ => ws
       }
     }else{ws}
@@ -129,12 +128,12 @@ object GithubWS {
       fetch(s"/gists/$gistId/star").delete()
     }
 
-    def get(gistId: Long, authenticated: Boolean = true): Future[JsValue] = {
-      fetch(s"/gists/$gistId", authenticated = authenticated).get.map(_.json)
+    def get(gistId: Long, authenticated: Boolean = true, client_id: Option[String] = clientId, client_secret: Option[String] = clientSecret): Future[JsValue] = {
+      fetch(s"/gists/$gistId", authenticated=authenticated, client_id=client_id, client_secret=client_secret).get.map(_.json)
     }
 
-    def getFileUrl(gistId: Long, fileName: String, authenticated: Boolean = true ): Future[Option[String]] = {
-      get(gistId, authenticated = authenticated).map{ json =>
+    def getFileUrl(gistId: Long, fileName: String, authenticated: Boolean = true, client_id: Option[String] = clientId, client_secret: Option[String] = clientSecret): Future[Option[String]] = {
+      get(gistId, authenticated, client_id, client_secret).map{ json =>
         (json \ "files" \ fileName \ "raw_url").asOpt[String]
       }
     }

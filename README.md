@@ -37,13 +37,13 @@ forks/instances (using Gist forking) to build a pure opensource knownledge clust
 
 Xamplez.io provides out-of-the-box:
 
- * the famous **Lord of the Gists** which is the mandatory starting point containing 3 files by default:
+ * the famous **Lord of the Gists** which is the mandatory starting point containing 4 files by default:
     * `code` that can be renamed with your extension: for ex, `code.scala`
     * `README.md` containing xamplez guide explaining how to write code snippets
     * `_License.txt` containing a potential license for your code
     * `meta` containing metadata used by xamplez.io backend
  
- * the less known **Lord of the Conf Gists** which is used to store all custom configurations for your Xamplez instance: 
+ * the less known **Lord of the Conf Gists** used to store all custom configurations for your Xamplez instance: 
      * custom Play configuration
      * custom CSS
      * custom HTML templates
@@ -54,15 +54,15 @@ Xamplez.io provides out-of-the-box:
     * Play2.1/Scala + ElasticSearch for backend
     * AngularJS for frontend
 
- * a **domain xamplez.io** : we would like to gather all Xamplez instances under this domain `xyz.xamplez.io`. It's not mandatory but we think it would be cool ;)
+ * a domain `xamplez.io` : we would like to gather all Xamplez instances under this domain `xyz.xamplez.io`. It's not mandatory but we think it would be cool ;)
  
 > Xamplez Core Server is licensed under classic Apache2 which provides the freedom we expect and will maintain the link between core projet and its forks.
 
 ### How to create a new instance of Xamplez.io
 
  1. Fork this github project
- 2. Fork the **Lord of the Gist** to create your Root Gist
- 3. Fork the **Lord of the Gist Conf** to create your Conf Gist & put Root Gist ID in it
+ 2. Fork the **Lord of the Gists** to create your Root Gist
+ 3. Fork the **Lord of the Conf Gists** to create your Conf Gist & put Root Gist ID in it
  4. Put Conf Gist ID in conf/application.conf
  5. Fork Root Gist and create a few snippets :
      * Put a short & relevant description of your code snippet: all words preceded by `#` will be indexed as tags

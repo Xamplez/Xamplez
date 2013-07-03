@@ -6997,6 +6997,44 @@ footer p {
   padding-bottom: 20px;
   font: 13px sans-serif;
 }
+#comments .discussion-bubble {
+  position: relative;
+}
+#comments .discussion-bubble::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 38px;
+  width: 0;
+  height: 0;
+  border: 5px solid white;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  z-index: 10;
+}
+#comments .discussion-bubble .discussion-bubble-avatar {
+  float: left;
+  box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.2);
+}
+#comments .discussion-bubble .discussion-bubble-content {
+  position: relative;
+  padding-bottom: 30px;
+  margin-left: 48px;
+  border-radius: 2px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+#comments .discussion-bubble .discussion-bubble-content .comment-header {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  padding: 10px;
+  font-size: 0.7rem;
+  color: #ccc;
+}
+#comments .discussion-bubble .discussion-bubble-content .comment-content .comment-body {
+  padding: 10px 20px;
+}
 .gistContainer .description {
   background-color: #eaeaea;
   color: #666;

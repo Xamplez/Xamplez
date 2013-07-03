@@ -17,9 +17,22 @@ Firstly, let's quote a well known writer:
 >
 > One Gist to bring them all and in the whatever-ness bind them
 
-#### For the sharers
+#### For the code sharers
 
-We aim at providing a **_"standard"_ way of building a knowledge base of code snippets** about a given topic 
+Our primary goal is to help people build knowledge bases of code snippets focusing on precise topics
+(from the very generic such as programming language or frameworks to the more specific such as 
+very precise technical points).
+
+To achieve this common goal, we aim at providing a few common rule
+
+By establishing a very few rules to follow and a few mechanisms to use, we 
+
+To afford this, we have established a few rules to 
+ * a very few rules to follow to 
+ * encouraging people to fork Xamplez core and create **multiple instances focused on different topics**
+
+For now, a instance of Xamplez
+
 by **forking a core opensource server**.
 
 Xamplez core project provides common mechanisms but can be fully customizable. 

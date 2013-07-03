@@ -31,9 +31,11 @@ you are participating to the constellations of Xamplez instances _(constellation
 
 ### What's Xamplez.io out-of-the-box ?
 
-Xamplez.io is completely opensource, nothing hidden because we want people to contribute to it, to improve it and
-to fork it for their own needs. We would just like to try to keep a link from the core project to all its 
-forks/instances to build a pure opensource knownledge cluster based on Gist.
+Xamplez.io is completely opensource, nothing hidden. We want people to contribute to it, to improve it &
+to fork it for their own needs. We'd just like to try to keep a link from the core project to all
+forks/instances (using Gist forking) to build a pure opensource knownledge cluster based on Gist.
+
+Xamplez.io provides out-of-the-box:
 
  * the famous **Lord of the Gist** which is the mandatory starting point containing 3 files by default:
     * `code` that can be renamed with your extension: for ex, `code.scala`

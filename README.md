@@ -1,27 +1,26 @@
 ## Welcome to Xamplez.io
 #### Building an OpenSource Knowledge Cluster of Code Snippets
 
-<br/>
 ### Xamplez.io's idea?
 
 Xamplez is based on a very simple idea: 
 > I want to share code snippets (and nothing else) about a given topic and be able to search them based 
 > on tags, ratings etc...
 
-Our primary goal is to **help people build code snippets bases, each focusing on a given topic**. The topic can go
-from the very generic subject such as programming language or frameworks to the more specific such as 
+Our primary goal is to **help people build multiple bases of code snippet, each focusing on a given topic**. 
+The topic can go from very generic subjects such as programming language or frameworks to more specific ones such as 
 very precise technical points. It's up to you to do what you want...
 
 To achieve this goal, **we propose to adopt a very few common & clear rules (actually one).** 
 
-> As soon as you follow this rule, you can participate to the constellations of Xamplez instances. 
+> As soon as you follow this rule, you can participate to the constellations of Xamplez instances (constellation begins with number >=2 ;)). 
 
 ### Xamplez.io's Rule
 
 ##### Literary version
 > One Gist to rule them all, One Gist to find them,
 >
-> One Gist to bring them all and in the whatever-ness bind them
+> One Gist to bring them all and in the happiness bind them
 
 ##### casual version
  * Xamplez provides the **Lord of the Gist** ie the gist that rules them all!

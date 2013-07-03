@@ -23,8 +23,8 @@ you are participating to the constellations of Xamplez instances _(constellation
 > One Gist to bring them all and in the happiness bind them
 
 ##### Common version
- * Xamplez provides the **Lord of the Gist** ie the gist that rules them all!
- * Just fork this _Lord of the Gist_ for your new instance of Xamplez: we call it the **Root Gist**.
+ * Xamplez is based on the **Lord of the Gists** ie the gist that rules them all!
+ * To start a new instance of Xamplez, just fork the _Lord of the Gists_: we call it the **Root Gist**.
  * **All code snippets concerning your topic must fork your Root Gist**.
  * From your Root Gist, using the great power of Github, you can then find all code snippets for your topic.
  * That's all folks...
@@ -37,13 +37,13 @@ forks/instances (using Gist forking) to build a pure opensource knownledge clust
 
 Xamplez.io provides out-of-the-box:
 
- * the famous **Lord of the Gist** which is the mandatory starting point containing 3 files by default:
+ * the famous **Lord of the Gists** which is the mandatory starting point containing 3 files by default:
     * `code` that can be renamed with your extension: for ex, `code.scala`
     * `README.md` containing xamplez guide explaining how to write code snippets
     * `_License.txt` containing a potential license for your code
     * `meta` containing metadata used by xamplez.io backend
  
- * the less known **Lord of the Conf Gist** which is used to store all custom configurations for your Xamplez instance: 
+ * the less known **Lord of the Conf Gists** which is used to store all custom configurations for your Xamplez instance: 
      * custom Play configuration
      * custom CSS
      * custom HTML templates

@@ -79,12 +79,40 @@ header {
 
   .logo {
     font-size: 40px;
-    padding: 15px;
+    //padding: 15px;
+    padding-top: 10px;
+    padding-bottom: 0px;
     font-style: italic;
 
     img {
       width: auto;
       height: 50px;
+    }
+  }
+
+  .fork {
+    position: absolute;
+    top: 60px;
+    left: 290px;
+    color: #666;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .fork a {
+    color: #428bca;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+
+    &::before {
+      border-top: 0;
+    }
+
+    &:hover {
+      &::before {
+        border-top: 0;
+      }
     }
   }
 }

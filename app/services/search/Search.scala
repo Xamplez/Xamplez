@@ -217,7 +217,8 @@ trait ElasticSearch {
     "query" -> Json.obj( "match_all" -> Json.obj() ),
     "size" -> 100,
     "sort" -> Json.arr( Json.obj(
-      "updated_at" -> "desc"
+      "updated_at" -> "desc",
+      "stars" -> "desc"
     ))
   )
 

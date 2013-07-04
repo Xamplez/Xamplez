@@ -113,8 +113,8 @@
                     <span class="author">by <a data-ng-href="https://github.com/{{gist.author_login}}">{{gist.author_login}}</a></span>
                     <div class="pull-right">
                         <span class="label label-default gist-stars">
-                            {{gist.stars > 0 ? gist.stars : 0}}
-                            <i class="icon-4 star" data-ng-class="gist.stars > 0 ? 'icon-star' : 'icon-star-empty'"></i>
+                            <a href="https://gist.github.com/{{gist.id}}" title="To star/unstar, do it directly on github & wait for xamplez reindexing">{{gist.stars > 0 ? gist.stars : 0}}
+                            <i class="icon-4 star" data-ng-class="gist.stars > 0 ? 'icon-star' : 'icon-star-empty'"></i></a>
                         </span>
                     </div>
                     <div class="pull-right langs">
@@ -129,9 +129,9 @@
             </div>
         </script>
 
-        <script type="text/javascript">
+        @*<script type="text/javascript">
             var customvars = 
                 @Html(services.GistConfig.getConfigAsJson("custom.vars").get.toString)
-        </script>
+        </script>*@
     </body>
 </html>

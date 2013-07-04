@@ -51,28 +51,31 @@ So, for now, Xamplez.io provides out-of-the-box:
 #### The mandatory **Lord of the Gists**, 
 
 It's the father of all Root gists. It provides a default format based on 4 files:
-    * `code` that can be renamed with your extension: for ex, `code.scala`
-    * `README.md` containing xamplez guide explaining how to write code snippets
-    * `_License.txt` containing a potential license for your code
-    * `meta` containing metadata used by xamplez.io backend
+
+ * `code` that can be renamed with your extension: for ex, `code.scala`
+ * `README.md` containing xamplez guide explaining how to write code snippets
+ * `_License.txt` containing a potential license for your code
+ * `meta` containing metadata used by xamplez.io backend
  
 #### The useful **Master Conf Gist** 
 
 It's used to store all custom configurations for Xamplez instance and specially the link to the Root Gist of your intance. 
 
-It works on the same principles as the _Lord of the Gists_: to build your own configuration, you fork it and store in one or more files: : 
-     * custom Play configuration
-     * custom CSS
-     * custom HTML templates
-     * local messages
-     * etc...
+It works on the same principles as the _Lord of the Gists_: to build your own configuration, you fork it and store in one or more files:
+
+ * custom Play configuration
+ * custom CSS
+ * custom HTML templates
+ * local messages
+ * etc...
  
 #### A **default Opensource server implementation** 
 
 This is an autonomous server capable of building a code snippet search engine starting only with the ID of your Root Gist. 
 It's based on:
-    * Play2.1/Scala + ElasticSearch for backend
-    * AngularJS for frontend
+ 
+ * Play2.1/Scala + ElasticSearch for backend
+ * AngularJS for frontend
 
 Please note that we don't impose anything about the backend and you can implement it as you want. But naturally, 
 our default implementation provides the default mechanisms and our vision. So, we'd like people to
@@ -96,8 +99,9 @@ We would like to gather all Xamplez instances under this domain `xyz.xamplez.io`
  3. Fork the **Master Conf Gist** to create your Conf Gist & put Root Gist ID in it
  4. Put Conf Gist ID in conf/application.conf
  5. Fork Root Gist and create a few snippets :
-     * Put a short & relevant description of your code snippet: all words preceded by `#` will be indexed as tags
-     * Put your code snippet in code file and you can create more files too
+
+   * Put a short & relevant description of your code snippet: all words preceded by `#` will be indexed as tags
+   * Put your code snippet in code file and you can create more files too
     
 <br/>
 ### The team behind Xamplez.io
@@ -105,6 +109,7 @@ We would like to gather all Xamplez instances under this domain `xyz.xamplez.io`
 If you want to contact us : contact@xamplez.io
 
 (in alphabetic order)
+
 * Jacques Bachellerie, backend ninja
 * Paul Dijou, frontend/AngularJs kung(fu-)guru 
 * Gaetan Renaudeau, initiator & frontend ma(d)ster

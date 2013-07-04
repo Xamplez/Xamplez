@@ -1,71 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
-    <!--link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" /-->
-    <!--link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" /-->
-    <!--link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" /-->
-    
-    <style type="text/css">
-      body {
-        font-family: 'Georgia', serif;
-        font-size: 17px;
-      }
-      
-      .content {
-        width: 530px;
-        margin: 40px auto;
-      }
-      
-      h1, h2, h3, h4, h5 {
-        font-family: 'Garamond', 'Georgia', serif;
-        font-weight: normal;
-        color: #444;
-      }
-      
-      blockquote {
-        font-style: italic;
-        color: #444;
-      }
-      
-      ul {
-        margin: 15px 0 15 px 0;
-        list-style: none;
-        line-height: 1.4;
-      }
-
-      ul li:before {
-        content: '\2014\a0';
-        color: #888;
-        position: absolute;
-        margin-left: -16px;
-      }
-    </style>
-
     <title>Xamplez.io by Xamplez</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
-    <div class="content">
-    <header>
-      <div class="container">
+    <div class="wrapper">
+      <header>
         <h1>Xamplez.io</h1>
-        <h2>Participate to Xamplez.io and help us build an OpenSource Knowledge Cluster of Code Snippets</h2>
+        <p>Participate to Xamplez.io and help us build an OpenSource Knowledge Cluster of Code Snippets</p>
 
-        <section id="downloads">
-          <a href="https://github.com/Xamplez/Xamplez/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/Xamplez/Xamplez/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/Xamplez/Xamplez" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+        <p class="view"><a href="https://github.com/Xamplez/Xamplez">View the Project on GitHub <small>Xamplez/Xamplez</small></a></p>
 
-    <div class="container">
-      <section id="main_content">
+
+        <ul>
+          <li><a href="https://github.com/Xamplez/Xamplez/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/Xamplez/Xamplez/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/Xamplez/Xamplez">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
         <h2>
 <a name="welcome-to-xamplezio" class="anchor" href="#welcome-to-xamplezio"><span class="octicon octicon-link"></span></a>Welcome to Xamplez.io</h2>
+
+<blockquote>
+<p>Participate to Xamplez.io and help us build an OpenSource Knowledge Cluster of Code Snippets</p>
+</blockquote>
 
 <h3>
 <a name="xamplezios-idea" class="anchor" href="#xamplezios-idea"><span class="octicon octicon-link"></span></a>Xamplez.io's idea?</h3>
@@ -131,35 +99,43 @@ we aim at building an opensource knownledge cluster based on Gist.</p>
 <h4>
 <a name="the-mandatory-lord-of-the-gists" class="anchor" href="#the-mandatory-lord-of-the-gists"><span class="octicon octicon-link"></span></a>The mandatory <strong>Lord of the Gists</strong>,</h4>
 
-<p>It's the father of all Root gists. It provides a default format based on 4 files:
-    * <code>code</code> that can be renamed with your extension: for ex, <code>code.scala</code>
-    * <code>README.md</code> containing xamplez guide explaining how to write code snippets
-    * <code>_License.txt</code> containing a potential license for your code
-    * <code>meta</code> containing metadata used by xamplez.io backend</p>
+<p>It's the father of all Root gists. It provides a default format based on 4 files:</p>
 
-<h4>
+<ul>
+<li>
+<code>code</code> that can be renamed with your extension: for ex, <code>code.scala</code>
+</li>
+<li>
+<code>README.md</code> containing xamplez guide explaining how to write code snippets</li>
+<li>
+<code>_License.txt</code> containing a potential license for your code</li>
+<li>
+<code>meta</code> containing metadata used by xamplez.io backend</li>
+</ul><h4>
 <a name="the-useful-master-conf-gist" class="anchor" href="#the-useful-master-conf-gist"><span class="octicon octicon-link"></span></a>The useful <strong>Master Conf Gist</strong>
 </h4>
 
 <p>It's used to store all custom configurations for Xamplez instance and specially the link to the Root Gist of your intance. </p>
 
-<p>It works on the same principles as the <em>Lord of the Gists</em>: to build your own configuration, you fork it and store in one or more files: : 
-     * custom Play configuration
-     * custom CSS
-     * custom HTML templates
-     * local messages
-     * etc...</p>
+<p>It works on the same principles as the <em>Lord of the Gists</em>: to build your own configuration, you fork it and store in one or more files:</p>
 
-<h4>
+<ul>
+<li>custom Play configuration</li>
+<li>custom CSS</li>
+<li>custom HTML templates</li>
+<li>local messages</li>
+<li>etc...</li>
+</ul><h4>
 <a name="a-default-opensource-server-implementation" class="anchor" href="#a-default-opensource-server-implementation"><span class="octicon octicon-link"></span></a>A <strong>default Opensource server implementation</strong>
 </h4>
 
 <p>This is an autonomous server capable of building a code snippet search engine starting only with the ID of your Root Gist. 
-It's based on:
-    * Play2.1/Scala + ElasticSearch for backend
-    * AngularJS for frontend</p>
+It's based on:</p>
 
-<p>Please note that we don't impose anything about the backend and you can implement it as you want. But naturally, 
+<ul>
+<li>Play2.1/Scala + ElasticSearch for backend</li>
+<li>AngularJS for frontend</li>
+</ul><p>Please note that we don't impose anything about the backend and you can implement it as you want. But naturally, 
 our default implementation provides the default mechanisms and our vision. So, we'd like people to
 improve this default implementation and contribute to the github project so that everyone can take advantage of 
 the same well built backend and build an instance very quickly.</p>
@@ -189,14 +165,11 @@ is quite cool to customize your instance very easily.</p>
 <li>Fork the <strong>Lord of the Gists</strong> to create your Root Gist</li>
 <li>Fork the <strong>Master Conf Gist</strong> to create your Conf Gist &amp; put Root Gist ID in it</li>
 <li>Put Conf Gist ID in conf/application.conf</li>
-<li>Fork Root Gist and create a few snippets :
-
-<ul>
+<li>Fork Root Gist and create a few snippets :</li>
+</ol><ul>
 <li>Put a short &amp; relevant description of your code snippet: all words preceded by <code>#</code> will be indexed as tags</li>
 <li>Put your code snippet in code file and you can create more files too</li>
-</ul>
-</li>
-</ol><p><br></p>
+</ul><p><br></p>
 
 <h3>
 <a name="the-team-behind-xamplezio" class="anchor" href="#the-team-behind-xamplezio"><span class="octicon octicon-link"></span></a>The team behind Xamplez.io</h3>
@@ -212,8 +185,12 @@ is quite cool to customize your instance very easily.</p>
 <li>Pascal Voitot, initiator &amp; backend terrible bogeyman</li>
 </ul>
       </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/Xamplez">Xamplez</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-
+    <script src="javascripts/scale.fix.js"></script>
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -224,6 +201,6 @@ is quite cool to customize your instance very easily.</p>
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
-    </div>
+
   </body>
 </html>

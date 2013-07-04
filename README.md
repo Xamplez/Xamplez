@@ -79,14 +79,14 @@ our default implementation provides the default mechanisms and our vision. So, w
 improve this default implementation and contribute to the github project so that everyone can take advantage of 
 the same well built backend and build an instance very quickly.
 
+> We will progressively document our backend implementation and specially the use of the configuration Gist which
+is quite cool to customize your instance very easily.
+
 #### A domain `xamplez.io`
 
 We would like to gather all Xamplez instances under this domain `xyz.xamplez.io`. It's not mandatory but we think it would be cool ;)
  
 > Xamplez Core Server is licensed under classic Apache2 which provides the freedom we expect and will maintain the link between core projet and its forks.
-
-> We will progressively document our backend implementation and specially the use of the configuration Gist which
-is quite cool to customize your instance very easily.
 
 <br/>
 ### How to create a new instance of Xamplez.io

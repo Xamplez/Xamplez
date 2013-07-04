@@ -1,6 +1,6 @@
 ## Welcome to Xamplez.io
 
-> Participate to Xamplez.io and help us build an OpenSource Knowledge Cluster of Code Snippets
+> Help us build an OpenSource Knowledge Cluster of Code Snippets
 
 ### Xamplez.io's idea?
 

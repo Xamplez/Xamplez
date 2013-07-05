@@ -64,7 +64,8 @@ class AddForks extends Actor {
         whiteIds = forksId -- blacklistId
         forks           <- GithubWS.Gist.fetchForks(whiteIds)
         stars           <- GithubWS.Gist.fetchStars(whiteIds)
-        response        <- insert(forks)
+        starsforks = forks.zip(stars).map( a => a._1 ++ a._2 )
+        response        <- insert(starsforks)
       } yield (response)).map{ r =>
         logResponse(r)
       } recover {

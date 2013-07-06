@@ -40,6 +40,7 @@ trait ElasticSearch {
   lazy val INDEX_URL = s"$ELASTIC_URL/$INDEX_NAME"
   lazy val INSERT_URL = s"$ELASTIC_URL/$INDEX_NAME/$TYPE_NAME"
   lazy val SEARCH_URL = INDEX_URL + "/_search"
+  lazy val UPDATE_URL = s"$ELASTIC_URL/$INDEX_NAME/$TYPE_NAME"
 
   private var node: Option[Node] = None
 
@@ -50,7 +51,6 @@ trait ElasticSearch {
         if(r.status == 200) Right(r.json.as[JsObject])
         else Left(s"status:${r.status} statusText:${r.statusText} error:${r.body}")
       }
-
   }
 
   private def createIndex(name: String): Future[Either[String, JsObject]] = {
@@ -115,8 +115,16 @@ trait ElasticSearch {
 
   val ext2Lang = Map(
     "scala" -> ("scala", false),
-    "java" -> ("java", false),
-    "py" -> ("python", true)
+    "java"  -> ("java", false),
+    "py"    -> ("python", true),
+    "js"    -> ("javascript", true),
+    "json"  -> ("json", false),
+    "html"  -> ("html", false),
+    "htm"   -> ("html", false),
+    "png"   -> ("png", false),
+    "jpg"   -> ("jpg", false),
+    "TXT"   -> ("text", false),
+    "text"  -> ("text", false)
   )
 
   private def getLangs(files: Seq[String]): (Seq[String], Seq[String]) = {
@@ -135,7 +143,7 @@ trait ElasticSearch {
     }
   }
 
-  def insert(json: JsObject): Future[Either[Response, JsValue]] = {
+  def insert(json: JsObject): Future[Either[String, JsValue]] = {
     descIdReader.reads(json).map{
       case (Some(desc), id, files) if desc.length>0 =>
         val tags = Tag.fetchTags(desc)
@@ -152,12 +160,22 @@ trait ElasticSearch {
           .put(fullJson)
           .map { r =>
             if(r.status == 200 || r.status == 201) Right(r.json)
-            else Left(r)
+            else Left(s"Couldn't insert $id (status:${r.status} msg:${r.statusText}")
           }
       case (_, id, _) =>
-        play.Logger.warn(s"Search : can't insert $json because description is null or empty")
-        Future(Right(Json.obj()))
-    }.recoverTotal{ e => Future(Right(Json.obj())) }
+        play.Logger.warn(s"Can't insert $json because description is null or empty")
+        Future(Left(s"Can't insert $json because description is null or empty"))
+    }.recoverTotal{ e => Future(Left(s"Can't insert due to json error ${e}")) }
+  }
+
+  def updateStars(id: Long, stars: Int): Future[Response] = {
+    val obj = Json.obj(
+      "script" -> "ctx._source.stars = stars",
+      "params" -> Json.obj(
+        "stars" -> stars
+      )
+    )
+    WS.url(s"$UPDATE_URL/$id/_update").post(obj)
   }
 
   def delete(id: Long): Future[Response] = {

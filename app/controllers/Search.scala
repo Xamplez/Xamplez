@@ -30,7 +30,7 @@ object Search extends Controller {
     Async{
       S.insert(jsObject).map(
         _.fold(
-          err => InternalServerError(err.json \ "error"),
+          err => InternalServerError(err),
           r => Ok(r)
         )
       )

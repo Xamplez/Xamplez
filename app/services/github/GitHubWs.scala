@@ -195,22 +195,40 @@ object GithubWS {
       }
     }
 
+    def fetchFork(id: Long): Future[Option[JsObject]] = {
+      //play.Logger.debug(s"Fetch fork : $id")
+      get(id).map{ fork =>
+        fork.transform(cleanJsonWithFiles).asOpt
+      }/*.recover{
+        case e: Throwable =>
+          play.Logger.warn("Failed to load gist %s : %s".format(id, e.getMessage));
+          None
+      }*/
+    }
+
     def fetchForks(forks: Set[Long]): Future[Seq[JsObject]] = {
-      play.Logger.debug("Fetch forks : %s".format(forks.toString))
+      //play.Logger.debug("Fetch forks : %s".format(forks.toString))
       Future.sequence( forks.toSeq.map{ id =>
         get(id).map{ fork =>
           fork.transform(cleanJsonWithFiles).asOpt
-        } recover {
-          case e: Exception => 
-            play.Logger.warn("Failed to load gist %s : %s".format(id, e.getMessage)); 
+        }/*.recover{
+          case e: Throwable =>
+            play.Logger.warn("Failed to load gist %s : %s".format(id, e.getMessage));
             None
-        }
+        }*/
       }).map( _.flatten )
+    }
+
+    def fetchStar(id: Long): Future[JsObject] = {
+      stars(id).map{
+        case Some(nb) => Json.obj("stars"-> nb)
+        case None => Json.obj("stars" -> 0)
+      }
     }
 
     def fetchStars(ids: Set[Long]): Future[Seq[JsObject]] = {
       Future.sequence( ids.toSeq.map{ id =>
-        stars(id).map{ 
+        stars(id).map{
           case Some(nb) => Json.obj("stars"-> nb)
           case None => Json.obj("stars" -> 0)
         }

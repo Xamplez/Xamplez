@@ -48,7 +48,7 @@ object Global extends GlobalSettings {
     Search.start;
 
     val addForks = Akka.system.actorOf(Props(new actors.AddForks), name = "addForks")
-    Akka.system.scheduler.schedule(0 seconds, 1 minutes, addForks, "update")
+    Akka.system.scheduler.schedule(0 seconds, 5 minutes, addForks, "indexing")
 
   }
 

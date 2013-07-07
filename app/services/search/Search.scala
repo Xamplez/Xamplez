@@ -184,12 +184,17 @@ trait ElasticSearch {
   }
 
   private def buildSearch(query: String) =
-    Json.obj("query" -> Json.obj(
-      "query_string" -> Json.obj(
-        "fields" -> Seq("description", "tags^10"),
-        "query"  -> query
-      )
-    ))
+    Json.obj(
+      "query" -> Json.obj(
+        "query_string" -> Json.obj(
+          "fields" -> Seq("description", "tags^10"),
+          "query"  -> query
+        )
+      ),
+      "sort"   -> Json.arr( Json.obj(
+        "stars" -> "desc"
+      ))
+    )
 
   private def search(query: JsObject, pretty: Boolean): Future[Either[Response, JsValue]] =
     WS.url(SEARCH_URL)
@@ -205,8 +210,8 @@ trait ElasticSearch {
   }
 
   val queryTags = Json.obj(
-    "query" -> Json.obj("match_all" -> Json.obj()),
-    "size"  -> 1000,
+    "query"  -> Json.obj("match_all" -> Json.obj()),
+    "size"   -> 1000,
     "facets" -> Json.obj(
       "tags" -> Json.obj(
         "terms" -> Json.obj(
@@ -235,8 +240,7 @@ trait ElasticSearch {
     "query" -> Json.obj( "match_all" -> Json.obj() ),
     "size" -> 100,
     "sort" -> Json.arr( Json.obj(
-      "updated_at" -> "desc",
-      "stars" -> "desc"
+      "updated_at" -> "desc"
     ))
   )
 

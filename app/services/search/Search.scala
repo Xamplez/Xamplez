@@ -102,10 +102,17 @@ trait ElasticSearch {
     }
   }
 
-  val descIdReader = (
+  val descIdFilesReader = (
     (__ \ "description").readNullable[String] and
     (__ \ "id").read[String] and
     (__ \ "files").read[Seq[String]]
+  ).tupled
+
+  val descIdFilesStarsReader = (
+    (__ \ "description").readNullable[String] and
+    (__ \ "id").read[String] and
+    (__ \ "files").read[Seq[String]] and
+    (__ \ "stars").read[Int]
   ).tupled
 
   // Magical string interpolation to pattern match regex
@@ -145,7 +152,7 @@ trait ElasticSearch {
   }
 
   def insert(json: JsObject): Future[Either[String, JsValue]] = {
-    descIdReader.reads(json).map{
+    descIdFilesReader.reads(json).map{
       case (Some(desc), id, files) if desc.length>0 =>
         val tags = Tag.fetchTags(desc)
         val (langs, tagLangs) = getLangs(files)
@@ -177,6 +184,64 @@ trait ElasticSearch {
       )
     )
     WS.url(s"$UPDATE_URL/$id/_update").post(obj)
+  }
+
+  def update(id: Long, json: JsObject, stars: JsObject): Future[Either[String, JsValue]] = {
+    descIdFilesStarsReader.reads(json ++ stars).map{
+      case (Some(desc), _, files, stars) if desc.length>0 =>
+        byId(id).flatMap{ _ match {
+          case r@Left(_)    => Future.successful(r)
+
+          case Right(kjson) =>
+            val kstars = (kjson \ "stars").as[Int]
+            val kdesc  = (kjson \ "description").as[String]
+            val klangs = (kjson \ "langs").as[Seq[String]]
+            val ktags = (kjson \ "tags").as[Seq[String]]
+            val tags = Tag.fetchTags(desc).map(_.name)
+
+            val (langs, tagLangs) = getLangs(files)
+
+            var script = ""
+            var obj = Json.obj()
+
+            if(kdesc != desc){
+              script += "ctx._source.description = description;"
+              obj = obj ++ Json.obj("description" -> desc)
+            }
+            if(ktags != tags ++ tagLangs){
+              script += "ctx._source.tags = tags;"
+              obj = obj ++ Json.obj("tags" -> (tags ++ tagLangs))
+            }
+            if(klangs != langs){
+              script += "ctx._source.langs = langs;"
+              obj = obj ++ Json.obj("langs" -> langs)
+            }
+            if(kstars != stars){
+              script += "ctx._source.stars = stars;"
+              obj = obj ++ Json.obj("stars" -> stars)
+            }
+
+            if(script.isEmpty) Future.successful(Left(s"$id not modified"))
+            else {
+              val upd = Json.obj(
+                "script" -> script,
+                "params" -> obj
+              )
+              play.Logger.debug("going to update "+upd)
+              WS.url(s"$UPDATE_URL/$id/_update")
+                .post(upd)
+                .map { r =>
+                  if(r.status == 200 || r.status == 201) Right(r.json)
+                  else Left(s"Couldn't insert $id (status:${r.status} msg:${r.statusText}")
+                }
+            }
+        }
+      }
+
+      case (_, id, _, _) =>
+        play.Logger.warn(s"Can't update $json because description is null or empty")
+        Future(Left(s"Can't update $json because description is null or empty"))
+    }.recoverTotal{ e => Future(Left(s"Can't update due to json error ${e}")) }
   }
 
   def delete(id: Long): Future[Response] = {
@@ -251,8 +316,32 @@ trait ElasticSearch {
     "query" -> Json.obj( "ids" -> Json.obj( "values" -> Json.arr(id.toString)) ),
     "size" -> 1
   )
+  def byId(id: Long): Future[Either[String, JsValue]] = {
+    search(queryById(id), true).map{
+      case Left(r) => Left(s"Couldn't insert $id (status:${r.status} msg:${r.statusText}")
+      case Right(js) => 
+        val hits = (js \ "hits").as[JsObject]
+        val nb = (hits \ "total").as[Int]
+        if(nb >= 1) Right( (( (hits \ "hits").as[JsArray] ).apply(0) \ "_source").as[JsObject] )
+        else Left(s"gist $id not found in index")
+    }
+  }
 
-  def byId(id: Long) = search(queryById(id), true)
+  def queryByIds(ids: Seq[Long]) = Json.obj(
+    "query" -> Json.obj( "ids" -> Json.obj( "values" -> Json.arr(ids)) ),
+    "size" -> ids.length
+  )
+  def byIds(ids: Seq[Long]): Future[Either[String, Seq[JsValue]]] = {
+    search(queryByIds(ids), true).map{
+      case Left(r) => Left(s"Couldn't search $ids (status:${r.status} msg:${r.statusText}")
+      case Right(js) => 
+        val hits = (js \ "hits").as[JsObject]
+        val nb = (hits \ "total").as[Int]
+        if(nb >= 1) Right((hits \ "hits" \ "_source").as[Seq[JsObject]])
+        else Left(s"gist $ids not found in index")
+    }
+  }
+
 }
 
 object Search extends ElasticSearch

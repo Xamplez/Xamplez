@@ -47,14 +47,14 @@ object GithubWS {
      * Return information about the connected user
      */
     def me(implicit token: OAuth2Token) = {
-      fetch("/users/user").get.map(_.json)
+      fetchWithToken("/user").get.map(_.json)
     }
 
     /**
      * Return information about an user
      */
     def info(user: String)(implicit token: OAuth2Token) = {
-      fetch(s"/users/$user").get.map(_.json)
+      fetchWithToken(s"/users/$user").get.map(_.json)
     }
   }
 
@@ -177,15 +177,18 @@ object GithubWS {
       }
     }
 
-    def forksId(gistId: Long): Future[Seq[Long]] = {
-      get(gistId).map{ json =>
+    def forksId(gistId: Long): Future[Set[Long]] = {
+      /*get(gistId).map{ json =>
         (json \ "forks").as[JsArray].value.map{ fork =>
           (fork \ "id").as[String].toLong
         }
+      }*/
+      fetch(s"/gists/$gistId/forks").get.map(_.json).map{ js =>
+        js.as[Seq[JsValue]].map{ json => (json \ "id").as[String].toLong }.toSet
       }
     }
 
-    def listForks(gistId: Long): Future[Seq[JsObject]] = {
+    def listForks(gistId: Long): Future[Set[JsObject]] = {
       forksId(gistId).flatMap{ ids =>
         Future.sequence(ids.map{ id =>
           get(id).map{ fork =>

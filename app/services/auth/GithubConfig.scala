@@ -30,8 +30,8 @@ trait OAuth2DefaultConfiguration extends OAuth2Configuration {
   private lazy val conf = current.configuration.getConfig(configuration).getOrElse(throwConfigurationNotFound)
 
   override lazy val oauth2info = OAuth2Infos(
-    get("clientId"),
-    get("clientSecret"),
+    get("client.id"),
+    get("client.secret"),
     get("urlAuthorize"),
     get("urlAccessToken"),
     get("scope"))

@@ -16,7 +16,7 @@ object Gists extends Controller {
 		Async{
 	    EsSearch.byId(id).map{ e =>
 	    	e.fold(
-	    		{ r => BadRequest("%s - %s".format(r.status, r.body) ) },
+	    		{ r => BadRequest(r) },
 	    		{ json =>
 	    			( json \ "hits" \ "hits").as[Seq[JsValue]] match {
 	    				case head :: _ => Ok(head)

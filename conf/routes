@@ -8,7 +8,7 @@ GET     /views/index                   controllers.Application.index
 GET     /views/gist                    controllers.Application.gist
 GET     /views/stats                   controllers.Application.stats
 GET     /views/about                   controllers.Application.about
-GET     /auth                          controllers.Application.authenticate
+GET     /auth                          controllers.Api.authenticate
 
 # Search API
 GET     /api/search                    controllers.Search.search(q: String)
@@ -19,6 +19,7 @@ GET     /api/gists/:id                 controllers.Gists.findById(id: Long)
 DELETE  /api/gists/:id                 controllers.Gists.blacklist(id: Long)
 GET     /api/gists/:id/comments        controllers.Gists.comments(id: Long)
 
+GET     /api/index/update              controllers.Api.updateIndex
 
 # 404 API in case of unknown url
 GET     /api/*any                      controllers.Application.notFound(any)

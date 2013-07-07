@@ -1,5 +1,11 @@
 .gistContainer {
+  border-top: 5px solid #eee;
   .description {
+    background-color: transparent;
+    color: #999;
+    font-size: 16px;
+    padding: 10px;
+
     .author {
       margin-right: 10px;
       font-style: italic;
@@ -60,7 +66,7 @@
   color:#000;
   
   .gist-file {
-    border:1px solid #dedede;
+    border: none;
     font-family:Consolas, "Liberation Mono", Courier, monospace;
     margin-bottom:1em;
     
@@ -68,7 +74,7 @@
       font-family:Helvetica, arial, freesans, clean, sans-serif;
       overflow:hidden;font-size:85%;
       padding:.5em;color:#666;
-      background-color:#eaeaea;
+      background-color: transparent;
       
       a{color:#369}
       a:visited{color:#737}
@@ -76,14 +82,20 @@
     .gist-data {
       overflow:auto;
       word-wrap:normal;
-      background-color:#f8f8ff;
-      border-bottom:1px solid #ddd;
+      background-color: transparent;
+      border-bottom: none;
       font-size:100%;
 
       .line-data{padding:.5em !important}
       .line-pre{font-family:Consolas, "Liberation Mono", Courier, monospace;background:transparent !important;border:none !important;margin:0 !important;padding:0 !important}
       .gist-highlight{background:transparent !important}
-      .line-numbers{background-color:#ececec;color:#aaa;border-right:1px solid #ddd;text-align:right;padding:.5em}
+      .line-numbers{
+        background-color: transparent;
+        color:#aaa;
+        border-right:1px solid #ddd;
+        text-align:right;
+        padding:.5em
+      }
       .line-numbers .line-number{clear:right;display:block}.gist-syntax{background:#ffffff}
     }
   }

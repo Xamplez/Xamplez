@@ -124,7 +124,8 @@ trait ElasticSearch {
     "png"   -> ("png", false),
     "jpg"   -> ("jpg", false),
     "TXT"   -> ("text", false),
-    "text"  -> ("text", false)
+    "text"  -> ("text", false),
+    "less" -> ("less", false)
   )
 
   private def getLangs(files: Seq[String]): (Seq[String], Seq[String]) = {

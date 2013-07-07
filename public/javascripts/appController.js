@@ -27,7 +27,7 @@ app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags
 	$scope.search = function () {
 		var query = $scope.queryToString($scope.searchData.query);
 
-		if (query) {
+		if (query != null) {
 			$location.search("q", query);
 			$scope.searchResults = Search.query({q: query});
 		}

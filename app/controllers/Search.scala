@@ -15,9 +15,13 @@ import concurrent.Future
 
 object Search extends Controller {
 
-  def search(q: String) = Action {
+  def search(q: String, sorts: Option[String] = None, from: Option[Int] = None, size: Option[Int] = None) = Action {
     Async{
-      S.search(q).map(
+      val s = sorts.map(_.split(",").map(_.splitAt(1)).collect {
+                case ("+", field) => Json.obj(field -> "asc")
+                case ("-", field) => Json.obj(field -> "desc")
+              }.reduceLeft(_ ++ _))
+      S.search(q, s, from, size).map(
         _.fold(
           resp => InternalServerError(resp.body),
           json => Ok(json))

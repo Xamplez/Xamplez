@@ -11,7 +11,7 @@ GET     /views/about                   controllers.Application.about
 GET     /auth                          controllers.Api.authenticate
 
 # Search API
-GET     /api/search                    controllers.Search.search(q: String)
+GET     /api/search                    controllers.Search.search(q: String, sorts: Option[String] ?= None, from: Option[Int] ?= None, size: Option[Int] ?= None)
 POST    /api/search                    controllers.Search.insert
 GET     /api/tags                      controllers.Search.tags
 GET     /api/lastcreated               controllers.Search.lastCreated

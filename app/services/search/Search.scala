@@ -249,18 +249,26 @@ trait ElasticSearch {
     WS.url(s"$INSERT_URL/$id").delete
   }
 
-  private def buildSearch(query: String) =
-    Json.obj(
-      "query" -> Json.obj(
-        "query_string" -> Json.obj(
-          "fields" -> Seq("description", "tags^10"),
-          "query"  -> query
-        )
-      ),
-      "sort"   -> Json.arr( Json.obj(
-        "stars" -> "desc"
-      ))
+  private def buildSearch(query: String, sorts: Option[JsObject] = Some(Json.obj("stars" -> "desc")), from: Option[Int] = None, size: Option[Int] = None) = {
+    val q = 
+      if(query.isEmpty) Json.obj("match_all" -> Json.obj())
+      else Json.obj(
+             "query_string" -> Json.obj(
+                "fields" -> Seq("description", "tags^10"),
+               "query"  -> query
+             )
+           )
+    val obj = Json.obj(
+      "query" -> q
     )
+
+    val search = obj ++
+    sorts.map( s => Json.obj("sort" -> Json.arr(s))).getOrElse(Json.obj("sort" -> Json.arr(Json.obj("stars" -> "desc")))) ++
+    from.map(from => Json.obj("from" -> from)).getOrElse(Json.obj()) ++
+    size.map(from => Json.obj("size" -> size)).getOrElse(Json.obj())
+    play.Logger.debug("query:"+search)
+    search
+  }
 
   private def search(query: JsObject, pretty: Boolean): Future[Either[Response, JsValue]] =
     WS.url(SEARCH_URL)
@@ -270,9 +278,9 @@ trait ElasticSearch {
         else Left(r)
       }
 
-  def search(q: String, pretty: Boolean = true): Future[Either[Response, JsValue]] = {
-    play.Logger.debug(s"Search : query $q")
-    search(buildSearch(q), pretty)
+  def search(q: String, sorts: Option[JsObject] = Some(Json.obj("stars" -> "desc")), from: Option[Int] = None, size: Option[Int] = None, pretty: Boolean = true): Future[Either[Response, JsValue]] = {
+    play.Logger.debug(s"Search : query=$q sorts=$sorts from=$from size=$size")
+    search(buildSearch(q, sorts, from, size), pretty)
   }
 
   val queryTags = Json.obj(

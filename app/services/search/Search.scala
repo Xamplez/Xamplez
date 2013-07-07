@@ -190,9 +190,8 @@ trait ElasticSearch {
     descIdFilesStarsReader.reads(json ++ stars).map{
       case (Some(desc), _, files, stars) if desc.length>0 =>
         byId(id).flatMap{ _ match {
-          case r@Left(_)    => Future.successful(r)
-
-          case Right(kjson) =>
+          case Some(kjson) =>
+        
             val kstars = (kjson \ "stars").as[Int]
             val kdesc  = (kjson \ "description").as[String]
             val klangs = (kjson \ "langs").as[Seq[String]]
@@ -228,20 +227,22 @@ trait ElasticSearch {
                 "params" -> obj
               )
               play.Logger.debug("going to update "+upd)
-              WS.url(s"$UPDATE_URL/$id/_update")
+              val a: Future[Either[String, JsValue]] = WS.url(s"$UPDATE_URL/$id/_update")
                 .post(upd)
                 .map { r =>
                   if(r.status == 200 || r.status == 201) Right(r.json)
-                  else Left(s"Couldn't insert $id (status:${r.status} msg:${r.statusText}")
+                  else Left(s"Couldn't update $id (status:${r.status} msg:${r.statusText}")
                 }
+              a
             }
-        }
-      }
+
+          case None  => Future.successful(Left(s"$id not found"))
+        } }
 
       case (_, id, _, _) =>
         play.Logger.warn(s"Can't update $json because description is null or empty")
         Future(Left(s"Can't update $json because description is null or empty"))
-    }.recoverTotal{ e => Future(Left(s"Can't update due to json error ${e}")) }
+    }.recoverTotal{ e => Future.successful(Left(s"Can't update due to json error ${e}")) }
   }
 
   def delete(id: Long): Future[Response] = {
@@ -324,14 +325,14 @@ trait ElasticSearch {
     "query" -> Json.obj( "ids" -> Json.obj( "values" -> Json.arr(id.toString)) ),
     "size" -> 1
   )
-  def byId(id: Long): Future[Either[String, JsValue]] = {
+  def byId(id: Long): Future[Option[JsValue]] = {
     search(queryById(id), true).map{
-      case Left(r) => Left(s"Couldn't insert $id (status:${r.status} msg:${r.statusText}")
-      case Right(js) => 
+      case Left(r) => throw new RuntimeException(s"Couldn't search $id (status:${r.status} msg:${r.statusText}")
+      case Right(js) =>
         val hits = (js \ "hits").as[JsObject]
         val nb = (hits \ "total").as[Int]
-        if(nb >= 1) Right( (( (hits \ "hits").as[JsArray] ).apply(0) \ "_source").as[JsObject] )
-        else Left(s"gist $id not found in index")
+        if(nb >= 1) Some((( (hits \ "hits").as[JsArray] ).apply(0) \ "_source").as[JsObject])
+        else None
     }
   }
 
@@ -346,7 +347,7 @@ trait ElasticSearch {
         val hits = (js \ "hits").as[JsObject]
         val nb = (hits \ "total").as[Int]
         if(nb >= 1) Right((hits \ "hits" \ "_source").as[Seq[JsObject]])
-        else Left(s"gist $ids not found in index")
+        else Right(Seq())
     }
   }
 

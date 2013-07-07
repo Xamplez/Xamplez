@@ -14,18 +14,9 @@ object Gists extends Controller {
 
 	def findById(id: Long) = Action {
 		Async{
-	    EsSearch.byId(id).map{ e =>
-	    	e.fold(
-	    		{ r => BadRequest(r) },
-	    		{ json =>
-	    			( json \ "hits" \ "hits").as[Seq[JsValue]] match {
-	    				case head :: _ => Ok(head)
-	    				case _ => NotFound(id.toString)
-	    			} 
-	    		}
-	    	)
-	    } recover {
-	    	case e: Exception => BadRequest("Failed to load data : %s".format(e.getMessage))
+	    EsSearch.byId(id).map{
+				case Some(json) => Ok(json)
+				case _ => NotFound(id.toString)
 	    }
 	  }
 	}

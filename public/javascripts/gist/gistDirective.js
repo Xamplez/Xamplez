@@ -38,10 +38,10 @@ app.directive("gist", function () {
 		link: function (scope, elem, attrs) {
 			if (scope.value.$then) {
 				scope.value.$then(function (request) {
-					handleGist (scope, elem, request.data._source);
+					handleGist (scope, elem, request.data);
 				});
 			} else {
-				handleGist (scope, elem, scope.value._source);
+				handleGist (scope, elem, scope.value);
 			}
 		}
 	}

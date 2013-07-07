@@ -41,7 +41,7 @@ app.directive("gist", function () {
 					handleGist (scope, elem, request.data);
 				});
 			} else {
-				handleGist (scope, elem, scope.value);
+				handleGist (scope, elem, scope.value._source);
 			}
 		}
 	}

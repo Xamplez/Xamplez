@@ -1,5 +1,12 @@
 .gistContainer {
-  border-top: 5px solid #eee;
+  border-top: 3px solid #eee;
+
+  padding-top: 10px;
+
+  /*.gistWrapper {
+    border: 1px solid #ccc;
+  }*/
+
   .description {
     background-color: transparent;
     color: #999;
@@ -9,11 +16,12 @@
     .author {
       margin-right: 10px;
       font-style: italic;
+      font-size: 80%;
     }
 
     .gist-link {
-      margin-left: 5px;
       margin-right: 5px;
+      font-size: 90%;
     }
 
     .gist-stars {
@@ -27,6 +35,10 @@
           text-decoration: none
         }
       }
+    }
+
+    .desc {
+      padding-top: 8px;
     }
 
     .star {
@@ -69,6 +81,10 @@
     border: none;
     font-family:Consolas, "Liberation Mono", Courier, monospace;
     margin-bottom:1em;
+
+    .file-data {
+      border: 1px solid #eee;
+    }
     
     .gist-meta {
       font-family:Helvetica, arial, freesans, clean, sans-serif;
@@ -79,6 +95,7 @@
       a{color:#369}
       a:visited{color:#737}
     }
+
     .gist-data {
       overflow:auto;
       word-wrap:normal;

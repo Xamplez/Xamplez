@@ -6735,6 +6735,9 @@ select.select2 {
 }
 .gistContainer .description .desc {
   padding-top: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .gistContainer .description .star {
   margin-left: 4px;

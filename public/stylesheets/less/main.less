@@ -23,7 +23,7 @@
 @inputBackground: @input-bg;
 @errorText: @state-danger-text;
 
-@green-play: #92d13d;
+@green-play: #8adc92;
 @gray-play: #454545;
 
 body {
@@ -124,7 +124,10 @@ header {
   &.ribbon-main {
     padding-bottom: 100px;
     color: #fff;
-    background-color: @green-play;
+    background: #8adc92;
+    background: -webkit-gradient(linear, left bottom, right top, from(#B3E862), to(#73dac1));
+    background: -moz-linear-gradient(left bottom, #B3E862, #73dac1);
+    background: gradient(linear, left bottom, right top, from(#B3E862), to(#73dac1));
 
     h2 {
       padding: 0px;

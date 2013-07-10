@@ -7052,7 +7052,7 @@ select.select2 {
   font-size: 16px;
 }
 .tags .tag a:hover {
-  color: #92d13d;
+  color: #8adc92;
   text-decoration: none;
 }
 #book-title {
@@ -7469,7 +7469,7 @@ form {
   vertical-align: middle;
 }
 header {
-  border-top: 5px solid #92d13d;
+  border-top: 5px solid #8adc92;
 }
 header a {
   position: relative;
@@ -7487,7 +7487,7 @@ header a::before {
   top: 0;
   left: 0;
   right: 0;
-  border-top: 0px solid #92d13d;
+  border-top: 0px solid #8adc92;
   -webkit-transition: all 250ms;
   -moz-transition: all 250ms;
   -o-transition: all 250ms;
@@ -7499,7 +7499,7 @@ header a:hover {
   background: rgba(235, 235, 235, 0.3);
 }
 header a:hover::before {
-  border-top: 5px solid #92d13d;
+  border-top: 5px solid #8adc92;
 }
 header .icons a {
   display: block;
@@ -7542,7 +7542,10 @@ header .fork a:hover::before {
 .ribbon.ribbon-main {
   padding-bottom: 100px;
   color: #fff;
-  background-color: #92d13d;
+  background: #8adc92;
+  background: -webkit-gradient(linear, left bottom, right top, from(#b3e862), to(#73dac1));
+  background: -moz-linear-gradient(left bottom, #b3e862, #73dac1);
+  background: gradient(linear, left bottom, right top, from(#b3e862), to(#73dac1));
 }
 .ribbon.ribbon-main h2 {
   padding: 0px;

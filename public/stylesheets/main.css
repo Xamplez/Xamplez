@@ -6701,6 +6701,10 @@ select.select2 {
   }*/
 
 }
+.gistContainer .first {
+  font-size: 40px;
+  margin-right: 10px;
+}
 .gistContainer .description {
   background-color: transparent;
   color: #999;

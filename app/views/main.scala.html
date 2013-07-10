@@ -110,20 +110,25 @@
         <script id="/templates/gist" type="text/ng-template">
             <div id="{{containerId}}" class="gistContainer">
                 <div class="description">
-                    <span class="gist-link"><a data-ng-href="{{gist.id}}">Gist {{gist.id}}</a></span>
-                    <span class="author">by <a data-ng-href="https://github.com/{{gist.author_login}}">{{gist.author_login}}</a></span>
-                    <div class="pull-right">
-                        <span class="label label-default gist-stars">
-                            <a href="https://gist.github.com/{{gist.id}}" title="To star/unstar, do it directly on github & wait for xamplez reindexing">{{gist.stars > 0 ? gist.stars : 0}}
-                            <i class="icon-4 star" data-ng-class="gist.stars > 0 ? 'icon-star' : 'icon-star-empty'"></i></a>
-                        </span>
+                    <div class="first pull-left">
+                        <i class="icon-double-angle-up"></i>
                     </div>
-                    <div class="pull-right langs">
-                        <span class="label gist-lang" data-ng-class="lang.toLowerCase()" data-ng-repeat="lang in gist.langs">
-                            {{lang}}
-                        </span>
+                    <div class="second">
+                        <span class="gist-link"><a data-ng-href="{{gist.id}}">Gist {{gist.id}}</a></span>
+                        <span class="author">by <a data-ng-href="https://github.com/{{gist.author_login}}">{{gist.author_login}}</a></span>
+                        <div class="pull-right">
+                            <span class="label label-default gist-stars">
+                                <a href="https://gist.github.com/{{gist.id}}" title="To star/unstar, do it directly on github & wait for xamplez reindexing">{{gist.stars > 0 ? gist.stars : 0}}
+                                <i class="icon-4 star" data-ng-class="gist.stars > 0 ? 'icon-star' : 'icon-star-empty'"></i></a>
+                            </span>
+                        </div>
+                        <div class="pull-right langs">
+                            <span class="label gist-lang" data-ng-class="lang.toLowerCase()" data-ng-repeat="lang in gist.langs">
+                                {{lang}}
+                            </span>
+                        </div>
+                        <div data-ng-bind-html-unsafe="gist.taggedDescription" class="desc"></div>
                     </div>
-                    <div data-ng-bind-html-unsafe="gist.taggedDescription" class="desc"></div>
                 </div>
                 <div class="gistWrapper"></div>
             </div>

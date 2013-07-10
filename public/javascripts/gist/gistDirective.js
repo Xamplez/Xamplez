@@ -36,6 +36,16 @@ app.directive("gist", function () {
 		},
 		templateUrl: "/templates/gist",
 		link: function (scope, elem, attrs) {
+      elem.find('.description').bind('click', function() {
+        var arrow = elem.parent().find('.first > i');
+
+        if(arrow.hasClass('icon-double-angle-up')) arrow.removeClass('icon-double-angle-up').addClass('icon-double-angle-down');
+        else if(arrow.hasClass('icon-double-angle-down')) arrow.removeClass('icon-double-angle-down').addClass('icon-double-angle-up');
+
+        elem.find('.gistWrapper').toggle();
+
+      });
+
 			if (scope.value.$then) {
 				scope.value.$then(function (request) {
 					handleGist (scope, elem, request.data);

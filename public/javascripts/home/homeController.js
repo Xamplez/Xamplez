@@ -37,6 +37,34 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
     $scope.searchData.query = $scope.queryFromString($location.search().q);
   }
 
+  var searchBar = $(".search-bar:first");
+  var searchBarContainer = $(".search-bar-container:first");
+  var searchBarTopPosition;
+  function computeSearchBarTopPosition () {
+    searchBarTopPosition = searchBarContainer.offset().top;
+  }
+  function syncSearchBarFixed () {
+    var top = $(window).scrollTop();
+    searchBar.toggleClass("fixed", top > searchBarTopPosition);
+  }
+  $(window).on("scroll", function (e) {
+    syncSearchBarFixed();
+  });
+  $(window).on("resize", function (e) {
+    computeSearchBarTopPosition();
+  });
+
+  // Also wait for font load end
+  $(window).on("load", function () {
+    computeSearchBarTopPosition();
+    syncSearchBarFixed();
+  });
+
+  // Trigger once on ready
+  $(function(){
+    computeSearchBarTopPosition();
+    syncSearchBarFixed();
+  });
 
   // EXPERIMENTS:
 

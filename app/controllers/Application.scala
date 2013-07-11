@@ -2,15 +2,11 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import services.github._
-import play.api.libs.concurrent.Execution.Implicits._
-
 import play.api.Play.current
 
 object Application extends Controller {
-
-  lazy val ROOT_GIST = Play.application.configuration.getString("gist.root").get
-  lazy val ROOT_GIST_URL = s"https://gist.github.com/$ROOT_GIST"
+  lazy val GIST_ROOT = Play.application.configuration.getLong("gist.root")
+  lazy val ROOT_GIST_URL = "https://gist.github.com/%s".format( GIST_ROOT.map(_.toString).getOrElse("Missing") )
 
   def main(any: String) = Action {
     Ok(views.html.main())

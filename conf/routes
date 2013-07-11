@@ -25,6 +25,7 @@ GET     /api/index/update              controllers.Api.updateIndex
 GET     /api/*any                      controllers.Application.notFound(any)
 
 # Map static resources from the /public folder to the /assets URL path
+GET     /assets/gist/:fileName         controllers.GistAssets.at(fileName: String)
 GET     /assets/*file                  controllers.Assets.at(path="/public", file)
 
 # Map all unknown routes to the main so they will be handle by Angular

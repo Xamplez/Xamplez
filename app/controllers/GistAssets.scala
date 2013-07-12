@@ -25,16 +25,13 @@ object GistAssets extends Controller{
 
   def at( fileName: String ) = Action{
     Async{
-      (( Cache.getAs[String](fileName), GIST_CONF ) match {
-        case ( None, Some(id) ) => Gist.getFile(id, fileName).map{ 
-          case Some(file) => {
-            cached.update({ s => s +fileName })
-            Cache.set(fileName, file)
-            Some(file)
-          }
-          case f => f
+      (( Cache.getAs[Option[String]](fileName), GIST_CONF ) match {
+        case ( None, Some(id) ) => Gist.getFile(id, fileName).map { file =>
+          cached.update({ s => s +fileName })
+          Cache.set(fileName, file)
+          file
         }
-        case ( file, _ ) => Future(file)
+        case ( Some(cached), _ ) => Future(cached)
         case _ => Future(None)
       }).map{ 
         case Some(str) => {

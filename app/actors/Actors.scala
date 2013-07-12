@@ -64,22 +64,6 @@ class Indexer extends Actor {
     }
   }
 
-  // private def insert( gists: Seq[JsObject] ): Future[Seq[Either[String, JsValue]]] = {
-  //   play.Logger.debug("Inserting %s gists".format(gists.size))
-  //   Future.sequence(
-  //     gists.map{ json =>
-  //       services.search.Search.insert(json).map{ response =>
-  //         response.left.map{ r => "Failed to index gist, %s - %s".format(r.status, r.body) }
-  //       } recover {
-  //         case e: Exception => {
-  //           play.Logger.error("FAILURE recover : %s".format(e.getMessage));
-  //           Left("Failed to index gist, %s".format(e.getMessage))
-  //         }
-  //       }
-  //     }
-  //   )
-  // }
-
   val fetcher =
     Akka.system.actorOf(Props[GistActor]
           .withRouter(RoundRobinRouter(nrOfInstances = 5)))
@@ -90,6 +74,23 @@ class Indexer extends Actor {
 
   implicit val timeout = Timeout(600 seconds)
 
+  private def insert( ids: Set[Long], action: String ): Future[Seq[(Long, Either[String, JsValue])]] = {
+    log.debug(s"Fetching ${ids.size} forks for $ids...")
+
+    Future.sequence(
+      ids.toSeq.map{ id => 
+        (for{
+          fork    <- (fetcher ? FetchGist(id)).mapTo[Option[JsObject]]
+          stars   <- (fetcher ? FetchStar(id)).mapTo[JsObject]
+        } yield (fork, stars, action)).flatMap{
+          case (Some(fork), stars, "insert") => services.search.Search.insert(fork ++ stars).map( r => id -> r )
+          case (Some(fork), stars, "update") => services.search.Search.update(id, fork, stars).map( r => id -> r )
+          case (_, _, _) => Future.successful(id -> Left(s"Can't $action $id because gist not found or no stars"))
+        }
+      }
+    ) 
+  }
+
   def receive = {
     case "indexing" => {
       log.info("Launching re-indexing")
@@ -98,52 +99,12 @@ class Indexer extends Actor {
         lastUpdated    <- extractField(services.search.Search.lastUpdated, "updated_at" )
         forkIds        <- GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
         blacklistId    <- GistBlackList.ids
-        whiteIds = {
-          val ids = (forkIds -- blacklistId) //.take(100)
-          log.debug(s"Fetching ${ids.size} forks for $ids...")
-          ids
-        }
-
-        resps          <- Future.sequence(
-                            //whiteIds.map(id => (fetcher ? FetchGist(id)).mapTo[Option[JsObject]])
-                            whiteIds.map{ id => 
-                              (for{
-                                fork    <- (fetcher ? FetchGist(id)).mapTo[Option[JsObject]]
-                                stars   <- (fetcher ? FetchStar(id)).mapTo[JsObject]
-                              } yield (fork, stars)).flatMap{
-                                case (Some(fork), stars) => services.search.Search.insert(fork ++ stars).map( r => id -> r )
-                                case (_, _)              => Future.successful(id -> Left(s"Can't insert $id because gist not found or no stars"))
-                              }
-                            }
-                          )
-        /*idForks = {
-          log.debug(s"Fetching stars...")
-          whiteIds.zip(forks)
-        }
-        forkstars      <- Future.sequence(
-                            idForks.collect{
-                              case (id, Some(fork)) =>
-                                val maybeObj = (fetcher ? FetchStar(id)).mapTo[JsObject]
-                                maybeObj.map( obj => (id -> (fork ++ obj)) )
-                            }
-                          )
-        toInsert = {
-          log.debug(s"Indexing gists...")
-          forkstars
-        }
-        response       <- Future.sequence(
-                            toInsert.collect{
-                              case (id, json) =>
-                                val maybeR = (inserter ? InsertES(json)).mapTo[Either[String, JsValue]]
-                                maybeR.map( r => (id -> r) )
-                            }
-                          )*/
+        resps          <- insert( forkIds -- blacklistId, "insert" )
       } yield (resps)).map{ r =>
         logIndexingResponse(r.toSeq)
       } recover {
         case e: Exception => play.Logger.error("Failed to index the gists : %s".format(e.getMessage) )
       }
-
     }
 
     case "updating" =>
@@ -152,23 +113,7 @@ class Indexer extends Actor {
       (for{
         forkIds        <- GithubWS.Gist.forksId(rootId)
         blacklistId    <- GistBlackList.ids
-        whiteIds = {
-          val ids = (forkIds -- blacklistId) //.take(100)
-          log.debug(s"Fetching ${ids.size} forks for $ids...")
-          ids
-        }
-        // does update just after fetching and doesn't wait to have everything...
-        // TODO : should we do the same for insert???
-        resps          <- Future.sequence( whiteIds.map{ id => 
-                              (for{
-                                fork    <- (fetcher ? FetchGist(id)).mapTo[Option[JsObject]]
-                                stars   <- (fetcher ? FetchStar(id)).mapTo[JsObject]
-                              } yield (fork, stars)).flatMap{
-                                case (Some(fork), stars) => services.search.Search.update(id, fork, stars).map( r => id -> r )
-                                case (_, _)                 => Future.successful(id -> Left(s"Can't update $id because gist not found or no stars"))
-                              }
-                            }
-                          )
+        resps          <- insert( forkIds -- blacklistId, "update" )
       } yield (resps)).map{ r =>
         logUpdatingResponse(r.toSeq)
       } recover {

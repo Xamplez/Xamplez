@@ -11,16 +11,15 @@ import scala.collection._
 import scala.concurrent.Future
 
 import services.github.GithubWS._
+import utils.Atomic
 
 object GistAssets extends Controller{
   lazy val GIST_CONF = Play.application.configuration.getLong("config.external.gist")
 
-  val synchroSet = new mutable.HashSet[String] with mutable.SynchronizedSet[String]
+  val cached = Atomic[Set[String]](Set.empty)
 
   def invalidate = Action{
-    val values = synchroSet.toSeq
-    synchroSet --= values
-    values.foreach { v => Cache.remove(v) }
+    cached.getAndSet(Set.empty).foreach { v => Cache.remove(v) }
     Ok("Done")
   }
 
@@ -29,7 +28,7 @@ object GistAssets extends Controller{
       (( Cache.getAs[String](fileName), GIST_CONF ) match {
         case ( None, Some(id) ) => Gist.getFile(id, fileName).map{ 
           case Some(file) => {
-            synchroSet.add(fileName)
+            cached.update({ s => s +fileName })
             Cache.set(fileName, file)
             Some(file)
           }

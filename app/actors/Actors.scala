@@ -22,8 +22,10 @@ import play.api.libs.json.Reads._
 
 import play.libs.Akka
 
+import scala.collection.JavaConverters._
+
 class Indexer extends Actor {
-  lazy val rootId = Play.application.configuration.getLong("gist.root")
+  lazy val rootIds = Play.application.configuration.getLongList("gist.roots").asScala
   lazy val log = play.api.Logger("application.actor")
 
   private def extractField( future: Future[Either[Response, JsValue]], fieldName: String ) = {
@@ -97,7 +99,9 @@ class Indexer extends Actor {
       (for{
         lastCreated    <- extractField(services.search.Search.lastCreated, "created_at")
         lastUpdated    <- extractField(services.search.Search.lastUpdated, "updated_at" )
-        forkIds        <- GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
+        forkIds        <- Future.sequence( rootIds.map{ rootId =>
+                            GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
+                          } ).map(_.toSet.flatten)
         blacklistId    <- GistBlackList.ids
         resps          <- insert( forkIds -- blacklistId, "insert" )
       } yield (resps)).map{ r =>
@@ -111,7 +115,9 @@ class Indexer extends Actor {
       log.info("Launching updating")
 
       (for{
-        forkIds        <- GithubWS.Gist.forksId(rootId)
+        forkIds        <- Future.sequence( rootIds.map{ rootId =>
+                            GithubWS.Gist.forksId(rootId)
+                          } ).map(_.toSet.flatten)
         blacklistId    <- GistBlackList.ids
         resps          <- insert( forkIds -- blacklistId, "update" )
       } yield (resps)).map{ r =>

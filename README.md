@@ -47,8 +47,6 @@ and create a server instance, you are implicitly participating to the Xamplez's 
 As you can imagine, using the great power of Github API, from your Root Gist(s), you can then find all code snippets 
 about your topic.
 
-> This is the only mandatory rule for now! Now too constraining, isn't it?
-
 <br/>
 ## What's Xamplez.io out-of-the-box ?
 

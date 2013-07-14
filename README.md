@@ -59,6 +59,8 @@ to improve it & to fork it for their own needs and things we haven't imagined ye
 We'd just like to keep a link between all forks/instances (following the forks of _Lord of the Gists_) because
 we aim at building an opensource knownledge cluster based on Gist and improve the concept progressively.
 
+![xamplez_archi](./xamplez_graph.png)
+
 So, for now, Xamplez.io provides out-of-the-box:
 
 ### The mandatory [Lord of the Gists](https://gist.github.com/xamplez-admin/5897409) 

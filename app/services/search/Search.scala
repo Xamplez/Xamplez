@@ -132,7 +132,8 @@ trait ElasticSearch {
     "jpg"   -> ("jpg", false),
     "TXT"   -> ("text", false),
     "text"  -> ("text", false),
-    "less" -> ("less", false)
+    "less"  -> ("less", false),
+    "css"   -> ("css", false)
   )
 
   private def getLangs(files: Seq[String]): (Seq[String], Seq[String]) = {
@@ -146,8 +147,14 @@ trait ElasticSearch {
       file.split("\\.(?=[^\\.]+$)")(1)
     }.foldLeft(Seq[String](), Seq[String]()){
       case ((langs, tagLangs), file) =>
-        val (lg, keep) = ext2Lang(file)
-        (langs :+ lg, if(keep) (tagLangs :+ file :+ lg) else (tagLangs :+ file))
+        ext2Lang.get(file) match {
+          case None => 
+            play.Logger.warn(s"langage $file not recognized... not considering as language but indexing as tag")
+            (langs, tagLangs :+ file)
+          case Some((lg, keep)) =>
+            (langs :+ lg, if(keep) (tagLangs :+ file :+ lg) else (tagLangs :+ file))
+        }
+        
     }
   }
 

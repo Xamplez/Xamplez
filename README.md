@@ -71,7 +71,7 @@ It's used to store all custom configurations for Xamplez instance and specially 
 
 In this configuration, you can store one or more files:
 
- * custom Play configuration
+ * custom Play configuration (if you use our default server implementation)
  * custom CSS
  * custom HTML templates
  * local messages

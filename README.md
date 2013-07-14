@@ -8,13 +8,14 @@ Xamplez is based on a very simple idea:
 > I want to share code snippets (and nothing else) about a given topic with a simple description 
 > & be able to search them based on tags, ratings etc...
 
-Our primary goal is to **help people build their own stores of code snippets focusing on a specific topic**. 
+Our primary goal is to **help people build their own stores of code snippets focusing on one or more topics**. 
 The topic can go from very generic subjects such as programming language or frameworks to more specific ones such as 
-very precise technical points. It's up to you to do what you want...
+very precise technical points or even funnier subjects. It's up to you to do what you want...
+
+> We were inspired by [140byt.es](http://www.140byt.es/) idea based on GIST but we wanted to go further in a more generic manner.
 
 To achieve this goal, **we propose to adopt a very few common rules (actually one for now).** 
-As soon as you follow this rule, you are implicitly participating to the constellations of Xamplez 
-instances _(constellation begins with number > 1;))_. 
+As soon as you follow this rule and create a server instance, you are implicitly participating to the Xamplez's constellation.
 
 <br/>
 ### Xamplez.io's Rule
@@ -22,52 +23,67 @@ instances _(constellation begins with number > 1;))_.
 ##### Literary version
 > One Gist to rule them all, One Gist to find them,
 >
-> One Gist to bring them all and in the happiness bind them
+> One Gist to bring them all and in the <ChooseYourWord>ness bind them
 
 ##### Common version
- * All Xamplez is based on one single Gist called the **Lord of the Gists** that rules them all!
- * To start a new instance of Xamplez, just fork the _Lord of the Gists_ to obtain your **Root Gist**.
- * **All code snippets concerning your topic must fork your Root Gist**.
+ * One Xamplez's instance is based on one single Configuration Gist called the **Lord of the Gists** that rules all the configurations of all instances!
+ * To start a new instance of Xamplez, just fork the _Lord of the Gists_ to obtain your **Configuration Gist**.
+ * Then your configuration Gist must point to your Root Gist(s) 
+ * **All code snippets concerning one topic(s) must fork the same Root Gist(s)**.
 
-As you can imagine, using the great power of Github API, from your Root Gist, you can then find all code snippets 
-for your topic.
+As you can imagine, using the great power of Github API, from your Root Gist(s), you can then find all code snippets 
+about your topic.
 
-This is the only mandatory rule for now! Now too constraining, isn't it?
+> This is the only mandatory rule for now! Now too constraining, isn't it?
 
 <br/>
 ### What's Xamplez.io out-of-the-box ?
 
 Taking this rule into account, we have built current github project to help you kickstart your own instance of
-Xamplez.io for your own topic. 
+Xamplez.io for your own topic(s). 
 
-First of all, we made Xamplez.io completely opensource, nothing hidden. We want people to contribute to it, 
+First of all, we made [Xamplez.io](http://www.xamplez.io) completely opensource, nothing hidden. We want people to contribute to it, 
 to improve it & to fork it for their own needs and things we haven't imagined yet. 
 
 We'd just like to keep a link between all forks/instances (following the forks of _Lord of the Gists_) because
-we aim at building an opensource knownledge cluster based on Gist.
+we aim at building an opensource knownledge cluster based on Gist and improve the concept progressively.
 
 So, for now, Xamplez.io provides out-of-the-box:
 
-#### The mandatory **Lord of the Gists**, 
+#### The mandatory [Lord of the Gists](https://gist.github.com/xamplez-admin/5897409) 
 
-It's the father of all Root gists. It provides a default format based on 4 files:
+It's the father of all Configuration gists to be able to re-find all existing instances of Xamplez.
 
- * `code` that can be renamed with your extension: for ex, `code.scala`
- * `README.md` containing xamplez guide explaining how to write code snippets
- * `_License.txt` containing a potential license for your code
- * `meta` containing metadata used by xamplez.io backend
- 
-#### The useful **Master Conf Gist** 
+>When you create a new instance of Xamplez, you should just fork this gist.
 
-It's used to store all custom configurations for Xamplez instance and specially the link to the Root Gist of your intance. 
+It's used to store all custom configurations for Xamplez instance and specially the link to the Root Gist(s) of your instance. 
 
-It works on the same principles as the _Lord of the Gists_: to build your own configuration, you fork it and store in one or more files:
+In this configuration, you can store one or more files:
 
  * custom Play configuration
  * custom CSS
  * custom HTML templates
  * local messages
  * etc...
+
+
+#### The [Root of the Root Gists](https://gist.github.com/xamplez-admin/5993903)
+
+> Just remember one thing: 
+
+> One topic = One group of Gists forking the same Root Gist
+
+One instance of Xamplez can have several root gists.
+
+This Root of the Root Gists isn't mandatory but it provides a default template and we encourage forking it 
+when you start a new topic.
+
+This Gist is based on 4 files:
+
+ * `code` that can be renamed with your extension: for ex, `code.scala`
+ * `README.md` containing xamplez guide explaining how to write code snippets
+ * `_License.txt` containing a potential license for your code
+ * `meta` containing metadata used by xamplez.io backend
  
 #### A **default Opensource server implementation** 
 
@@ -94,14 +110,19 @@ We would like to gather all Xamplez instances under this domain `xyz.xamplez.io`
 <br/>
 ### How to create a new instance of Xamplez.io
 
- 1. Fork this github project
- 2. Fork the **Lord of the Gists** to create your Root Gist
- 3. Fork the **Master Conf Gist** to create your Conf Gist & put Root Gist ID in it
- 4. Put Conf Gist ID in conf/application.conf
- 5. Fork Root Gist and create a few snippets :
+ 1. Fork this github project if you want to use our default implementation
+ 2. Fork the **Lord of the Gists Configuration** to create your Configuration Gist
+ 3. Fork the **Master Conf Gist** to create your Conf Gist & put Root Gist ID in it (potentially several times)
+ 4. Put Conf Gist ID in `conf/application.conf` in the parameter `gist.roots=[ GIST_ID, ...]`
+ 5. Fork Root Gist to create a few snippets :
 
-   * Put a short & relevant description of your code snippet: all words preceded by `#` will be indexed as tags
-   * Put your code snippet in code file and you can create more files too
+    * You MUST put a gist description which summarizes your snippet as precisely as possible.
+    * All words starting in the description with a dash #tag are indexed as tags.
+    * You can add as many files as you want in your gist
+    * File extensions are used to identify the language (e.g. code.scala -> scala)
+    * A code snippet shouldn't be too big (a few lines if possible) so don't hesitate to cut in several files
+    * If you want to explain precisely your code or provide usage examples, please use a Markdown file (e.g. README.md)
+    * You can put a License in case your code need to be protected in anyway
     
 <br/>
 ### The team behind Xamplez.io

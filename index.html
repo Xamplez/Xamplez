@@ -28,15 +28,15 @@
         </ul>
       </header>
       <section>
-        <h2>
-<a name="welcome-to-xamplezio" class="anchor" href="#welcome-to-xamplezio"><span class="octicon octicon-link"></span></a>Welcome to Xamplez.io</h2>
+        <h1>
+<a name="welcome-to-xamplezio" class="anchor" href="#welcome-to-xamplezio"><span class="octicon octicon-link"></span></a>Welcome to Xamplez.io</h1>
 
 <blockquote>
-<p>Participate to Xamplez.io and help us build an OpenSource Knowledge Cluster of Code Snippets</p>
+<p>Help us build an OpenSource Knowledge Cluster of Code Snippets</p>
 </blockquote>
 
-<h3>
-<a name="xamplezios-idea" class="anchor" href="#xamplezios-idea"><span class="octicon octicon-link"></span></a>Xamplez.io's idea?</h3>
+<h2>
+<a name="xamplezios-idea" class="anchor" href="#xamplezios-idea"><span class="octicon octicon-link"></span></a>Xamplez.io's idea?</h2>
 
 <p>Xamplez is based on a very simple idea: </p>
 
@@ -45,61 +45,108 @@
 &amp; be able to search them based on tags, ratings etc...</p>
 </blockquote>
 
-<p>Our primary goal is to <strong>help people build their own stores of code snippets focusing on a specific topic</strong>. 
+<p>Our primary goal is to <strong>help people build their own stores of code snippets focusing on specific topics</strong>.
 The topic can go from very generic subjects such as programming language or frameworks to more specific ones such as 
-very precise technical points. It's up to you to do what you want...</p>
+very precise technical points or even funnier subjects. It's up to you to do what you want...</p>
 
-<p>To achieve this goal, <strong>we propose to adopt a very few common rules (actually one for now).</strong> 
-As soon as you follow this rule, you are implicitly participating to the constellations of Xamplez 
-instances <em>(constellation begins with number &gt; 1;))</em>. </p>
+<blockquote>
+<p>We were inspired by <a href="http://www.140byt.es/">140byt.es</a> idea based on GIST but we wanted to go further in a more generic manner.</p>
+</blockquote>
+
+<p>We aim at creating multiple instances of Xamplez. </p>
+
+<p>We think one Xamplez's instance should focused on one topic as much as possible. 
+But multi-topic instances can be considered naturally.</p>
+
+<p>One <strong>Xamplez's instance is just a server but it doesn't store any code snippets</strong>: they are stored in Gists.
+The server is just there to discover and index the gists about your topic and provide a <strong>Search Engine</strong>.
+You can kill the server and re-launch it somewhere else and it will just be down meanwhile it re-builds the index.</p>
+
+<p>Finally, to become a real Xamplez instance, <strong>we propose to adopt a very few common rules</strong>. As soon as you follow these rules 
+and create a server instance, you are implicitly participating to the Xamplez's constellation.</p>
 
 <p><br></p>
 
-<h3>
-<a name="xamplezios-rule" class="anchor" href="#xamplezios-rule"><span class="octicon octicon-link"></span></a>Xamplez.io's Rule</h3>
+<h2>
+<a name="xamplezios-rules" class="anchor" href="#xamplezios-rules"><span class="octicon octicon-link"></span></a>Xamplez.io's Rules</h2>
 
-<h5>
-<a name="literary-version" class="anchor" href="#literary-version"><span class="octicon octicon-link"></span></a>Literary version</h5>
+<h3>
+<a name="literary-version" class="anchor" href="#literary-version"><span class="octicon octicon-link"></span></a>Literary version</h3>
 
 <blockquote>
 <p>One Gist to rule them all, One Gist to find them,</p>
 
-<p>One Gist to bring them all and in the happiness bind them</p>
+<p>One Gist to bring them all and in the ness bind them</p>
 </blockquote>
 
-<h5>
-<a name="common-version" class="anchor" href="#common-version"><span class="octicon octicon-link"></span></a>Common version</h5>
+<h3>
+<a name="common-version" class="anchor" href="#common-version"><span class="octicon octicon-link"></span></a>Common version</h3>
 
+<blockquote>
 <ul>
-<li>All Xamplez is based on one single Gist called the <strong>Lord of the Gists</strong> that rules them all!</li>
-<li>To start a new instance of Xamplez, just fork the <em>Lord of the Gists</em> to obtain your <strong>Root Gist</strong>.</li>
-<li>
-<strong>All code snippets concerning your topic must fork your Root Gist</strong>.</li>
-</ul><p>As you can imagine, using the great power of Github API, from your Root Gist, you can then find all code snippets 
-for your topic.</p>
+<li><p>One Xamplez's instance requires to fork the <strong>Lord of the Gists</strong> that rules all the configurations of all instances!</p></li>
+<li><p>The Configuration Gist must point to one (or more) Root Gist(s)</p></li>
+<li><p>All code snippets concerning one topic(s) must fork the same Root Gist(s).</p></li>
+<li><p>One Xamplez's instance can point to one or more Root Gist(s).</p></li>
+</ul>
+</blockquote>
 
-<p>This is the only mandatory rule for now! Now too constraining, isn't it?</p>
+<p>As you can imagine, using the great power of Github API, from your Root Gist(s), you can then find all code snippets 
+about your topic.</p>
 
 <p><br></p>
 
-<h3>
-<a name="whats-xamplezio-out-of-the-box-" class="anchor" href="#whats-xamplezio-out-of-the-box-"><span class="octicon octicon-link"></span></a>What's Xamplez.io out-of-the-box ?</h3>
+<h2>
+<a name="whats-xamplezio-out-of-the-box-" class="anchor" href="#whats-xamplezio-out-of-the-box-"><span class="octicon octicon-link"></span></a>What's Xamplez.io out-of-the-box ?</h2>
 
 <p>Taking this rule into account, we have built current github project to help you kickstart your own instance of
-Xamplez.io for your own topic. </p>
+Xamplez.io for your own topic(s). </p>
 
-<p>First of all, we made Xamplez.io completely opensource, nothing hidden. We want people to contribute to it, 
+<p>First of all, we made <a href="http://www.xamplez.io">Xamplez.io</a> completely opensource, nothing hidden. We want people to contribute to it, 
 to improve it &amp; to fork it for their own needs and things we haven't imagined yet. </p>
 
 <p>We'd just like to keep a link between all forks/instances (following the forks of <em>Lord of the Gists</em>) because
-we aim at building an opensource knownledge cluster based on Gist.</p>
+we aim at building an opensource knownledge cluster based on Gist and improve the concept progressively.</p>
+
+<p><img src="./xamplez_graph.png" alt="xamplez_archi"></p>
 
 <p>So, for now, Xamplez.io provides out-of-the-box:</p>
 
-<h4>
-<a name="the-mandatory-lord-of-the-gists" class="anchor" href="#the-mandatory-lord-of-the-gists"><span class="octicon octicon-link"></span></a>The mandatory <strong>Lord of the Gists</strong>,</h4>
+<h3>
+<a name="the-mandatory-lord-of-the-gists" class="anchor" href="#the-mandatory-lord-of-the-gists"><span class="octicon octicon-link"></span></a>The mandatory <a href="https://gist.github.com/xamplez-admin/5897409">Lord of the Gists</a>
+</h3>
 
-<p>It's the father of all Root gists. It provides a default format based on 4 files:</p>
+<p>It's the father of all Configuration gists to be able to re-find all existing instances of Xamplez.</p>
+
+<blockquote>
+<p>When you create a new instance of Xamplez, you should just fork this gist.</p>
+</blockquote>
+
+<p>It's used to store all custom configurations for Xamplez instance and specially the link to the Root Gist(s) of your instance. </p>
+
+<p>In this configuration, you can store one or more files:</p>
+
+<ul>
+<li>custom Play configuration (if you use our default server implementation)</li>
+<li>custom CSS</li>
+<li>custom HTML templates</li>
+<li>local messages</li>
+<li>etc...</li>
+</ul><h3>
+<a name="the-root-of-the-root-gists--code-snippet-template" class="anchor" href="#the-root-of-the-root-gists--code-snippet-template"><span class="octicon octicon-link"></span></a>The <a href="https://gist.github.com/xamplez-admin/5993903">Root of the Root Gists</a> = code snippet template</h3>
+
+<blockquote>
+<p>Just remember one thing: </p>
+
+<p>One topic = One group of Gists forking the same Root Gist</p>
+</blockquote>
+
+<p>One instance of Xamplez can have several root gists.</p>
+
+<p>This Root of the Root Gists isn't mandatory but it provides a default template and we encourage forking it 
+when you start a new topic.</p>
+
+<p>This Gist is based on 4 files:</p>
 
 <ul>
 <li>
@@ -111,23 +158,9 @@ we aim at building an opensource knownledge cluster based on Gist.</p>
 <code>_License.txt</code> containing a potential license for your code</li>
 <li>
 <code>meta</code> containing metadata used by xamplez.io backend</li>
-</ul><h4>
-<a name="the-useful-master-conf-gist" class="anchor" href="#the-useful-master-conf-gist"><span class="octicon octicon-link"></span></a>The useful <strong>Master Conf Gist</strong>
-</h4>
-
-<p>It's used to store all custom configurations for Xamplez instance and specially the link to the Root Gist of your intance. </p>
-
-<p>It works on the same principles as the <em>Lord of the Gists</em>: to build your own configuration, you fork it and store in one or more files:</p>
-
-<ul>
-<li>custom Play configuration</li>
-<li>custom CSS</li>
-<li>custom HTML templates</li>
-<li>local messages</li>
-<li>etc...</li>
-</ul><h4>
+</ul><h3>
 <a name="a-default-opensource-server-implementation" class="anchor" href="#a-default-opensource-server-implementation"><span class="octicon octicon-link"></span></a>A <strong>default Opensource server implementation</strong>
-</h4>
+</h3>
 
 <p>This is an autonomous server capable of building a code snippet search engine starting only with the ID of your Root Gist. 
 It's based on:</p>
@@ -145,9 +178,9 @@ the same well built backend and build an instance very quickly.</p>
 is quite cool to customize your instance very easily.</p>
 </blockquote>
 
-<h4>
+<h3>
 <a name="a-domain-xamplezio" class="anchor" href="#a-domain-xamplezio"><span class="octicon octicon-link"></span></a>A domain <code>xamplez.io</code>
-</h4>
+</h3>
 
 <p>We would like to gather all Xamplez instances under this domain <code>xyz.xamplez.io</code>. It's not mandatory but we think it would be cool ;)</p>
 
@@ -157,22 +190,35 @@ is quite cool to customize your instance very easily.</p>
 
 <p><br></p>
 
-<h3>
-<a name="how-to-create-a-new-instance-of-xamplezio" class="anchor" href="#how-to-create-a-new-instance-of-xamplezio"><span class="octicon octicon-link"></span></a>How to create a new instance of Xamplez.io</h3>
+<h2>
+<a name="how-to-create-a-new-instance-of-xamplezio" class="anchor" href="#how-to-create-a-new-instance-of-xamplezio"><span class="octicon octicon-link"></span></a>How to create a new instance of Xamplez.io</h2>
 
 <ol>
-<li>Fork this github project</li>
-<li>Fork the <strong>Lord of the Gists</strong> to create your Root Gist</li>
-<li>Fork the <strong>Master Conf Gist</strong> to create your Conf Gist &amp; put Root Gist ID in it</li>
-<li>Put Conf Gist ID in conf/application.conf</li>
-<li>Fork Root Gist and create a few snippets :</li>
+<li>Fork this github project if you want to use our default implementation</li>
+<li>Fork the <strong>Lord of the Gists Configuration</strong> to create your Configuration Gist</li>
+<li>Fork the <strong>Master Conf Gist</strong> to create your Conf Gist &amp; put Root Gist ID in it (potentially several times)</li>
+<li>Put Conf Gist ID in <code>conf/application.conf</code> in the parameter <code>gist.roots=[ GIST_ID, ...]</code>
+</li>
+<li>Fork Root Gist to create a few snippets :</li>
 </ol><ul>
-<li>Put a short &amp; relevant description of your code snippet: all words preceded by <code>#</code> will be indexed as tags</li>
-<li>Put your code snippet in code file and you can create more files too</li>
-</ul><p><br></p>
+<li>You MUST put a gist description which summarizes your snippet as precisely as possible.</li>
+<li>All words starting in the description with a dash #tag are indexed as tags.</li>
+<li>You can add as many files as you want in your gist</li>
+<li>File extensions are used to identify the language (e.g. code.scala -&gt; scala)</li>
+<li>A code snippet shouldn't be too big (a few lines if possible) so don't hesitate to cut in several files</li>
+<li>If you want to explain precisely your code or provide usage examples, please use a Markdown file (e.g. README.md)</li>
+<li>You can put a License in case your code need to be protected in anyway</li>
+</ul><blockquote>
+<p>If you accept to link your instance to original xamplez.io, contact us at <a href="mailto:contact@xamplez.io">contact@xamplez.io</a> so that we create a subdomain for your instance in xamplez.io</p>
 
-<h3>
-<a name="the-team-behind-xamplezio" class="anchor" href="#the-team-behind-xamplezio"><span class="octicon octicon-link"></span></a>The team behind Xamplez.io</h3>
+<pre><code>Topic foobar =&gt; sub-domain foobar.xamplez.io
+</code></pre>
+</blockquote>
+
+<p><br></p>
+
+<h2>
+<a name="the-team-behind-xamplezio" class="anchor" href="#the-team-behind-xamplezio"><span class="octicon octicon-link"></span></a>The team behind Xamplez.io</h2>
 
 <p>If you want to contact us : <a href="mailto:contact@xamplez.io">contact@xamplez.io</a></p>
 

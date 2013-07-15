@@ -144,6 +144,8 @@ We would like to gather all Xamplez instances under this domain `xyz.xamplez.io`
 <br/>
 ## The team behind Xamplez.io
 
+If you want to ask any quesiton : [Xamplez Google Group](https://groups.google.com/forum/#!forum/xamplez)
+
 If you want to contact us : contact@xamplez.io
 
 (in alphabetic order)

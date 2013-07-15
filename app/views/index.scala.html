@@ -2,30 +2,21 @@
 
 <div class="home">
     <section class="ribbon ribbon-main">
-        <h2>{{sentence.question}}</h2>
+        <h2>
+          {{sentence}}
+          <a href="@Application.ROOT_GIST_URL" class="btn btn-small btn-link">Create a snippet</a>
+        </h2>
     </section>
 
     <section class="main">
         <div class="row">
             <div class="col-6">
-                <h3>{{sentence.createTitle}}</h3>
-                <p>{{sentence.createDescription}}</p>
-            </div>
-
-            <div class="col-6">
-                <h3>{{sentence.searchTitle}}</h3>
-                <p>{{sentence.searchDescription}}</p>
             </div>
         </div>
 
         <div class="search-bar-container">
         <div class="row search-bar container">
-            <div class="col-6">
-                <a href="@Application.ROOT_GIST_URL" class="btn btn-default btn-large btn-block">Create a snippet</a>
-            </div>
-            <div class="col-6">
                 <div data-ng-include="'/templates/searchForm'"></div>
-            </div>
         </div>
         </div>
 

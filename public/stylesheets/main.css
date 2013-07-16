@@ -7031,6 +7031,11 @@ select.select2 {
 }
 .search-bar-container {
   height: 54px;
+  margin: 30px 0;
+}
+.search-bar-container .input-group {
+  max-width: 600px;
+  margin: 0 auto;
 }
 .search-bar.fixed {
   z-index: 99;
@@ -7039,6 +7044,9 @@ select.select2 {
   top: 0;
   margin-left: -20px;
   padding: 0 5px;
+}
+.search-bar.fixed .input-group {
+  max-width: none;
 }
 .tags {
   margin: 15px 0px;

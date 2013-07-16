@@ -7578,6 +7578,8 @@ section.main h3 {
 @media (min-width: 768px) {
   .ribbon {
     margin: 0px -50%;
+    padding-right: 50%;
+    padding-left: 50%;
   }
 }
 .mirror {

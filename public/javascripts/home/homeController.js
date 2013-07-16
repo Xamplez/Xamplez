@@ -38,6 +38,22 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
   if ($location.search().q) {
     $scope.searchData.query = $scope.queryFromString($location.search().q);
   }
+  else {
+    var scrollIndicator = $(".scrollIndicator");
+    function doEmptySearch () {
+      $(window).off("scroll wheel mousewheel", firstScrollDown);
+      scrollIndicator.off("click", doEmptySearch);
+      console.log("FIXME: trigger an empty search result");
+    }
+    function firstScrollDown (e) {
+      var $w = $(window);
+      if ($w.scrollTop() >= $(document).height()-$w.height()) {
+        doEmptySearch();
+      }
+    }
+    $(window).on("scroll wheel mousewheel", firstScrollDown);
+    scrollIndicator.on("click", doEmptySearch);
+  }
 
   var searchBar = $(".search-bar:first");
   var searchBarContainer = $(".search-bar-container:first");

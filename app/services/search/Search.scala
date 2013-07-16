@@ -262,7 +262,8 @@ trait ElasticSearch {
       if(query.isEmpty) Json.obj("match_all" -> Json.obj())
       else Json.obj(
              "query_string" -> Json.obj(
-                "fields" -> Seq("description", "tags^10"),
+               "fields" -> Seq("description", "tags^10"),
+               "default_operator" -> "AND",
                "query"  -> query
              )
            )

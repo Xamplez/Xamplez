@@ -7026,7 +7026,8 @@ select.select2 {
   text-align: center;
 }
 .home .main p {
-  text-align: justify;
+  text-align: center;
+  font-size: 1.2em;
 }
 .search-bar-container {
   height: 54px;

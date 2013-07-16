@@ -35,10 +35,9 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
   $scope.sentence = $scope.sentences[_.random(0, $scope.sentences.length - 1)];
   */
 
-  $scope.sentence = "Gists for all, all for Play!";
-
   if ($location.search().q) {
     $scope.searchData.query = $scope.queryFromString($location.search().q);
+    $scope.autocomplete.value = $location.search().q;
   }
 
   var searchBar = $(".search-bar:first");

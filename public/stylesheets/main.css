@@ -7489,7 +7489,7 @@ header a {
   vertical-align: middle;
   font-weight: bold;
   font-size: 18px;
-  padding: 24px;
+  padding: 20px;
 }
 header a::before {
   content: " ";
@@ -7517,8 +7517,9 @@ header .icons a {
 }
 header .logo {
   font-size: 40px;
-  padding-top: 10px;
-  padding-bottom: 0px;
+  line-height: 54px;
+  padding: 10px 0;
+  height: 77px;
   font-style: italic;
 }
 header .logo img {

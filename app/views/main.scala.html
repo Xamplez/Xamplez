@@ -92,12 +92,17 @@
         <script id="/templates/searchForm" type="text/ng-template">
             <form name="searchForm" data-ng-submit="search()">
                 <div class="input-group">
-                    <input type="text" class="input-large" data-ng-model="searchData.query" ui-select2="searchOptions" autofocus/>
+
+<div id="debug"></div>
+
+                    <input id="autocomplete" type="search" class="input-large" autofocus ng-init="initAutocomplete();" />
+
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-default btn-large">Search</button>
                     </span>
                 </div>
             </form>
+
         </script>
 
         <script id="/templates/footer" type="text/ng-template">

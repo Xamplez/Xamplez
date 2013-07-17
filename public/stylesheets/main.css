@@ -7044,9 +7044,8 @@ select.select2 {
   top: 0;
   margin-left: -20px;
   padding: 0 5px;
-}
-.search-bar.fixed .input-group {
-  max-width: none;
+  padding-bottom: 5px;
+  width: 100%;
 }
 .tags {
   margin: 15px 0px;
@@ -7608,6 +7607,13 @@ footer {
 .ribbon.ribbon-main h2 {
   padding: 0px;
   margin: 0px;
+  white-space: nowrap;
+  z-index: 1;
+  position: relative;
+}
+.ribbon.ribbon-main .create-a-snippet {
+  z-index: 2;
+  position: relative;
 }
 section.main {
   position: relative;

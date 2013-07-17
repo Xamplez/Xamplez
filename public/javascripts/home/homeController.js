@@ -36,7 +36,8 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
   */
 
   if ($location.search().q) {
-    $scope.searchData.query = $scope.queryFromString($location.search().q);
+    //$scope.searchData.query = $scope.queryFromString($location.search().q);
+    $scope.autocomplete.value = $location.search().q;
   }
   else {
     var scrollIndicator = $(".scrollIndicator");

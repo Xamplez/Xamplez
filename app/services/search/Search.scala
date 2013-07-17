@@ -1,5 +1,6 @@
 package services.search
 
+import org.joda.time.DateTime
 import scala.concurrent._
 import scala.concurrent.duration._
 
@@ -252,6 +253,18 @@ trait ElasticSearch {
     }.recoverTotal{ e => Future.successful(Left(s"Can't update due to json error ${e}")) }
   }
 
+  def twitted( id: Long ): Future[Either[String, JsValue]] = {
+    val upd = Json.obj( "script" -> "ctx._source.twitted = true" )
+    play.Logger.debug("going to update "+upd)
+    
+    WS.url(s"$UPDATE_URL/$id/_update")
+      .post(upd)
+      .map { r =>
+        if(r.status == 200 || r.status == 201) Right(r.json)
+        else Left(s"Couldn't update $id (status:${r.status} msg:${r.statusText}")
+      }
+  }
+
   def delete(id: Long): Future[Response] = {
     play.Logger.debug(s"Search : deleting $id")
     WS.url(s"$INSERT_URL/$id").delete
@@ -336,11 +349,7 @@ trait ElasticSearch {
   def byId(id: Long): Future[Option[JsValue]] = {
     search(queryById(id), true).map{
       case Left(r) => throw new RuntimeException(s"Couldn't search $id (status:${r.status} msg:${r.statusText}")
-      case Right(js) =>
-        val hits = (js \ "hits").as[JsObject]
-        val nb = (hits \ "total").as[Int]
-        if(nb >= 1) Some((( (hits \ "hits").as[JsArray] ).apply(0) \ "_source").as[JsObject])
-        else None
+      case Right(js) => (js \ "hits" \ "hits" \\ "_source").headOption
     }
   }
 
@@ -351,14 +360,25 @@ trait ElasticSearch {
   def byIds(ids: Seq[Long]): Future[Either[String, Seq[JsValue]]] = {
     search(queryByIds(ids), true).map{
       case Left(r) => Left(s"Couldn't search $ids (status:${r.status} msg:${r.statusText}")
-      case Right(js) => 
-        val hits = (js \ "hits").as[JsObject]
-        val nb = (hits \ "total").as[Int]
-        if(nb >= 1) Right((hits \ "hits" \ "_source").as[Seq[JsObject]])
-        else Right(Seq())
+      case Right(js) => Right( (js \ "hits" \ "hits" \\ "_source") )
     }
   }
 
+  def queryTwittable( minCreated: DateTime, maxUpdated: DateTime, minStars: Int ) = Json.obj(
+    "filter" -> Json.obj( "and" -> Json.arr(
+      Json.obj( "missing" -> Json.obj("field" -> "twitted") ),
+      Json.obj( "range" -> Json.obj( "created_at" -> Json.obj( "ge" -> minCreated.toString() ) ) ),
+      Json.obj( "or" -> Json.arr(
+        Json.obj( "range" -> Json.obj( "updated_at" -> Json.obj( "lt" -> maxUpdated.toString() ) ) ),
+        Json.obj( "range" -> Json.obj( "stars" -> Json.obj( "ge" -> minStars ) ) )
+      ))
+    ))
+  )
+  def twittable( minCreated: DateTime, maxUpdated: DateTime, minStars: Int): Future[Set[Long]] = 
+    search(queryTwittable(minCreated, maxUpdated, minStars), true).map {
+      case Left(r) => play.Logger.debug("Couldn't find any twittable Gists"); Set.empty
+      case Right(js) => (js \ "hits" \ "hits" \\ "_id").map( _.as[String].toLong ).toSet
+    }
 }
 
 object Search extends ElasticSearch

@@ -1,8 +1,12 @@
 package controllers
 
+import org.joda.time.DateTime
+
 import play.api._
 import play.api.mvc._
 import play.api.Play.current
+
+import play.api.libs.concurrent.Execution.Implicits._
 
 object Application extends Controller {
   lazy val GIST_ROOT = Play.application.configuration.getLong("gist.root")
@@ -31,5 +35,4 @@ object Application extends Controller {
   def about = Action {
     Ok(views.html.about())
   }
-
 }

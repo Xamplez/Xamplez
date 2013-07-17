@@ -35,16 +35,12 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
   $scope.sentence = $scope.sentences[_.random(0, $scope.sentences.length - 1)];
   */
 
-  if ($location.search().q) {
-    //$scope.searchData.query = $scope.queryFromString($location.search().q);
-    $scope.autocomplete.value = $location.search().q;
-  }
-  else {
+  if (!("q" in $location.search())) {
     var scrollIndicator = $(".scrollIndicator");
     function doEmptySearch () {
       $(window).off("scroll wheel mousewheel", firstScrollDown);
       scrollIndicator.off("click", doEmptySearch);
-      console.log("FIXME: trigger an empty search result");
+      location.href = "/?q="; // FIXME: WTF do I need to do that? other techniques don't work
     }
     function firstScrollDown (e) {
       var $w = $(window);

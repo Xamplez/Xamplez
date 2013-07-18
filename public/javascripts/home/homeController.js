@@ -36,18 +36,16 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', '$window', 'Tags'
   */
 
   var $w = angular.element($window);
-  var scope = $scope;
 
   if (!("q" in $location.search())) {
     var scrollIndicator = $(".scrollIndicator");
     function doEmptySearch () {
-      scope.$apply(function(){
+      $scope.$apply(function(){
         var $w = angular.element($window);
         $w.off("scroll wheel mousewheel", firstScrollDown);
         scrollIndicator.off("click", doEmptySearch);
-        $location.search({"q":"", "size":10});
+        $scope.searchResults = Search.query({q: "", size: 10});
       });
-      //location.href = "/?q="; // FIXME: WTF do I need to do that? other techniques don't work
     }
     function firstScrollDown (e) {
       var $w = angular.element($window);

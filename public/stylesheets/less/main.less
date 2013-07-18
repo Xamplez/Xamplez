@@ -73,8 +73,12 @@ header {
     }
   }
 
+  .icons {
+    text-align: center;
+  }
+
   .icons a {
-    display: block;
+    display: inline-block;
     text-align: center;
   }
 
@@ -119,6 +123,24 @@ header {
   }
 }
 
+@media (max-width: 768px) {
+  header {
+    .logo-container {
+      text-align: center;
+    }
+    .icons {
+      margin-top: -15px;
+      a:hover {
+        margin-top: 0px;
+        background: none;
+        &::before {
+          border-top: 0;
+        }
+      }
+    }
+  }
+}
+
 footer {
   display: block;
   position: fixed;
@@ -127,7 +149,6 @@ footer {
   text-align: center;
   padding: 5px;
   background: white;
-  border-top: 1px solid #eee;
 }
 
 @keyframes updown {

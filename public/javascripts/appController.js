@@ -116,10 +116,10 @@ app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags
   */
 
 	$scope.search = function () {
-    var query = $scope.autocomplete.value;
-    $location.search("q", query);
-    $scope.searchResults = Search.query({q: query});
-  };
+	    var query = $scope.autocomplete.value;
+	    $location.search("q", query);
+	    $scope.searchResults = Search.query({q: query});
+    };
 
   
 	$scope.queryFromString = function (queryString) {

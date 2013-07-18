@@ -1,4 +1,4 @@
-app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search', 'GistService', function($scope, $location, $timeout, Tags, Search, GistService) {
+app.controller('HomeCtrl', ['$scope', '$location', '$timeout', '$window', 'Tags', 'Search', 'GistService', function($scope, $location, $timeout, $window, Tags, Search, GistService) {
   
   /*
   $scope.sentences = [
@@ -35,20 +35,27 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
   $scope.sentence = $scope.sentences[_.random(0, $scope.sentences.length - 1)];
   */
 
+  var $w = angular.element($window);
+  var scope = $scope;
+
   if (!("q" in $location.search())) {
     var scrollIndicator = $(".scrollIndicator");
     function doEmptySearch () {
-      $(window).off("scroll wheel mousewheel", firstScrollDown);
-      scrollIndicator.off("click", doEmptySearch);
-      location.href = "/?q="; // FIXME: WTF do I need to do that? other techniques don't work
+      scope.$apply(function(){
+        var $w = angular.element($window);
+        $w.off("scroll wheel mousewheel", firstScrollDown);
+        scrollIndicator.off("click", doEmptySearch);
+        $location.search({"q":"", "size":10});
+      });
+      //location.href = "/?q="; // FIXME: WTF do I need to do that? other techniques don't work
     }
     function firstScrollDown (e) {
-      var $w = $(window);
+      var $w = angular.element($window);
       if ($w.scrollTop() >= $(document).height()-$w.height()) {
         doEmptySearch();
       }
     }
-    $(window).on("scroll wheel mousewheel", firstScrollDown);
+    $w.on("scroll wheel mousewheel", firstScrollDown);
     scrollIndicator.on("click", doEmptySearch);
   }
 
@@ -59,18 +66,19 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
     searchBarTopPosition = searchBarContainer.offset().top;
   }
   function syncSearchBarFixed () {
-    var top = $(window).scrollTop();
+    var $w = angular.element($window);
+    var top = $w.scrollTop();
     searchBar.toggleClass("fixed", top > searchBarTopPosition);
   }
-  $(window).on("scroll", function (e) {
+  $w.on("scroll", function (e) {
     syncSearchBarFixed();
   });
-  $(window).on("resize", function (e) {
+  $w.on("resize", function (e) {
     computeSearchBarTopPosition();
   });
 
   // Also wait for font load end
-  $(window).on("load", function () {
+  $w.on("load", function () {
     computeSearchBarTopPosition();
     syncSearchBarFixed();
   });

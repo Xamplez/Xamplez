@@ -87,14 +87,12 @@ app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags
             var selectionStart = newValue.length;
             var selectionEnd = setValue.length;
             input.value = setValue;
-            /*
             input.selectionStart = selectionStart;
             input.selectionEnd = selectionEnd;
-            */
             setTimeout(function(){
               input.selectionStart = selectionStart;
               input.selectionEnd = selectionEnd;
-            }, 50);
+            }, 0);
           }
         }
       }

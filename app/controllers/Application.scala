@@ -9,8 +9,8 @@ import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits._
 
 object Application extends Controller {
-  lazy val GIST_ROOT = Play.application.configuration.getLong("gist.root")
-  lazy val ROOT_GIST_URL = "https://gist.github.com/%s".format( GIST_ROOT.map(_.toString).getOrElse("Missing") )
+  lazy val GIST_ROOTS = Play.application.configuration.getLongList("gist.roots")
+  lazy val ROOT_GIST_URL = "https://gist.github.com/%s".format( GIST_ROOTS.get.get(0) )
 
   def main(any: String) = Action {
     Ok(views.html.main())

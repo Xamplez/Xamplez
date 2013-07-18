@@ -29,8 +29,6 @@ class Indexer extends Actor {
   lazy val rootIds = Play.application.configuration.getLongList("gist.roots").asScala
   lazy val log = play.api.Logger("application.actor")
 
-  val startupTime = DateTime.now
-
   private def extractField( future: Future[Either[Response, JsValue]], fieldName: String ) = {
     future.map{ r =>
       r.right.toOption.map{ json =>
@@ -87,7 +85,7 @@ class Indexer extends Actor {
     log.debug(s"Fetching ${ids.size} forks for $ids...")
 
     Future.sequence(
-      ids.toSeq.map{ id => 
+      ids.toSeq.map{ id =>
         (for{
           fork    <- (fetcher ? FetchGist(id)).mapTo[Option[JsObject]]
           stars   <- (fetcher ? FetchStar(id)).mapTo[JsObject]
@@ -99,9 +97,10 @@ class Indexer extends Actor {
       }
     )
   }
-  
+
   private def searchTwittable = services.search.Search.twittable(
-    startupTime, DateTime.now.minusHours( services.Twitter.tweetableDelay), 
+    services.search.Startup.date,
+    DateTime.now.minusHours( services.Twitter.tweetableDelay),
     services.Twitter.tweetableStars
   )
 
@@ -189,7 +188,7 @@ class TwitterActor extends Actor{
   def receive = {
     case TweetGist(id) => sender ! Await.result(
       services.search.Search.byId(id).map {
-        case Some(js) => Twitter.tweet(js).map { 
+        case Some(js) => Twitter.tweet(js).map {
           case true => {
             log.debug(s"Gist $id tweeted")
             services.search.Search.twitted(id).map( _ => true )

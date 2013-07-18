@@ -101,7 +101,7 @@ app.factory("BubbleCloud", [function () {
 	    });
 	    node.exit().remove();
 	    return node.enter().append("a").attr("class", "bubble-node").attr("xlink:href", function(d) {
-	      return "#" + (encodeURIComponent(idValue(d)));
+	      return "/?q=" + (encodeURIComponent(idValue(d)));
 	    }).call(force.drag).call(connectEvents).append("circle").attr("r", function(d) {
 	      return rScale(rValue(d));
 	    });
@@ -113,7 +113,7 @@ app.factory("BubbleCloud", [function () {
 	    });
 	    label.exit().remove();
 	    labelEnter = label.enter().append("a").attr("class", "bubble-label").attr("href", function(d) {
-	      return "#" + (encodeURIComponent(idValue(d)));
+	      return "/?q=" + (encodeURIComponent(idValue(d)));
 	    }).call(force.drag).call(connectEvents);
 	    labelEnter.append("div").attr("class", "bubble-label-name").text(function(d) {
 	      return textValue(d);
@@ -172,13 +172,8 @@ app.factory("BubbleCloud", [function () {
 	    };
 	  };
 	  connectEvents = function(d) {
-	    d.on("click", click);
 	    d.on("mouseover", mouseover);
 	    return d.on("mouseout", mouseout);
-	  };
-	  click = function(d) {
-	    //location.replace("#" + encodeURIComponent(idValue(d)));
-	    return d3.event.preventDefault();
 	  };
 	  updateActive = function(id) {
 	    node.classed("bubble-selected", function(d) {

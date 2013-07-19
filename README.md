@@ -1,8 +1,8 @@
-# Welcome to Xamplez.io
+# Xamplez.io Manifesto
 
 > Help us build an OpenSource Knowledge Cluster of Code Snippets
 
-## Xamplez.io's idea?
+## Xamplez's idea?
 
 Xamplez is based on a very simple idea: 
 > I want to share code snippets (and nothing else) about a given topic with a simple description 

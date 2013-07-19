@@ -9,9 +9,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.GistAssets.at("custom.css")">
     </head>
     <body data-ng-app="app" data-ng-controller="AppCtrl">
+        <a href="https://github.com/Xamplez/Xamplez/tree/playbyexample"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
         <header>
             <div class="container">
                 <div class="row">
@@ -23,21 +26,16 @@
                             </span>
                         </a>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-2">
                         <div class="row icons">
-                            <div class="col-4">
+                            <div class="col-6">
                                 <a href="/stats">
                                     <span class="icon-bar-chart icon-2x"></span>
                                 </a>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <a href="/about">
                                     <span class="icon-group icon-2x"></span>
-                                </a>
-                            </div>
-                            <div class="col-4">
-                                <a href="https://github.com/Xamplez/Xamplez/tree/playbyexample">
-                                    <span class="icon-github icon-2x"></span>
                                 </a>
                             </div>
                         </ul>
@@ -94,7 +92,7 @@
 
 <div id="debug"></div>
 
-                    <input id="autocomplete" type="search" class="input-large" ng-init="initAutocomplete();" placeholder="...Type & Up/Down Arrows to choose Autocompletion..."/>
+                    <input id="autocomplete" type="search" class="input-large" ng-init="initAutocomplete();" placeholder="... Search, Autocomplete, ⇵"/>
 
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-default btn-large">Search</button>

@@ -7669,3 +7669,8 @@ section.main .separator .inner {
   width: 100px;
   height: 100px;
 }
+.main .left-about h3,
+.main .left-about h4,
+.main .left-about p {
+  text-align: left;
+}

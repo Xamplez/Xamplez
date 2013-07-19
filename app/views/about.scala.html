@@ -7,34 +7,43 @@
 
     <section class="main">
         <div class="row">
-            <div class="col-12">
-                <h3>Incoming: the awesome team behind Play by examples</h3>
-            </div>
+            <h3>What's Play Xamplez?</h3>
+            <br/>
+            <h4>PlayXamplez is an instance of <a href="http://www.xamplez.io">Xamplez</a> following its <a href="http://www.xamplez.io">manifesto</a> and focusing on gathering & sharing code snippets concerning Play Framework and everything about it.</h4>
         </div>
-
+        <div class="separator"><div class="inner"></div></div>
         <div class="row">
             <div class="col-12">
-                <h3>This project is build using uber awesome stuff</h3>
+                <h3>The secret team behind Play Xamplez</h3>
+                <br/>
+                <h4>Jacques Bachellerie, backend ninja (<a href="http://www.github.com/timshel">Github</a>)</h4>
+                <h4>Paul Dijou, frontend/AngularJs kung(fu-)guru (<a href="http://www.github.com/pauldijou">Github</a>)</h4>
+                <h4>Gaetan Renaudeau, initiator & frontend ma(d)ster (<a href="http://www.github.com/manbudian">@@greweb</a> - <a href="http://www.github.com/greweb">Github</a>)</h4>
+                <h4>Pascal Voitot, initiator & backend terrible bogeyman (<a href="http://www.twitter.com/manbudian">@@mandubian</a> - <a href="http://www.github.com/manbudian">Github</a>)</h4>
+            </div>
+        </div>
+        <div class="separator"><div class="inner"></div></div>
+        <div class="row">
+            <div class="col-12">
+                <h3>This project is build using uber awesome OSS techies</h3>
                 <div id="techCloud"></div>
             </div>
         </div>
-
+        <div class="separator"><div class="inner"></div></div>
         <div class="row">
             <div class="col-12 contributors">
-                <h3>A huge thanks to all contributors of the project!</h3>
+                <h3>A huge thanks to all <a href="https://github.com/Xamplez/Xamplez/graphs/contributors">contributors of the project</a>!</h3>
 
-                {{contributors}}
-
-                <ul class="media-list" data-ng-repeat="c in contributors | orderBy:'-total'">
-                  <li class="media">
+                <div class="media-list">
+                  <div class="media" data-ng-repeat="c in contributors | orderBy:'-total'">
                     <a class="pull-left" data-ng-href="{{c.author.html_url}}">
-                      <img class="media-object" data-ng-src="{{c.author.avatar_url}}">
+                      <img class="media-object" data-ng-src="{{c.author.avatar_url}}"/>
                     </a>
                     <div class="media-body">
                       <h4 class="media-heading">{{c.author.login}}</h4>
                     </div>
-                  </li>
-                </ul>
+                  </div>
+                </div>
             </div>
         </div>
     </section>

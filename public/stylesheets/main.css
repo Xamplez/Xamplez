@@ -291,12 +291,6 @@ img {
 .img-circle {
   border-radius: 500px;
 }
-hr {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: 0;
-  border-top: 1px solid #eeeeee;
-}
 p {
   margin: 0 0 10px;
 }
@@ -508,6 +502,13 @@ dd {
 }
 .dl-horizontal dd:after {
   clear: both;
+}
+hr {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }
 abbr[title],
 abbr[data-original-title] {
@@ -990,10 +991,8 @@ th {
 }
 .table thead > tr > th,
 .table tbody > tr > th,
-.table tfoot > tr > th,
 .table thead > tr > td,
-.table tbody > tr > td,
-.table tfoot > tr > td {
+.table tbody > tr > td {
   padding: 8px;
   line-height: 1.428571429;
   vertical-align: top;
@@ -1003,10 +1002,10 @@ th {
   vertical-align: bottom;
 }
 .table caption + thead tr:first-child th,
-.table colgroup + thead tr:first-child th,
-.table thead:first-child tr:first-child th,
 .table caption + thead tr:first-child td,
+.table colgroup + thead tr:first-child th,
 .table colgroup + thead tr:first-child td,
+.table thead:first-child tr:first-child th,
 .table thead:first-child tr:first-child td {
   border-top: 0;
 }
@@ -1018,10 +1017,8 @@ th {
 }
 .table-condensed thead > tr > th,
 .table-condensed tbody > tr > th,
-.table-condensed tfoot > tr > th,
 .table-condensed thead > tr > td,
-.table-condensed tbody > tr > td,
-.table-condensed tfoot > tr > td {
+.table-condensed tbody > tr > td {
   padding: 4px 5px;
 }
 .table-bordered {
@@ -1032,10 +1029,8 @@ th {
 }
 .table-bordered > thead > tr > th,
 .table-bordered > tbody > tr > th,
-.table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
-.table-bordered > tbody > tr > td,
-.table-bordered > tfoot > tr > td {
+.table-bordered > tbody > tr > td {
   border-left: 1px solid #dddddd;
 }
 .table-bordered > caption + thead > tr:first-child th,
@@ -1080,14 +1075,14 @@ th {
   border-bottom-right-radius: 0;
 }
 .table-bordered > caption + thead > tr:first-child > th:first-child,
-.table-bordered > colgroup + thead > tr:first-child > th:first-child,
 .table-bordered > caption + tbody > tr:first-child > td:first-child,
+.table-bordered > colgroup + thead > tr:first-child > th:first-child,
 .table-bordered > colgroup + tbody > tr:first-child > td:first-child {
   border-top-left-radius: 4px;
 }
 .table-bordered > caption + thead > tr:first-child > th:last-child,
-.table-bordered > colgroup + thead > tr:first-child > th:last-child,
 .table-bordered > caption + tbody > tr:first-child > td:last-child,
+.table-bordered > colgroup + thead > tr:first-child > th:last-child,
 .table-bordered > colgroup + tbody > tr:first-child > td:last-child {
   border-top-right-radius: 4px;
 }
@@ -2043,6 +2038,9 @@ input[type="button"].btn-block {
   padding-left: 20px;
   padding-right: 20px;
 }
+.typeahead {
+  z-index: 1051;
+}
 .list-group {
   margin-bottom: 20px;
   padding-left: 0;
@@ -2884,11 +2882,14 @@ button.close {
   display: inline-block;
   text-shadow: 0 1px 0 #fff;
 }
-.breadcrumb > li + li:before {
+.breadcrumb > li:after {
   display: inline-block;
-  content: "/\00a0";
+  content: "\00a0 /";
   padding: 0 5px;
   color: #ccc;
+}
+.breadcrumb > li:last-child:after {
+  display: none;
 }
 .breadcrumb > .active {
   color: #999999;
@@ -7512,7 +7513,6 @@ header .icons a {
   text-align: center;
 }
 header .logo {
-  z-index: -1;
   font-size: 32px;
   line-height: 54px;
   padding: 10px 0;

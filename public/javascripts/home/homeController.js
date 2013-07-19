@@ -54,7 +54,10 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', '$window', 'Tags'
       }
     }
     $w.on("scroll wheel mousewheel", firstScrollDown);
-    scrollIndicator.on("click", doEmptySearch);
+    scrollIndicator.on("click", function (e) {
+      e.preventDefault();
+      doEmptySearch();
+    });
   }
 
   var searchBar = $(".search-bar:first");

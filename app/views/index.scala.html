@@ -1,13 +1,15 @@
 @()
 
-<div class="home">
     <section class="ribbon ribbon-main">
+      <div class="container">
       <a href="@Application.ROOT_GIST_URL" class="btn btn-small btn-default pull-right create-a-snippet">Create a snippet</a>
         <h2>
           Gists 'n' Play!
         </h2>
+        </div>
     </section>
 
+<div class="home container">
     <section class="main">
 
         <div class="description">
@@ -43,7 +45,10 @@
 </div>
 
 <div class="scrollIndicator" ng-hide="searchResults.hits.hits">
-  <a href="">
+  <a href="" class="pull-left">
+    <i class="icon-4x icon-double-angle-down"></i>
+  </a>
+  <a href="" class="pull-right">
     <i class="icon-4x icon-double-angle-down"></i>
   </a>
 </div>

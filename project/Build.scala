@@ -4,7 +4,7 @@ import play.Project._
 
 object ApplicationBuild extends Build {
 
-  val appName         = "play-xamplez"
+  val appName         = "scalamacro-xamplez"
   val appVersion      = "1.0-SNAPSHOT"
 
   val mandubianRepo = Seq(

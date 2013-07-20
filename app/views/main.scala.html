@@ -84,13 +84,15 @@
             })
         </script>
 
+        @if(play.api.Play.isDev(play.api.Play.current)) {
         <script src="http://localhost:35729/livereload.js"></script>
+        }
 
         <script id="/templates/searchForm" type="text/ng-template">
             <form name="searchForm" data-ng-submit="search()">
                 <div class="input-group">
 
-<div id="debug"></div>
+                    <div id="debug"></div>
 
                     <input id="autocomplete" type="search" class="input-large" ng-init="initAutocomplete();" placeholder="...Search #tags, Autocomplete, ⇵" />
 
@@ -133,9 +135,5 @@
             </div>
         </script>
 
-        @*<script type="text/javascript">
-            var customvars = 
-                @Html(services.GistConfig.getConfigAsJson("custom.vars").get.toString)
-        </script>*@
     </body>
 </html>

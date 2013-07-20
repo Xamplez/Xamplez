@@ -24,7 +24,7 @@ object Gists extends Controller {
 	def blacklist(id: Long) = Action {
 	  Async{
 	  	services.GistBlackList.add(id).map{ response =>
-	  		response.status match {
+	  		response._1.status match {
 	  			case 200 => Ok(s"Gist with $id blacklisted")
 	  			case _ => BadRequest( response.toString )
 	  		}

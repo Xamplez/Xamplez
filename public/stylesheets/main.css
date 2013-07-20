@@ -6755,6 +6755,7 @@ select.select2 {
 }
 .gistContainer .description .gist-lang {
   font-size: 100%;
+  background-color: #cd0000;
 }
 .gistContainer .description hr {
   margin: 5px 0px;
@@ -7687,4 +7688,10 @@ section.main .separator .inner {
 .main .left-about h4,
 .main .left-about p {
   text-align: left;
+}
+.btn-default {
+  background-color: #cd0000;
+}
+.btn-default:hover {
+  background-color: #a70000;
 }

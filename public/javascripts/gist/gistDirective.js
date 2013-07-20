@@ -3,6 +3,7 @@ app.directive("gist", function () {
     normalizeId(gist);
     normalizeUrl(gist);
     normalizeDescription(gist);
+    normalizeLinks(gist);
     return gist;
   };
 
@@ -16,6 +17,12 @@ app.directive("gist", function () {
 
   function normalizeDescription (gist) {
     gist.taggedDescription = gist.description.replace(/(#([a-zA-Z0-9_\.]*[a-zA-Z0-9]+))/g , '<a href="/?q=%23$2">$1</a>');
+  };
+
+  var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+
+  function normalizeLinks (gist) {
+    gist.taggedDescription = gist.taggedDescription.replace(urlPattern , '<a href="$1">$1</a>');
   };
 
   function getContainerId (gist) {

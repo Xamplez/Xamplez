@@ -6759,6 +6759,11 @@ select.select2 {
 .gistContainer .description hr {
   margin: 5px 0px;
 }
+.gist-full .description .desc {
+  white-space: initial;
+  overflow: initial;
+  text-overflow: initial;
+}
 .gist {
   color: #000;
 }
@@ -6769,6 +6774,15 @@ select.select2 {
 }
 .gist .gist-file .file-data {
   border: 1px solid #eee;
+}
+.gist .gist-file .readme {
+  border: 1px solid #eee;
+}
+.gist .gist-file .readme p {
+  text-align: left;
+}
+.gist .gist-file .readme .markdown-body {
+  padding: 10px;
 }
 .gist .gist-file .gist-meta {
   font-family: Helvetica, arial, freesans, clean, sans-serif;

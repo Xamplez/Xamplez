@@ -14,8 +14,18 @@ app.directive("gist", function () {
     gist.url = gist.url || "https://gist.github.com/"+ (gist.author_login && gist.author_login+"/" || "") + gist.id;
   };
 
+  var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;
+
+  var tagPattern = /(#([a-zA-Z0-9_\.]*[a-zA-Z0-9]+))/g
+
+  var twitterPattern = /@(twitter:)*([a-zA-Z0-9_\-\.]*[a-zA-Z0-9]+)/g
+  var githubPattern = /@(github:)([a-zA-Z0-9_\-\.]*[a-zA-Z0-9]+)/g
+
   function normalizeDescription (gist) {
-    gist.taggedDescription = gist.description.replace(/(#([a-zA-Z0-9_\.]*[a-zA-Z0-9]+))/g , '<a href="/?q=%23$2">$1</a>');
+    gist.taggedDescription = gist.description.replace(tagPattern , '<a href="/?q=%23$2">$1</a>');
+    gist.taggedDescription = gist.taggedDescription.replace(urlPattern , '<a href="$&">$&</a>');
+    gist.taggedDescription = gist.taggedDescription.replace(githubPattern , '<a href="https://www.github.com/$2">$2</a>');
+    gist.taggedDescription = gist.taggedDescription.replace(twitterPattern , '<a href="http://www.twitter.com/$2">$2</a>');
   };
 
   function getContainerId (gist) {
@@ -26,6 +36,12 @@ app.directive("gist", function () {
   	scope.gist = normalize(gist);
   	scope.containerId = getContainerId(scope.gist);
 		elem.append('<script type="text/javascript" src="'+ scope.gist.url +'.json?callback=displayGist"></script>');
+  };
+
+  function handleGistFull (scope, elem, gist) {
+    scope.gist = normalize(gist);
+    scope.containerId = getContainerId(scope.gist);
+    elem.addClass("gist-full").append('<script type="text/javascript" src="'+ scope.gist.url +'.json?callback=displayGistFull"></script>');
   };
 
 	return {
@@ -48,7 +64,7 @@ app.directive("gist", function () {
 
 			if (scope.value.$then) {
 				scope.value.$then(function (request) {
-					handleGist (scope, elem, request.data);
+					handleGistFull (scope, elem, request.data);
 				});
 			} else {
 				handleGist (scope, elem, scope.value._source);

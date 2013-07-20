@@ -56,3 +56,10 @@ function displayGist(gist) {
   $content.find(".gist-file.remove").remove();
   angular.element("#"+gistId+"Container .gistWrapper").append($content);
 }
+
+function displayGistFull(gist) {
+  var $content = angular.element(gist.div);
+  var gistId = $content.attr("id");
+
+  angular.element("#"+gistId+"Container .gistWrapper").append($content);
+}

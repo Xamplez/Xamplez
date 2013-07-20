@@ -61,5 +61,14 @@ function displayGistFull(gist) {
   var $content = angular.element(gist.div);
   var gistId = $content.attr("id");
 
+  $content.find(".gist-file").each(function(index) {
+      var fileName = angular.element(this).find(".gist-meta a:nth-child(2)").text();
+      if (fileName == "README.md") {
+          angular.element(this).addClass("remove");
+      }
+  });
+
+  $content.find(".gist-file.remove").remove();
+
   angular.element("#"+gistId+"Container .gistWrapper").append($content);
 }

@@ -14,7 +14,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Play.current
 
 import services.github.GithubWS._
-import services.search.Search
+import services.search.GistSearch
 
 trait GistBlackListService{
 
@@ -32,7 +32,7 @@ trait GistBlackListService{
 	def add(id: Long): Future[Response] = {
 		for{
 			ids 	 <- ids
-			response <- Search.delete(id)
+			response <- GistSearch.delete(id)
 			removed  <- GistProperties.set("blacklist", (ids + id).map(_.toString))
 		}yield( response )
 	}

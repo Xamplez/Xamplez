@@ -18,7 +18,7 @@ import models._
 
 import scala.util.matching._
 
-trait ElasticSearch extends EsAPI{
+trait GistSearch extends EsAPI{
 
   import org.elasticsearch.node._
   import org.elasticsearch.node.NodeBuilder._
@@ -187,7 +187,22 @@ trait ElasticSearch extends EsAPI{
 
   def delete(id: Long): Future[Response] = delete(TYPE_NAME, id.toString)
 
-  private def buildSearch(query: String, sorts: Option[JsObject] = Some(Json.obj("stars" -> "desc")), from: Option[Int] = None, size: Option[Int] = None) = {
+  val typeFilter = Json.obj(
+    "type" -> Json.obj(
+      "value" -> TYPE_NAME
+    )
+  )
+
+  private def filtered(query: JsObject, filter: JsObject): JsObject = {
+    Json.obj(
+      "filtered" -> Json.obj(
+        "query" -> query,
+        "filter" -> filter
+      )
+    )
+  }
+
+  private def buildSearch(query: String, sorts: Option[JsObject] = Some(Json.obj("stars" -> "desc")), from: Option[Int] = None, size: Option[Int] = None): JsObject = {
     val q =
       if(query.isEmpty) Json.obj("match_all" -> Json.obj())
       else Json.obj(
@@ -197,15 +212,15 @@ trait ElasticSearch extends EsAPI{
                "query"  -> query
              )
            )
-    val obj = Json.obj(
-      "query" -> q
-    )
 
-    val search = obj ++
-    sorts.map( s => Json.obj("sort" -> Json.arr(s))).getOrElse(Json.obj("sort" -> Json.arr(Json.obj("stars" -> "desc")))) ++
-    from.map(from => Json.obj("from" -> from)).getOrElse(Json.obj()) ++
-    size.map(from => Json.obj("size" -> size)).getOrElse(Json.obj())
+    val search = 
+      Json.obj("query" -> filtered(q, typeFilter)) ++
+      sorts.map( s => Json.obj("sort" -> Json.arr(s))).getOrElse(Json.obj("sort" -> Json.arr(Json.obj("stars" -> "desc")))) ++
+      from.map(from => Json.obj("from" -> from)).getOrElse(Json.obj()) ++
+      size.map(from => Json.obj("size" -> size)).getOrElse(Json.obj())
+
     play.Logger.debug("query:"+search)
+
     search
   }
 
@@ -223,7 +238,7 @@ trait ElasticSearch extends EsAPI{
   }
 
   val queryTags = Json.obj(
-    "query"  -> Json.obj("match_all" -> Json.obj()),
+    "query"  -> filtered(Json.obj("match_all" -> Json.obj()), typeFilter),
     "size"   -> 1000,
     "facets" -> Json.obj(
       "tags" -> Json.obj(
@@ -238,7 +253,7 @@ trait ElasticSearch extends EsAPI{
   def tags = search(queryTags, true)
 
   val queryLastCreated = Json.obj(
-    "query" -> Json.obj( "match_all" -> Json.obj() ),
+    "query" -> filtered(Json.obj( "match_all" -> Json.obj() ), typeFilter),
     "size" -> 100,
     "sort" -> Json.arr(
       Json.obj(
@@ -250,7 +265,7 @@ trait ElasticSearch extends EsAPI{
   def lastCreated = search(queryLastCreated, true)
 
   val queryLastUpdated = Json.obj(
-    "query" -> Json.obj( "match_all" -> Json.obj() ),
+    "query" -> filtered(Json.obj( "match_all" -> Json.obj() ), typeFilter),
     "size" -> 100,
     "sort" -> Json.arr( Json.obj(
       "updated_at" -> "desc"
@@ -298,4 +313,4 @@ trait ElasticSearch extends EsAPI{
     }
 }
 
-object Search extends ElasticSearch
+object GistSearch extends GistSearch

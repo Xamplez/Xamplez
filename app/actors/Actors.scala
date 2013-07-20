@@ -90,15 +90,15 @@ class Indexer extends Actor {
           fork    <- (fetcher ? FetchGist(id)).mapTo[Option[JsObject]]
           stars   <- (fetcher ? FetchStar(id)).mapTo[JsObject]
         } yield (fork, stars, action)).flatMap{
-          case (Some(fork), stars, "insert") => services.search.Search.insert(fork ++ stars).map( r => id -> r )
-          case (Some(fork), stars, "update") => services.search.Search.update(id, fork, stars).map( r => id -> r )
+          case (Some(fork), stars, "insert") => services.search.GistSearch.insert(fork ++ stars).map( r => id -> r )
+          case (Some(fork), stars, "update") => services.search.GistSearch.update(id, fork, stars).map( r => id -> r )
           case (_, _, _) => Future.successful(id -> Left(s"Can't $action $id because gist not found or no stars"))
         }
       }
     )
   }
 
-  private def searchTwittable = services.search.Search.twittable(
+  private def searchTwittable = services.search.GistSearch.twittable(
     services.search.Startup.date,
     DateTime.now.minusHours( services.Twitter.tweetableDelay),
     services.Twitter.tweetableStars
@@ -115,8 +115,8 @@ class Indexer extends Actor {
     case "indexing" => {
       log.info("Launching re-indexing")
       (for{
-        lastCreated    <- extractField(services.search.Search.lastCreated, "created_at")
-        lastUpdated    <- extractField(services.search.Search.lastUpdated, "updated_at" )
+        lastCreated    <- extractField(services.search.GistSearch.lastCreated, "created_at")
+        lastUpdated    <- extractField(services.search.GistSearch.lastUpdated, "updated_at" )
         twittableIds   <- searchTwittable
         forkIds        <- Future.sequence( rootIds.map{ rootId =>
                             GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
@@ -174,7 +174,7 @@ class ElasticSearchActor extends Actor {
 
   def receive = {
     case InsertES(json) =>
-      sender ! Await.result(services.search.Search.insert(json), timeout)  // pipeTo sender
+      sender ! Await.result(services.search.GistSearch.insert(json), timeout)  // pipeTo sender
   }
 }
 
@@ -187,11 +187,11 @@ class TwitterActor extends Actor{
 
   def receive = {
     case TweetGist(id) => sender ! Await.result(
-      services.search.Search.byId(id).map {
+      services.search.GistSearch.byId(id).map {
         case Some(js) => Twitter.tweet(js).map {
           case true => {
             log.debug(s"Gist $id tweeted")
-            services.search.Search.twitted(id).map( _ => true )
+            services.search.GistSearch.twitted(id).map( _ => true )
           }
           case false => Future(false)
         }.flatMap(identity)

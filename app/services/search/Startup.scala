@@ -18,7 +18,7 @@ object Startup extends EsAPI{
              .map( _.fold( err => date, js => date ) )
       },
       js => {
-        play.Logger.error(js.toString)
+        play.Logger.info("Last Startup "+js.toString)
         Future( new DateTime( ( js \ "_source" \ "date" ).as[String] ) )
       }
     )).flatMap( identity ), 20 seconds

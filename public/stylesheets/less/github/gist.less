@@ -8,7 +8,7 @@
     font-size: 40px;
     margin-right: 10px;
   }
-  
+
   .description {
     background-color: transparent;
     color: #999;
@@ -82,11 +82,23 @@
       margin: 5px 0px;
     }
   }
+
 }
+
+.gist-full {
+  .description {
+    .desc{
+      white-space: initial;
+      overflow: initial;
+      text-overflow: initial;
+    }
+  }
+}
+
 
 .gist {
   color:#000;
-  
+
   .gist-file {
     border: none;
     font-family:Consolas, "Liberation Mono", Courier, monospace;
@@ -95,13 +107,24 @@
     .file-data {
       border: 1px solid #eee;
     }
-    
+
+    .readme {
+      border: 1px solid #eee;
+      p {
+        text-align: left;
+      }
+
+      .markdown-body {
+        padding: 10px;
+      }
+    }
+
     .gist-meta {
       font-family:Helvetica, arial, freesans, clean, sans-serif;
       overflow:hidden;font-size:85%;
       padding:.5em;color:#666;
       background-color: transparent;
-      
+
       a{color:#369}
       a:visited{color:#737}
     }

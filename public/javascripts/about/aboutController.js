@@ -4,16 +4,16 @@ app.controller("AboutCtrl", ["$scope", "ReposGitHub", function ($scope, ReposGit
   
   var fill = d3.scale.category20();
 
-  d3.layout.cloud().size([600, 600])
+  d3.layout.cloud().size([700, 700])
     .words([
     	{text: "GitHub", size: 100, url: "http://www.github.com"},
     	{text: "Gists", size: 100, url: "http://gist.github.com"},
-    	{text: "HTML5", size: 75},
-    	{text: "CSS3", size: 75},
+    	{text: "HTML5", size: 40},
+    	{text: "CSS3", size: 40},
     	{text: "JavaScript", size: 75},
     	{text: "Play! Framework", size: 50, url: "http://playframework.org"},
     	{text: "AngularJS", size: 50, url: "http://www.angularjs.org/"},
-    	{text: "Elastic Search", size: 40, url: "http://www.elasticsearch.org/"},
+    	{text: "ElasticSearch", size: 50, url: "http://www.elasticsearch.org/"},
     	{text: "Bootstrap", size: 30, url: "http://twitter.github.io/bootstrap/"},
     	{text: "Select2", size: 30, url: "http://ivaynberg.github.io/select2/"},
     	{text: "D3", size: 30, url: "http://d3js.org/"},
@@ -23,7 +23,7 @@ app.controller("AboutCtrl", ["$scope", "ReposGitHub", function ($scope, ReposGit
     	{text: "Angular UI", size: 15},
     	{text: "jQuery", size: 15, url: "http://jquery.com/"}
     ])
-    .padding(5)
+    .padding(2)
     .rotate(function() { return (~~(Math.random() * 3) - 1) * 45; })
     .font("Impact")
     .fontSize(function(d) { return d.size; })
@@ -32,8 +32,8 @@ app.controller("AboutCtrl", ["$scope", "ReposGitHub", function ($scope, ReposGit
 
   function draw(words) {
     d3.select("#techCloud").append("svg")
-      .attr("width", 600)
-      .attr("height", 600)
+      .attr("width", 700)
+      .attr("height", 700)
       .append("g")
       .attr("transform", "translate(300,300)")
       .selectAll("text")

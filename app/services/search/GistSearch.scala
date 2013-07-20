@@ -219,8 +219,6 @@ trait GistSearch extends EsAPI{
       from.map(from => Json.obj("from" -> from)).getOrElse(Json.obj()) ++
       size.map(from => Json.obj("size" -> size)).getOrElse(Json.obj())
 
-    play.Logger.debug("query:"+search)
-
     search
   }
 

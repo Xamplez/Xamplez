@@ -3,7 +3,6 @@ app.directive("gist", function () {
     normalizeId(gist);
     normalizeUrl(gist);
     normalizeDescription(gist);
-    normalizeLinks(gist);
     return gist;
   };
 
@@ -15,14 +14,18 @@ app.directive("gist", function () {
     gist.url = gist.url || "https://gist.github.com/"+ (gist.author_login && gist.author_login+"/" || "") + gist.id;
   };
 
+  var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g;
+
+  var tagPattern = /(#([a-zA-Z0-9_\.]*[a-zA-Z0-9]+))/g
+
+  var twitterPattern = /@(twitter:)*([a-zA-Z0-9_\-\.]*[a-zA-Z0-9]+)/g
+  var githubPattern = /@(github:)([a-zA-Z0-9_\-\.]*[a-zA-Z0-9]+)/g
+
   function normalizeDescription (gist) {
-    gist.taggedDescription = gist.description.replace(/(#([a-zA-Z0-9_\.]*[a-zA-Z0-9]+))/g , '<a href="/?q=%23$2">$1</a>');
-  };
-
-  var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
-
-  function normalizeLinks (gist) {
-    gist.taggedDescription = gist.taggedDescription.replace(urlPattern , '<a href="$1">$1</a>');
+    gist.taggedDescription = gist.description.replace(tagPattern , '<a href="/?q=%23$2">$1</a>');
+    gist.taggedDescription = gist.taggedDescription.replace(urlPattern , '<a href="$&">$&</a>');
+    gist.taggedDescription = gist.taggedDescription.replace(githubPattern , '<a href="https://www.github.com/$2">$2</a>');
+    gist.taggedDescription = gist.taggedDescription.replace(twitterPattern , '<a href="http://www.twitter.com/$2">$2</a>');
   };
 
   function getContainerId (gist) {

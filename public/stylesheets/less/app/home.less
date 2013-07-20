@@ -1,0 +1,59 @@
+.home {
+  .main {
+    > .col {
+      padding: 0px 30px;
+    }
+
+    h3 {
+      font-style: italic;
+      color: #454545;
+      text-align: center;
+    }
+
+    p {
+      text-align: center;
+      font-size: 1.2em;
+    }
+  }
+}
+
+.search-bar-container {
+  height: 54px;
+  .input-group {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  margin: 30px 0;
+}
+
+.search-bar.fixed {
+  z-index: 99;
+  background: white;
+  position: fixed;
+  top: 0;
+  margin-left: -20px;
+  padding: 0 5px;
+  padding-bottom: 5px;
+  width: 100%;
+}
+
+.tags {
+  margin: 15px 0px;
+
+  .tag {
+
+    min-width: 110px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    a {
+      font-size: 16px;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}

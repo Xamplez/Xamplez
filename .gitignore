@@ -14,3 +14,7 @@ project/plugins/project/
 
 .DS_Store
 data
+components
+node_modules
+public/javascripts/vendors
+conf/local.conf

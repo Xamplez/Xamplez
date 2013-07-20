@@ -5,19 +5,29 @@
 # Views
 GET     /                              controllers.Application.main(any = "whatever")
 GET     /views/index                   controllers.Application.index
-GET     /views/search                  controllers.Application.search
-GET     /auth                          controllers.Application.authenticate
+GET     /views/gist                    controllers.Application.gist
+GET     /views/stats                   controllers.Application.stats
+GET     /views/about                   controllers.Application.about
+GET     /auth                          controllers.Api.authenticate
 
 # Search API
-GET     /api/search                    controllers.Search.search(q: String)
+GET     /api/search                    controllers.Search.search(q: String, sorts: Option[String] ?= None, from: Option[Int] ?= None, size: Option[Int] ?= None)
 POST    /api/search                    controllers.Search.insert
-GET     /api/tags                   controllers.Search.tags
+GET     /api/tags                      controllers.Search.tags
+GET     /api/lastcreated               controllers.Search.lastCreated
+GET     /api/gists/:id                 controllers.Gists.findById(id: Long)
+DELETE  /api/gists/:id                 controllers.Gists.blacklist(id: Long)
+GET     /api/gists/:id/comments        controllers.Gists.comments(id: Long)
+
+GET     /api/index/update              controllers.Api.updateIndex
 
 # 404 API in case of unknown url
 GET     /api/*any                      controllers.Application.notFound(any)
 
 # Map static resources from the /public folder to the /assets URL path
+GET     /assets/gist/invalidate        controllers.GistAssets.invalidate()
+GET     /assets/gist/:fileName         controllers.GistAssets.at(fileName: String)
 GET     /assets/*file                  controllers.Assets.at(path="/public", file)
 
 # Map all unknown routes to the main so they will be handle by Angular
-GET    /*any                           controllers.Application.main(any)
+GET     /*any                          controllers.Application.main(any)

@@ -7,7 +7,8 @@ case class OAuth2Infos(
   clientSecret: String,
   urlAuthorize: String,
   urlAccessToken: String,
-  scope: String)
+  scope: String
+)
 
 /**
  * Generic configuration required in the OAuth2 proccess
@@ -29,8 +30,8 @@ trait OAuth2DefaultConfiguration extends OAuth2Configuration {
   private lazy val conf = current.configuration.getConfig(configuration).getOrElse(throwConfigurationNotFound)
 
   override lazy val oauth2info = OAuth2Infos(
-    get("clientId"),
-    get("clientSecret"),
+    get("client.id"),
+    get("client.secret"),
     get("urlAuthorize"),
     get("urlAccessToken"),
     get("scope"))

@@ -155,4 +155,3 @@ If you want to contact us : contact@xamplez.io
 * Gaetan Renaudeau, initiator & frontend ma(d)ster
 * Pascal Voitot, initiator & backend terrible bogeyman
 
-

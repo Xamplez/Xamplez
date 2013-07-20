@@ -1,21 +1,55 @@
 @()
-<div class="row">
-    <div class="span6">
-        <h2>Tags</h2>
-        <div id="tags" class="well">
-            <ul>
-                <li class="tag" ng-repeat="tag in tags">
-                    <a href="/search?q={{tag.term}}" class="w{{tag.weight}}" title="({{tag.count}} references)">{{tag.term}}</a>
-                </li>
-            </ul>
+
+    <section class="ribbon ribbon-main">
+      <div class="container">
+      <a href="@Application.ROOT_GIST_URL" class="btn btn-small btn-default pull-right create-a-snippet">Create a snippet</a>
+      <h2>
+        Xamplez Root!
+      </h2>
+      </div>
+    </section>
+
+<div class="home container">
+    <section class="main">
+
+        <div class="description">
+          <p>
+          <a href="@Application.ROOT_GIST_URL">Fork the Root Gist</a> to <strong>Share</strong> <a href="http://xxx" target="_blank">XXX</a> code snippets or&nbsp;<strong>Search</strong>&nbsp;existing&nbsp;Gists&nbsp;below.
+          <a href="/about" class="create-a-snippet">Learn More...</a>
+          </p>
         </div>
 
-        <h2>Stats</h2>
-        <p>TODO</p>
-    </div>
+        <div class="search-bar-container">
+        <div class="row search-bar container">
+            <div data-ng-include="'/templates/searchForm'"></div>
+        </div>
+        </div>
 
-    <div class="span6">
-        <h2>Popular gists</h2>
-        <div id="popularGists" data-ng-mouseenter="stopPopulars()" data-ng-mouseleave="startPopulars()"></div>
-    </div>
+        <div class="row tags">
+            <div class="col-2 tag" data-ng-repeat="tag in searchData.tags">
+                <a data-ng-href="/?q=%23{{tag.term}}">#{{tag.term}}</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <ul class="list-unstyled">
+                    <li data-ng-repeat="gist in searchResults.hits.hits">
+                        <gist value="gist"></gist>
+                    </li>
+                </ul>
+                <div id="results2"><ul class="list-unstyled"></ul></div>
+                <div id="resultScripts2"></div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="scrollIndicator" ng-hide="searchResults.hits.hits">
+  <a href="" class="pull-left">
+    <i class="icon-4x icon-double-angle-down"></i>
+  </a>
+  <a href="" class="pull-right">
+    <i class="icon-4x icon-double-angle-down"></i>
+  </a>
 </div>

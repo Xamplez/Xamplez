@@ -72,7 +72,7 @@ trait GistSearch extends EsAPI{
       case _ => false
     }.map{ file =>
       file.split("\\.(?=[^\\.]+$)")(1)
-    }.foldLeft(Seq[String](), Seq[String]()){
+    }.distinct.foldLeft(Seq[String](), Seq[String]()){
       case ((langs, tagLangs), file) =>
         ext2Lang.get(file) match {
           case None =>

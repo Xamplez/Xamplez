@@ -28,6 +28,12 @@ app.directive("gist", function () {
 		elem.append('<script type="text/javascript" src="'+ scope.gist.url +'.json?callback=displayGist"></script>');
   };
 
+  function handleGistFull (scope, elem, gist) {
+    scope.gist = normalize(gist);
+    scope.containerId = getContainerId(scope.gist);
+    elem.addClass("gist-full").append('<script type="text/javascript" src="'+ scope.gist.url +'.json?callback=displayGistFull"></script>');
+  };
+
 	return {
 		restrict: "E",
 		replace: true,
@@ -48,7 +54,7 @@ app.directive("gist", function () {
 
 			if (scope.value.$then) {
 				scope.value.$then(function (request) {
-					handleGist (scope, elem, request.data);
+					handleGistFull (scope, elem, request.data);
 				});
 			} else {
 				handleGist (scope, elem, scope.value._source);

@@ -9,7 +9,7 @@ import play.api.libs.json.Json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 
-import services.search.{ Search => S }
+import services.search.{ GistSearch => S }
 
 import concurrent.Future
 

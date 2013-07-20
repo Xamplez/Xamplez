@@ -1,5 +1,6 @@
 package services.search
 
+import org.joda.time.DateTime
 import scala.concurrent._
 import scala.concurrent.duration._
 
@@ -17,90 +18,16 @@ import models._
 
 import scala.util.matching._
 
-trait ElasticSearch {
+trait GistSearch extends EsAPI{
 
   import org.elasticsearch.node._
   import org.elasticsearch.node.NodeBuilder._
 
-  lazy val IS_EMBEDDED =
-    Play.application.configuration.getBoolean("elasticsearch.embedded").getOrElse(true)
-
-  lazy val ELASTIC_URL =
-    Play.application.configuration.getString("elasticsearch.url").getOrElse("http://localhost:9200")
-
-  lazy val INDEX_NAME =
-    Play.application.configuration.getString("elasticsearch.index").getOrElse("xamplez")
-
   lazy val TYPE_NAME =
     Play.application.configuration.getString("elasticsearch.type").getOrElse("gists")
 
-  lazy val CLUSTER_NAME =
-    Play.application.configuration.getString("elasticsearch.clustername").getOrElse("xamplez")
-
-  lazy val INDEX_URL = s"$ELASTIC_URL/$INDEX_NAME"
-  lazy val INSERT_URL = s"$ELASTIC_URL/$INDEX_NAME/$TYPE_NAME"
   lazy val SEARCH_URL = INDEX_URL + "/_search"
-  lazy val UPDATE_URL = s"$ELASTIC_URL/$INDEX_NAME/$TYPE_NAME"
-
-  private var node: Option[Node] = None
-
-  private def getIndex(name: String): Future[Either[String, JsObject]] = {
-    WS.url(s"$ELASTIC_URL/$name/_settings")
-      .get()
-      .map { r =>
-        if(r.status == 200) Right(r.json.as[JsObject])
-        else Left(s"status:${r.status} statusText:${r.statusText} error:${r.body}")
-      }
-  }
-
-  private def createIndex(name: String): Future[Either[String, JsObject]] = {
-    WS.url(s"$ELASTIC_URL/$name")
-      .put(play.api.mvc.Results.EmptyContent())
-      .map { r =>
-        if(r.status == 200) Right(Json.obj("res" -> "ok"))
-        else Left(s"status:${r.status} statusText:${r.statusText} error:${r.body}")
-      }
-  }
-
-  def start {
-
-    import org.elasticsearch.common.settings._
-    import org.elasticsearch.common.io.stream._
-    import java.io._
-
-    if(IS_EMBEDDED) {
-      play.Logger.info("Starting Local ES")
-
-      import org.elasticsearch.common.settings.loader.SettingsLoader
-
-      val settings = Play.resourceAsStream("elasticsearch.yaml").map{ s =>
-        ImmutableSettings.settingsBuilder().loadFromStream("elasticsearch.yaml", s).build
-      }
-
-      val n = nodeBuilder().clusterName(CLUSTER_NAME).local(true)
-
-      node = Some(settings.map(n.settings _).getOrElse(n).node)
-    } else {
-      play.Logger.info(s"Creating index: $INDEX_NAME")
-      val resp = Await.result(
-        getIndex(INDEX_NAME).flatMap{
-          case Left(error) =>
-            if(error.contains("IndexMissingException")) createIndex(INDEX_NAME)
-            else throw new RuntimeException("Could create index: "+error)
-          case Right(settings) => play.Logger.info(s"Index already existing: $settings"); Future.successful()
-        },
-        Duration("10 seconds")
-      )
-
-    }
-  }
-
-  def stop() {
-    if(IS_EMBEDDED) {
-      play.Logger.info("Stopping ES")
-      for(n <- node) n.stop
-    }
-  }
+  lazy val UPDATE_URL = s"$elasticUrl/$indexName/$TYPE_NAME"
 
   val descIdFilesReader = (
     (__ \ "description").readNullable[String] and
@@ -148,13 +75,13 @@ trait ElasticSearch {
     }.foldLeft(Seq[String](), Seq[String]()){
       case ((langs, tagLangs), file) =>
         ext2Lang.get(file) match {
-          case None => 
+          case None =>
             play.Logger.warn(s"langage $file not recognized... not considering as language but indexing as tag")
             (langs, tagLangs :+ file)
           case Some((lg, keep)) =>
             (langs :+ lg, if(keep) (tagLangs :+ file :+ lg) else (tagLangs :+ file))
         }
-        
+
     }
   }
 
@@ -170,13 +97,7 @@ trait ElasticSearch {
             "tags" -> (tags.map(_.name) ++ tagLangs)
           )
 
-        play.Logger.debug(s"Search : inserting $fullJson")
-        WS.url(s"$INSERT_URL/$id")
-          .put(fullJson)
-          .map { r =>
-            if(r.status == 200 || r.status == 201) Right(r.json)
-            else Left(s"Couldn't insert $id (status:${r.status} msg:${r.statusText}")
-          }
+        insert(TYPE_NAME, id, fullJson)
       case (_, id, _) =>
         play.Logger.warn(s"Can't insert $json because description is null or empty")
         Future(Left(s"Can't insert $json because description is null or empty"))
@@ -198,7 +119,7 @@ trait ElasticSearch {
       case (Some(desc), _, files, stars) if desc.length>0 =>
         byId(id).flatMap{ _ match {
           case Some(kjson) =>
-        
+
             val kstars = (kjson \ "stars").as[Int]
             val kdesc  = (kjson \ "description").as[String]
             val klangs = (kjson \ "langs").as[Seq[String]]
@@ -252,29 +173,52 @@ trait ElasticSearch {
     }.recoverTotal{ e => Future.successful(Left(s"Can't update due to json error ${e}")) }
   }
 
-  def delete(id: Long): Future[Response] = {
-    play.Logger.debug(s"Search : deleting $id")
-    WS.url(s"$INSERT_URL/$id").delete
+  def twitted( id: Long ): Future[Either[String, JsValue]] = {
+    val upd = Json.obj( "script" -> "ctx._source.twitted = true" )
+    play.Logger.debug("going to update "+upd)
+
+    WS.url(s"$UPDATE_URL/$id/_update")
+      .post(upd)
+      .map { r =>
+        if(r.status == 200 || r.status == 201) Right(r.json)
+        else Left(s"Couldn't update $id (status:${r.status} msg:${r.statusText}")
+      }
   }
 
-  private def buildSearch(query: String, sorts: Option[JsObject] = Some(Json.obj("stars" -> "desc")), from: Option[Int] = None, size: Option[Int] = None) = {
-    val q = 
+  def delete(id: Long): Future[Response] = delete(TYPE_NAME, id.toString)
+
+  val typeFilter = Json.obj(
+    "type" -> Json.obj(
+      "value" -> TYPE_NAME
+    )
+  )
+
+  private def filtered(query: JsObject, filter: JsObject): JsObject = {
+    Json.obj(
+      "filtered" -> Json.obj(
+        "query" -> query,
+        "filter" -> filter
+      )
+    )
+  }
+
+  private def buildSearch(query: String, sorts: Option[JsObject] = Some(Json.obj("stars" -> "desc")), from: Option[Int] = None, size: Option[Int] = None): JsObject = {
+    val q =
       if(query.isEmpty) Json.obj("match_all" -> Json.obj())
       else Json.obj(
              "query_string" -> Json.obj(
-                "fields" -> Seq("description", "tags^10"),
+               "fields" -> Seq("description", "tags^10"),
+               "default_operator" -> "AND",
                "query"  -> query
              )
            )
-    val obj = Json.obj(
-      "query" -> q
-    )
 
-    val search = obj ++
-    sorts.map( s => Json.obj("sort" -> Json.arr(s))).getOrElse(Json.obj("sort" -> Json.arr(Json.obj("stars" -> "desc")))) ++
-    from.map(from => Json.obj("from" -> from)).getOrElse(Json.obj()) ++
-    size.map(from => Json.obj("size" -> size)).getOrElse(Json.obj())
-    play.Logger.debug("query:"+search)
+    val search = 
+      Json.obj("query" -> filtered(q, typeFilter)) ++
+      sorts.map( s => Json.obj("sort" -> Json.arr(s))).getOrElse(Json.obj("sort" -> Json.arr(Json.obj("stars" -> "desc")))) ++
+      from.map(from => Json.obj("from" -> from)).getOrElse(Json.obj()) ++
+      size.map(from => Json.obj("size" -> size)).getOrElse(Json.obj())
+
     search
   }
 
@@ -292,7 +236,7 @@ trait ElasticSearch {
   }
 
   val queryTags = Json.obj(
-    "query"  -> Json.obj("match_all" -> Json.obj()),
+    "query"  -> filtered(Json.obj("match_all" -> Json.obj()), typeFilter),
     "size"   -> 1000,
     "facets" -> Json.obj(
       "tags" -> Json.obj(
@@ -307,7 +251,7 @@ trait ElasticSearch {
   def tags = search(queryTags, true)
 
   val queryLastCreated = Json.obj(
-    "query" -> Json.obj( "match_all" -> Json.obj() ),
+    "query" -> filtered(Json.obj( "match_all" -> Json.obj() ), typeFilter),
     "size" -> 100,
     "sort" -> Json.arr(
       Json.obj(
@@ -319,7 +263,7 @@ trait ElasticSearch {
   def lastCreated = search(queryLastCreated, true)
 
   val queryLastUpdated = Json.obj(
-    "query" -> Json.obj( "match_all" -> Json.obj() ),
+    "query" -> filtered(Json.obj( "match_all" -> Json.obj() ), typeFilter),
     "size" -> 100,
     "sort" -> Json.arr( Json.obj(
       "updated_at" -> "desc"
@@ -335,11 +279,7 @@ trait ElasticSearch {
   def byId(id: Long): Future[Option[JsValue]] = {
     search(queryById(id), true).map{
       case Left(r) => throw new RuntimeException(s"Couldn't search $id (status:${r.status} msg:${r.statusText}")
-      case Right(js) =>
-        val hits = (js \ "hits").as[JsObject]
-        val nb = (hits \ "total").as[Int]
-        if(nb >= 1) Some((( (hits \ "hits").as[JsArray] ).apply(0) \ "_source").as[JsObject])
-        else None
+      case Right(js) => (js \ "hits" \ "hits" \\ "_source").headOption
     }
   }
 
@@ -350,14 +290,25 @@ trait ElasticSearch {
   def byIds(ids: Seq[Long]): Future[Either[String, Seq[JsValue]]] = {
     search(queryByIds(ids), true).map{
       case Left(r) => Left(s"Couldn't search $ids (status:${r.status} msg:${r.statusText}")
-      case Right(js) => 
-        val hits = (js \ "hits").as[JsObject]
-        val nb = (hits \ "total").as[Int]
-        if(nb >= 1) Right((hits \ "hits" \ "_source").as[Seq[JsObject]])
-        else Right(Seq())
+      case Right(js) => Right( (js \ "hits" \ "hits" \\ "_source") )
     }
   }
 
+  def queryTwittable( minCreated: DateTime, maxUpdated: DateTime, minStars: Int ) = Json.obj(
+    "filter" -> Json.obj( "and" -> Json.arr(
+      Json.obj( "missing" -> Json.obj("field" -> "twitted") ),
+      Json.obj( "range" -> Json.obj( "created_at" -> Json.obj( "ge" -> minCreated.toString() ) ) ),
+      Json.obj( "or" -> Json.arr(
+        Json.obj( "range" -> Json.obj( "updated_at" -> Json.obj( "lt" -> maxUpdated.toString() ) ) ),
+        Json.obj( "range" -> Json.obj( "stars" -> Json.obj( "ge" -> minStars ) ) )
+      ))
+    ))
+  )
+  def twittable( minCreated: DateTime, maxUpdated: DateTime, minStars: Int): Future[Set[Long]] =
+    search(queryTwittable(minCreated, maxUpdated, minStars), true).map {
+      case Left(r) => play.Logger.debug("Couldn't find any twittable Gists"); Set.empty
+      case Right(js) => (js \ "hits" \ "hits" \\ "_id").map( _.as[String].toLong ).toSet
+    }
 }
 
-object Search extends ElasticSearch
+object GistSearch extends GistSearch

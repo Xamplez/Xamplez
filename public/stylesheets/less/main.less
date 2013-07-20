@@ -23,11 +23,9 @@
 @inputBackground: @input-bg;
 @errorText: @state-danger-text;
 
-@green-play: #8adc92;
-@gray-play: #454545;
-
 body {
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 form {
@@ -39,17 +37,16 @@ form {
 }
 
 header {
-  border-top: 5px solid @green-play;
 
   a {
+    color: inherit;
     position: relative;
-    color: @gray-play;
     display: inline-block;
     box-sizing: border-box;
     vertical-align: middle;
     font-weight: bold;
     font-size: 18px;
-    padding: 24px;
+    padding: 20px;
 
     &::before {
       content: " ";
@@ -57,32 +54,33 @@ header {
       top: 0;
       left: 0;
       right: 0;
-      border-top: 0px solid @green-play;
+      border-top: 0px solid;
       .transition(all 250ms);
     }
 
     &:hover {
-      color: @gray-play;
+      color: inherit;
       text-decoration: none;
       background: rgba(235, 235, 235, 0.3);
-
-      &::before {
-        border-top: 5px solid @green-play;
-      }
     }
   }
 
+  .icons {
+    text-align: center;
+  }
+
   .icons a {
-    display: block;
+    display: inline-block;
     text-align: center;
   }
 
   .logo {
-    font-size: 40px;
-    //padding: 15px;
-    padding-top: 10px;
-    padding-bottom: 0px;
+    font-size: 32px;
+    line-height: 54px;
+    padding: 10px 0;
+    height: 77px;
     font-style: italic;
+    white-space: nowrap;
 
     img {
       width: auto;
@@ -117,21 +115,95 @@ header {
   }
 }
 
+@media (max-width: 768px) {
+  .description {
+    font-size: 0.8em;
+  }
+  header {
+    .logo-container {
+      text-align: center;
+    }
+    .icons {
+      margin-top: -15px;
+      a:hover {
+        margin-top: 0px;
+        background: none;
+        &::before {
+          border-top: 0;
+        }
+      }
+    }
+  }
+}
+
+footer {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 5px;
+  background: white;
+}
+
+@keyframes updown {
+  from {
+    transform: translateY(0px);
+    -moz-transform: translateY(0px);
+  }
+  60% {
+    transform: translateY(10px);
+    -moz-transform: translateY(10px);
+  }
+}
+
+@-webkit-keyframes updown {
+  from {
+    -webkit-transform: translateY(0px);
+  }
+  60% {
+    -webkit-transform: translateY(10px);
+  }
+}
+
+.scrollIndicator {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 0 20px;
+  -webkit-animation: updown 1s infinite;
+  -moz-animation: updown 1s infinite;
+  animation: updown 1s infinite;
+  a {
+    color: #ddd;
+    &:hover {
+      color: #ddd;
+    }
+    text-decoration: none;
+  }
+}
+
 .ribbon {
   text-align: center;
   padding: 20px;
 
   &.ribbon-main {
+    background: #eee;
     padding-bottom: 100px;
-    color: #fff;
-    background: #8adc92;
-    background: -webkit-gradient(linear, left bottom, right top, from(#B3E862), to(#73dac1));
-    background: -moz-linear-gradient(left bottom, #B3E862, #73dac1);
-    background: gradient(linear, left bottom, right top, from(#B3E862), to(#73dac1));
 
     h2 {
       padding: 0px;
       margin: 0px;
+      white-space: nowrap;
+      z-index: 1;
+      position: relative;
+    }
+
+    .create-a-snippet {
+      z-index: 2;
+      position: relative;
     }
   }
 }
@@ -141,19 +213,30 @@ section.main {
   top: -80px;
   background-color: #fff;
   padding: 20px;
-  box-shadow: 10px 0 20px -15px #444 , -10px 0 20px -15px #444;
+  box-shadow: 10px 0 20px -20px #444 , -10px 0 20px -20px #444;
 
   h3 {
     margin-top: 10px;
-    color: @gray-play;
     font-weight: bold;
     font-size: 24px;
   }
-}
 
-@media (min-width: 768px) {
-  .ribbon {
-    margin: 0px -50%;
+  .description {
+  }
+
+  #techCloud {
+    text-align: center;
+  }
+
+  .separator {
+    margin-top: 30px;
+    margin-bottom: 20px;
+
+    .inner {
+      border-top : 1px solid #000;
+      margin-left: 30%;
+      margin-right: 30%;
+    }
   }
 }
 
@@ -163,4 +246,27 @@ section.main {
      -moz-transform: rotateY( 180deg );
        -o-transform: rotateY( 180deg );
           transform: rotateY( 180deg );
+}
+
+.contributors {
+  .media-list{
+    margin-left:10%;
+
+    .media{
+      float: left;
+      margin-right: 20px;
+      margin-top: 20px;
+
+      .media-object {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  }
+}
+
+.main .left-about {
+  h3, h4, p {
+    text-align: left;
+  }
 }

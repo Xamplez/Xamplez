@@ -8,13 +8,13 @@ import play.api.libs.json._
 import play.api.libs.json.Json._
 import play.api.libs.functional.syntax._
 
-import services.search.{Search => EsSearch}
+import services.search.GistSearch
 
 object Gists extends Controller {
 
 	def findById(id: Long) = Action {
 		Async{
-	    EsSearch.byId(id).map{
+	    GistSearch.byId(id).map{
 				case Some(json) => Ok(json)
 				case _ => NotFound(id.toString)
 	    }
@@ -24,7 +24,7 @@ object Gists extends Controller {
 	def blacklist(id: Long) = Action {
 	  Async{
 	  	services.GistBlackList.add(id).map{ response =>
-	  		response.status match {
+	  		response._1.status match {
 	  			case 200 => Ok(s"Gist with $id blacklisted")
 	  			case _ => BadRequest( response.toString )
 	  		}

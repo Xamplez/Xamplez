@@ -1,13 +1,14 @@
 package actors
 
 import akka.actor.{Actor, Props}
+import akka.pattern.ask
 import akka.routing.RoundRobinRouter
+import akka.util.Timeout
+import concurrent.Future
+import org.joda.time.DateTime
+import org.joda.time.format._
 import scala.concurrent._
 import scala.concurrent.duration._
-import akka.util.Timeout
-import akka.pattern.ask
-
-import concurrent.Future
 
 import play._
 import play.api.libs.ws._
@@ -66,13 +67,17 @@ class Indexer extends Actor {
     }
   }
 
-  val fetcher =
-    Akka.system.actorOf(Props[GistActor]
-          .withRouter(RoundRobinRouter(nrOfInstances = 5)))
+  val fetcher = Akka.system.actorOf(
+    Props[GistActor].withRouter(RoundRobinRouter(nrOfInstances = 5))
+  )
 
-  val inserter =
-    Akka.system.actorOf(Props[ElasticSearchActor]
-          .withRouter(RoundRobinRouter(nrOfInstances = 5)))
+  val inserter = Akka.system.actorOf(
+    Props[ElasticSearchActor].withRouter(RoundRobinRouter(nrOfInstances = 5))
+  )
+
+  val tweeter = Akka.system.actorOf(
+    Props[TwitterActor].withRouter(RoundRobinRouter(nrOfInstances = 1))
+  )
 
   implicit val timeout = Timeout(600 seconds)
 
@@ -80,30 +85,45 @@ class Indexer extends Actor {
     log.debug(s"Fetching ${ids.size} forks for $ids...")
 
     Future.sequence(
-      ids.toSeq.map{ id => 
+      ids.toSeq.map{ id =>
         (for{
           fork    <- (fetcher ? FetchGist(id)).mapTo[Option[JsObject]]
           stars   <- (fetcher ? FetchStar(id)).mapTo[JsObject]
         } yield (fork, stars, action)).flatMap{
-          case (Some(fork), stars, "insert") => services.search.Search.insert(fork ++ stars).map( r => id -> r )
-          case (Some(fork), stars, "update") => services.search.Search.update(id, fork, stars).map( r => id -> r )
+          case (Some(fork), stars, "insert") => services.search.GistSearch.insert(fork ++ stars).map( r => id -> r )
+          case (Some(fork), stars, "update") => services.search.GistSearch.update(id, fork, stars).map( r => id -> r )
           case (_, _, _) => Future.successful(id -> Left(s"Can't $action $id because gist not found or no stars"))
         }
       }
-    ) 
+    )
+  }
+
+  private def searchTwittable = services.search.GistSearch.twittable(
+    services.search.Startup.date,
+    DateTime.now.minusHours( services.Twitter.tweetableDelay),
+    services.Twitter.tweetableStars
+  )
+
+  private def tweet( ids: Set[Long] ) = {
+    log.debug(s"Tweeting ${ids.size} forks for $ids...")
+    Future.sequence(
+      ids.toSeq.map { id => (tweeter ? TweetGist(id)) }
+    )
   }
 
   def receive = {
     case "indexing" => {
       log.info("Launching re-indexing")
       (for{
-        lastCreated    <- extractField(services.search.Search.lastCreated, "created_at")
-        lastUpdated    <- extractField(services.search.Search.lastUpdated, "updated_at" )
+        lastCreated    <- extractField(services.search.GistSearch.lastCreated, "created_at")
+        lastUpdated    <- extractField(services.search.GistSearch.lastUpdated, "updated_at" )
+        twittableIds   <- searchTwittable
         forkIds        <- Future.sequence( rootIds.map{ rootId =>
                             GithubWS.Gist.listNewForks(rootId, lastCreated, lastUpdated)
                           } ).map(_.toSet.flatten)
         blacklistId    <- GistBlackList.ids
         resps          <- insert( forkIds -- blacklistId, "insert" )
+        twitted        <- tweet( twittableIds -- forkIds )
       } yield (resps)).map{ r =>
         logIndexingResponse(r.toSeq)
       } recover {
@@ -134,6 +154,7 @@ sealed trait Payload
 case class InsertES(js: JsObject) extends Payload
 case class FetchGist(id: Long) extends Payload
 case class FetchStar(id: Long) extends Payload
+case class TweetGist(id: Long) extends Payload
 
 import akka.pattern.pipe
 
@@ -153,6 +174,28 @@ class ElasticSearchActor extends Actor {
 
   def receive = {
     case InsertES(json) =>
-      sender ! Await.result(services.search.Search.insert(json), timeout)  // pipeTo sender
+      sender ! Await.result(services.search.GistSearch.insert(json), timeout)  // pipeTo sender
+  }
+}
+
+class TwitterActor extends Actor{
+  import services.Twitter
+
+  val timeout = 60 seconds
+
+  lazy val log = play.api.Logger("application.actor.twitter")
+
+  def receive = {
+    case TweetGist(id) => sender ! Await.result(
+      services.search.GistSearch.byId(id).map {
+        case Some(js) => Twitter.tweet(js).map {
+          case true => {
+            log.debug(s"Gist $id tweeted")
+            services.search.GistSearch.twitted(id).map( _ => true )
+          }
+          case false => Future(false)
+        }.flatMap(identity)
+        case None => log.debug(s"Gist $id not in ES"); Future(false)
+      }.flatMap(identity), timeout )
   }
 }

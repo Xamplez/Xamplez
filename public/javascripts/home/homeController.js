@@ -1,5 +1,6 @@
-app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search', 'GistService', function($scope, $location, $timeout, Tags, Search, GistService) {
+app.controller('HomeCtrl', ['$scope', '$location', '$timeout', '$window', 'Tags', 'Search', 'GistService', function($scope, $location, $timeout, $window, Tags, Search, GistService) {
   
+  /*
   $scope.sentences = [
     {
       question: "What kind of developer are you right now?",
@@ -32,9 +33,31 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
   ];
 
   $scope.sentence = $scope.sentences[_.random(0, $scope.sentences.length - 1)];
+  */
 
-  if ($location.search().q) {
-    $scope.searchData.query = $scope.queryFromString($location.search().q);
+  var $w = angular.element($window);
+
+  if (!("q" in $location.search())) {
+    var scrollIndicator = $(".scrollIndicator");
+    function doEmptySearch () {
+      $scope.$apply(function(){
+        var $w = angular.element($window);
+        $w.off("scroll wheel mousewheel", firstScrollDown);
+        scrollIndicator.off("click", doEmptySearch);
+        $scope.searchResults = Search.query({q: "", size: 10});
+      });
+    }
+    function firstScrollDown (e) {
+      var $w = angular.element($window);
+      if ($w.scrollTop() >= $(document).height()-$w.height()) {
+        doEmptySearch();
+      }
+    }
+    $w.on("scroll wheel mousewheel", firstScrollDown);
+    scrollIndicator.on("click", function (e) {
+      e.preventDefault();
+      doEmptySearch();
+    });
   }
 
   var searchBar = $(".search-bar:first");
@@ -44,18 +67,19 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', 'Tags', 'Search',
     searchBarTopPosition = searchBarContainer.offset().top;
   }
   function syncSearchBarFixed () {
-    var top = $(window).scrollTop();
+    var $w = angular.element($window);
+    var top = $w.scrollTop();
     searchBar.toggleClass("fixed", top > searchBarTopPosition);
   }
-  $(window).on("scroll", function (e) {
+  $w.on("scroll", function (e) {
     syncSearchBarFixed();
   });
-  $(window).on("resize", function (e) {
+  $w.on("resize", function (e) {
     computeSearchBarTopPosition();
   });
 
   // Also wait for font load end
-  $(window).on("load", function () {
+  $w.on("load", function () {
     computeSearchBarTopPosition();
     syncSearchBarFixed();
   });

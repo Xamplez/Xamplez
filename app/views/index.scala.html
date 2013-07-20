@@ -1,36 +1,32 @@
 @()
 
-<div class="home">
     <section class="ribbon ribbon-main">
-        <h2>{{sentence.question}}</h2>
+      <div class="container">
+      <a href="@Application.ROOT_GIST_URL" class="btn btn-small btn-default pull-right create-a-snippet">Create a snippet</a>
+      <h2>
+        Gists 'n' Play!
+      </h2>
+      </div>
     </section>
 
+<div class="home container">
     <section class="main">
-        <div class="row">
-            <div class="col-6">
-                <h3>{{sentence.createTitle}}</h3>
-                <p>{{sentence.createDescription}}</p>
-            </div>
 
-            <div class="col-6">
-                <h3>{{sentence.searchTitle}}</h3>
-                <p>{{sentence.searchDescription}}</p>
-            </div>
+        <div class="description">
+          <p>
+          <a href="@Application.ROOT_GIST_URL">Fork the Root Gist</a> to <strong>Share</strong> <a href="http://playframework.com" target="_blank">Playframework</a> code snippets or&nbsp;<strong>Search</strong>&nbsp;existing&nbsp;Gists&nbsp;below.
+          <a href="/about" class="create-a-snippet">Learn More...</a>
+          </p>
         </div>
 
         <div class="search-bar-container">
         <div class="row search-bar container">
-            <div class="col-6">
-                <a href="@Application.ROOT_GIST_URL" class="btn btn-default btn-large btn-block">Create a snippet</a>
-            </div>
-            <div class="col-6">
-                <div data-ng-include="'/templates/searchForm'"></div>
-            </div>
+            <div data-ng-include="'/templates/searchForm'"></div>
         </div>
         </div>
 
         <div class="row tags">
-            <div class="col-sm-2 tag" data-ng-repeat="tag in searchData.tags">
+            <div class="col-2 tag" data-ng-repeat="tag in searchData.tags">
                 <a data-ng-href="/?q=%23{{tag.term}}">#{{tag.term}}</a>
             </div>
         </div>
@@ -46,7 +42,14 @@
                 <div id="resultScripts2"></div>
             </div>
         </div>
-
-        <div data-ng-include="'/templates/footer'"></div>
     </section>
+</div>
+
+<div class="scrollIndicator" ng-hide="searchResults.hits.hits">
+  <a href="" class="pull-left">
+    <i class="icon-4x icon-double-angle-down"></i>
+  </a>
+  <a href="" class="pull-right">
+    <i class="icon-4x icon-double-angle-down"></i>
+  </a>
 </div>

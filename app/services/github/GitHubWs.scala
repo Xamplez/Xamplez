@@ -24,7 +24,7 @@ object GithubWS {
 
   def fetch(url: String, accept: String = "application/json", client_id: Option[String] = clientId, client_secret: Option[String] = clientSecret): WSRequestHolder = {
     val ws = WS.url("https://api.github.com" + url).withHeaders("Accept" -> accept)
-    
+
     (client_id, client_secret) match {
       case (Some(id),Some(secret)) =>
           ws.withQueryString("client_id" -> id)

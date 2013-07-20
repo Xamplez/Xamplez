@@ -30,43 +30,47 @@ trait GistBackedProperties{
 		}
 	}
 
-	def set[T](key: String, value: T )(implicit write: Writes[T]): Future[T] = {
-		gistId.map{ id =>
-			Gist.getFile(id, fileName).map{ s => s.map{ str =>
-				Json.parse(str).validate[Option[JsObject]].fold(
-					invalid => {
-						play.Logger.warn(s"Failed to load data, invalid format, will be overriden: $str")
-						None
-					},
-					json => json
-				)
-			}}.map{ json =>
-				val merged = json match{
-					case Some(Some(js)) => js ++ Json.obj( key -> value)
-					case _ => Json.obj( key -> value)
+	def update[T](key: String, f: Option[T] => T )(implicit format: Format[T]): Either[String, T] =
+		updateO(key, { v: Option[T] => Some(f(v)) })(format).right.map(_.get)
+
+	def updateO[T](key: String, f: Option[T] => Option[T] )(implicit format: Format[T]): Either[String, Option[T]] = {
+		gistId.map{ id =>  synchronized {
+			val updated = Gist.getFile(id, fileName).map{ s =>
+				val json = s.map{ str =>
+					Json.parse(str).validate[Option[JsObject]].fold(
+						invalid => {
+							play.Logger.warn(s"Failed to load data, invalid format, will be overriden: $str")
+							None
+						},
+						json => json
+					)
+				}.getOrElse(None)
+
+				val value = json match {
+					case Some(js) => f( (js \ key).as[Option[T]] )
+					case _ => f(None)
+				}
+				val merged = (json, value) match {
+					case ( Some(js), Some(value) ) => Some(js ++ Json.obj( key -> value ))
+					case ( None, Some(value) ) => Some(Json.obj( key -> value ))
+					case ( Some(js), None ) => Some(js - key)
+					case ( None, None ) => None
 				}
 
-				Gist.putFile(id, fileName, Json.prettyPrint(merged)).map{ _ => value }
-			}.flatMap(identity)
-		}.getOrElse{
-			Future.failed(new RuntimeException("Failed to fetch key : missing key config.external.gist"))
-		}
-	}
-
-	def remove[T](key: String )(implicit read: Reads[T]): Future[Option[T]] = {
-		gistId.map{ id =>
-			Gist.getFile(id, fileName).map{ str =>
-				str.map{ u =>
-					Json.parse(u).asOpt[JsObject].map{ obj =>
-						val content = Json.prettyPrint(obj - key)
-						Gist.putFile(id, fileName, content).map{ _ =>
-							obj.asOpt[T]( (__ \ key).read[T] )
+				merged match {
+					case Some(js) => Gist.putFile(id, fileName, Json.prettyPrint(js)).map{ r =>
+						r.status match {
+							case 200 => value
+							case s => Future.failed(new RuntimeException("Failed to update file : %s - %s".format(s, r.body))); None
 						}
-					}.getOrElse( Future[Option[T]](None) )
-				}.getOrElse( Future[Option[T]](None) )
+					}
+					case None => Future(None)
+				}
 			}.flatMap(identity)
-		}.getOrElse{
-			Future.failed(new RuntimeException("Failed to fetch key : missing key config.external.gist"))
+
+			Right( Await.result( updated, 30 seconds ) )
+		}}.getOrElse{
+			Left("Failed to fetch key : missing key config.external.gist")
 		}
 	}
 }
@@ -90,7 +94,7 @@ object GistConfig {
 			case (arr, v) => arr :+ convert(v)
 		}
 	}
-	
+
 	implicit val configValueWriter = Writes[com.typesafe.config.ConfigValue]( cv => convert(cv) )
 
 	def getConfigAsJson(field: String): Option[JsObject] = {

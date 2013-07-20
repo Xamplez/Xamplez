@@ -54,7 +54,7 @@ function displayGist(gist) {
   });
 
   $content.find(".gist-file.remove").remove();
-  angular.element("#"+gistId+"Container .gistWrapper").append($content);
+  angular.element("#"+gistId+"Container .gistWrapper").empty().append($content);
 }
 
 function displayGistFull(gist) {
@@ -70,5 +70,5 @@ function displayGistFull(gist) {
 
   $content.find(".gist-file.remove").remove();
 
-  angular.element("#"+gistId+"Container .gistWrapper").append($content);
+  angular.element("#"+gistId+"Container .gistWrapper").empty().append($content);
 }

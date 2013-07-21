@@ -48,7 +48,9 @@ function displayGist(gist) {
   $content.find(".gist-file").each(function(index) {
       var fileName = angular.element(this).find(".gist-meta a:nth-child(2)").text();
       var extension = fileName.substring(fileName.lastIndexOf(".")+1);
-      if (extension == "md" || extension == "txt" || extension == "markdown") {
+      if (
+        fileName == "_README.md" || fileName == "__LICENSE.txt" /*||
+        extension == "md" || extension == "txt" || extension == "markdown"*/) {
           angular.element(this).addClass("remove");
       }
   });
@@ -63,8 +65,8 @@ function displayGistFull(gist) {
 
   $content.find(".gist-file").each(function(index) {
       var fileName = angular.element(this).find(".gist-meta a:nth-child(2)").text();
-      if (fileName == "README.md") {
-          angular.element(this).addClass("remove");
+      if (fileName == "_README.md") {
+        angular.element(this).addClass("remove");
       }
   });
 

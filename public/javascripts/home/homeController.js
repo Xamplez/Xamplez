@@ -44,7 +44,8 @@ app.controller('HomeCtrl', ['$scope', '$location', '$timeout', '$window', 'Tags'
         var $w = angular.element($window);
         $w.off("scroll wheel mousewheel", firstScrollDown);
         scrollIndicator.off("click", doEmptySearch);
-        $scope.searchResults = Search.query({q: "", size: 10});
+        var input = document.getElementById("autocomplete");
+        $scope.searchResults = Search.query({q: input ? input.value : ""/*, size: 10 <- only when we have a pager? */});
       });
     }
     function firstScrollDown (e) {

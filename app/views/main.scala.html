@@ -39,9 +39,10 @@
                                 </a>
                             </div>
                             <div class="col-4">
-                                <a href="http://twitter.com/playxamplez">
+                                @if(Application.TWITTER_ACCOUNT.isDefined) { <a href="http://twitter.com/@Application.TWITTER_ACCOUNT.get">
                                     <span class="icon-twitter icon-2x"></span>
                                 </a>
+                                }
                             </div>
                         </ul>
                     </div>

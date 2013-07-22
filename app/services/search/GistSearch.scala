@@ -27,6 +27,7 @@ trait GistSearch extends EsAPI{
     Play.application.configuration.getString("elasticsearch.type").getOrElse("gists")
 
   lazy val SEARCH_URL = INDEX_URL + "/_search"
+  lazy val COUNT_URL = INDEX_URL + "/_count"
   lazy val UPDATE_URL = s"$elasticUrl/$indexName/$TYPE_NAME"
 
   val descIdFilesReader = (
@@ -309,6 +310,18 @@ trait GistSearch extends EsAPI{
       case Left(r) => play.Logger.debug("Couldn't find any twittable Gists"); Set.empty
       case Right(js) => (js \ "hits" \ "hits" \\ "_id").map( _.as[String].toLong ).toSet
     }
+
+  def count: Future[Long] = {
+    WS.url(s"$COUNT_URL?q=_type:gists")
+      .get()
+      .flatMap { r =>
+        if(r.status == 200) 
+          Future.successful((r.json \ "count").as[Long])
+        else Future.failed(
+          new RuntimeException(s"couldn't count gists ${r.status} ${r.statusText}" )
+        )
+      }
+  }
 }
 
 object GistSearch extends GistSearch

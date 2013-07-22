@@ -18,7 +18,7 @@
         <header>
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-8 logo-container">
+                    <div class="col-sm-7 logo-container">
                         <a class="logo" href="/">
                             <img src="@routes.Assets.at("images/scalamacro_logo.png")" />
                             <span>
@@ -26,17 +26,23 @@
                             </span>
                         </a>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-4">
                         <div class="row icons">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <a href="/stats">
                                     <span class="icon-bar-chart icon-2x"></span>
                                 </a>
                             </div>
-                            <div class="col-6">
+                            <div class="col-4">
                                 <a href="/about">
                                     <span class="icon-group icon-2x"></span>
                                 </a>
+                            </div>
+                            <div class="col-4">
+                                @if(Application.TWITTER_ACCOUNT.isDefined) { <a href="http://twitter.com/@Application.TWITTER_ACCOUNT.get">
+                                    <span class="icon-twitter icon-2x"></span>
+                                </a>
+                                }
                             </div>
                         </ul>
                     </div>

@@ -1,4 +1,4 @@
-@()
+@(count: Option[Long] = None)
 
     <section class="ribbon ribbon-main">
       <div class="container">
@@ -14,7 +14,7 @@
 
         <div class="description">
           <p>
-          <a href="@Application.ROOT_GIST_URL">Fork the Root Gist</a> to <strong>Share</strong> <a href="http://scalamacros.org/" target="_blank">ScalaMacro</a> code snippets or&nbsp;<strong>Search</strong>&nbsp;existing&nbsp;Gists&nbsp;below.
+          <a href="@Application.ROOT_GIST_URL">Fork the Root Gist</a> to <strong>Share</strong> <a href="http://playframework.com" target="_blank">ScalaMacro</a> code snippets or&nbsp;<strong>Search</strong>&nbsp;@if(count.isDefined) {among&nbsp;@count.get&nbsp;gists&nbsp;below} else {existing&nbsp;Gists&nbsp;below}.
           <a href="/about" class="create-a-snippet">Learn More...</a>
           </p>
         </div>

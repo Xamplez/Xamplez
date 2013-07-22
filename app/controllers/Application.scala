@@ -11,6 +11,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 object Application extends Controller {
   lazy val GIST_ROOTS = Play.application.configuration.getLongList("gist.roots")
   lazy val ROOT_GIST_URL = "https://gist.github.com/%s".format( GIST_ROOTS.get.get(0) )
+  lazy val TWITTER_ACCOUNT = Play.application.configuration.getString("twitter.account")
 
   def main(any: String) = Action {
     Ok(views.html.main())
@@ -21,7 +22,11 @@ object Application extends Controller {
   }
 
   def index = Action {
-    Ok(views.html.index())
+    Async {
+      services.search.GistSearch.count.map{ c =>
+        Ok(views.html.index(Some(c)))
+      }
+    }
   }
 
   def gist = Action {

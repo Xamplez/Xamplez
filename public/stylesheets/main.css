@@ -7689,9 +7689,3 @@ section.main .separator .inner {
 .main .left-about p {
   text-align: left;
 }
-.btn-default {
-  background-color: #cd0000;
-}
-.btn-default:hover {
-  background-color: #a70000;
-}

@@ -59,6 +59,6 @@ object Twitter{
     val description = ( js \ "description" ).as[String] 
     val length = tags.length + 1 + ( if( rootUrl.startsWith("https") ) 23 else 22 ) + 1
 
-    tweet( "%s/%s %s %s".format(rootUrl, id, tags, clean(description, 140 - length)) )
+    tweet( "%s/%s %s %s".format(rootUrl, id, clean(description, 140 - length), tags) )
   }
 }

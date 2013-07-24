@@ -1,1 +1,9 @@
 application.name=Xamplez
+
+html.index.title=Gists 'n' Play!
+html.index.create.snippet=Create a snippet
+
+html.index.search.fork.root=Fork the Root Gist
+html.index.search.about=Learn More...
+html.index.search.noCount=to <strong>Share</strong> <a href="http://playframework.com" target="_blank">Playframework</a> code snippets or <strong>Search</strong> existing Gists below
+html.index.search.count=to <strong>Share</strong> <a href="http://playframework.com" target="_blank">Playframework</a> code snippets or <strong>Search</strong> {0} Gists below

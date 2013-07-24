@@ -2,10 +2,10 @@
 
     <section class="ribbon ribbon-main">
       <div class="container">
-      <a href="@Application.ROOT_GIST_URL" class="btn btn-small btn-default pull-right create-a-snippet">Create a snippet</a>
-      <h2>
-        Gists 'n' Play!
-      </h2>
+      <a href="@Application.ROOT_GIST_URL" class="btn btn-small btn-default pull-right create-a-snippet">
+        @Messages("html.index.create.snippet")
+      </a>
+      <h2>@Messages("html.index.title")</h2>
       </div>
     </section>
 
@@ -14,8 +14,11 @@
 
         <div class="description">
           <p>
-          <a href="@Application.ROOT_GIST_URL">Fork the Root Gist</a> to <strong>Share</strong> <a href="http://playframework.com" target="_blank">Playframework</a> code snippets or&nbsp;<strong>Search</strong>&nbsp;@if(count.isDefined) {among&nbsp;@count.get&nbsp;gists&nbsp;below} else {existing&nbsp;Gists&nbsp;below}.
-          <a href="/about" class="create-a-snippet">Learn More...</a>
+            <a href="@Application.ROOT_GIST_URL">@Messages("html.index.search.fork.root")</a>
+            @count.map { c =>
+              @Html( Messages("html.index.search.count", c) )
+            }.getOrElse( Html( Messages("html.index.search.noCount") ) )
+            <a href="/about" class="create-a-snippet">@Messages("html.index.search.about")</a>
           </p>
         </div>
 

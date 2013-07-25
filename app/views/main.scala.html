@@ -21,9 +21,7 @@
                     <div class="col-sm-7 logo-container">
                         <a class="logo" href="/">
                             <img src="@routes.Assets.at("images/playlogo.svg")" />
-                            <span>
-                              by Xamplez.io
-                            </span>
+                            <span>@Messages("html.main.title")</span>
                         </a>
                     </div>
                     <div class="col-sm-4">
@@ -103,10 +101,12 @@
 
                     <div id="debug"></div>
 
-                    <input id="autocomplete" type="search" class="input-large" ng-init="initAutocomplete();" placeholder="...Search #tags, Autocomplete, ⇵" />
+                    <input id="autocomplete" type="search" class="input-large" ng-init="initAutocomplete();" placeholder="@Messages("html.main.search.placeHolder")" />
 
                     <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default btn-large">Search</button>
+                        <button type="submit" class="btn btn-default btn-large">
+                            @Messages("html.main.search.button")
+                        </button>
                     </span>
                 </div>
             </form>
@@ -114,7 +114,7 @@
         </script>
 
         <script id="/templates/footer" type="text/ng-template">
-        Powered by <a href="http://xamplez.io/">xamplez.io</a> and <a href="https://github.com/">GitHub</a>.
+            @Html( Messages("html.main.footer") )
         </script>
 
         <script id="/templates/gist" type="text/ng-template">
@@ -126,9 +126,9 @@
                     <div class="second">
                         <span class="gist-link"><a data-ng-href="{{gist.id}}">Gist {{gist.id}}</a></span>
                         <span class="author">by <a data-ng-href="https://github.com/{{gist.author_login}}">{{gist.author_login}}</a></span>
-                        <div class="pull-right">
+                        <div class="pullhtml.main.starright">
                             <span class="label label-default gist-stars">
-                                <a href="https://gist.github.com/{{gist.id}}" title="To star/unstar, do it directly on github & wait for xamplez reindexing">{{gist.stars > 0 ? gist.stars : 0}}
+                                <a href="https://gist.github.com/{{gist.id}}" title="@Messages("html.main.star")">{{gist.stars > 0 ? gist.stars : 0}}
                                 <i class="icon-4 star" data-ng-class="gist.stars > 0 ? 'icon-star' : 'icon-star-empty'"></i></a>
                             </span>
                         </div>

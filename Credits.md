@@ -3,7 +3,7 @@
 (in alphabetic order)
 
 * Jacques Bachellerie, backend ninja
-* Paul Dijou, frontend/AngularJs kung(fu-)guru 
+* Paul Dijou, frontend/AngularJs kung(fu-)guru n ([@paul_dijou](http://twitter.com/paul_dijou) - [github](http://github.com/pauldijou) - [website](http://pauldijou.fr))
 * Gaetan Renaudeau, initiator & frontend ma(d)ster
 * Pascal Voitot, initiator & backend terrible bogeyman ([@mandubian](http://twitter.com/mandubian) - [github](http://github.com/mandubian) - [website](http://mandubian.com))
 

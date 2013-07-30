@@ -6,7 +6,7 @@ app.factory("BubbleCloud", [function () {
 	Bubbles = function(options) {
 	  var chart, click, collide, collisionPadding, connectEvents, data, force, gravity, height, idValue, jitter, label, margin, maxRadius, minCollisionRadius, mouseout, mouseover, node, rScale, rValue, textValue, tick, transformData, update, updateActive, updateLabels, updateNodes, width;
 	  width = options.width || 980;
-	  height = 510;
+	  height = 310;
 	  data = [];
 	  node = null;
 	  label = null;
@@ -226,7 +226,7 @@ app.factory("BubbleCloud", [function () {
 	};
 
 	root.plotData = function(d3selection, data) {
-		console.log(d3selection.style("width").slice(0, -2));
+		//console.log(d3selection.style("width").slice(0, -2));
 		var plot = Bubbles({
 			width: d3selection.style("width").slice(0, -2)
 		});
@@ -240,7 +240,7 @@ app.factory("BubbleCloud", [function () {
 			var width = d3selection.style("width").slice(0, -2);
 
 			$(window).on("resize", function () {
-				console.log("resize");
+				//console.log("resize");
 				var newWidth = d3selection.style("width").slice(0, -2);
 
 				if (newWidth != width) {

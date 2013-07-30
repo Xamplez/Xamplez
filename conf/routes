@@ -14,6 +14,7 @@ GET     /auth                          controllers.Api.authenticate
 GET     /api/search                    controllers.Search.search(q: String, sorts: Option[String] ?= None, from: Option[Int] ?= None, size: Option[Int] ?= None)
 POST    /api/search                    controllers.Search.insert
 GET     /api/tags                      controllers.Search.tags
+GET     /api/authors                   controllers.Search.authors
 GET     /api/lastcreated               controllers.Search.lastCreated
 GET     /api/gists/:id                 controllers.Gists.findById(id: Long)
 DELETE  /api/gists/:id                 controllers.Gists.blacklist(id: Long)

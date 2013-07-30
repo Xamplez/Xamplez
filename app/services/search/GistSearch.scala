@@ -208,7 +208,7 @@ trait GistSearch extends EsAPI{
       if(query.isEmpty) Json.obj("match_all" -> Json.obj())
       else Json.obj(
              "query_string" -> Json.obj(
-               "fields" -> Seq("description", "tags^10"),
+               "fields" -> Seq("tags^10", "author_login^10", "description"),
                "default_operator" -> "AND",
                "query"  -> query
              )
@@ -250,6 +250,21 @@ trait GistSearch extends EsAPI{
   )
 
   def tags = search(queryTags, true)
+
+  val queryAuthors = Json.obj(
+    "query"  -> filtered(Json.obj("match_all" -> Json.obj()), typeFilter),
+    "size"   -> 1000,
+    "facets" -> Json.obj(
+      "authors" -> Json.obj(
+        "terms" -> Json.obj(
+          "field" -> "author_login",
+          "size" -> 1000
+        )
+      )
+    )
+  )
+
+  def authors = search(queryAuthors, true)
 
   val queryLastCreated = Json.obj(
     "query" -> filtered(Json.obj( "match_all" -> Json.obj() ), typeFilter),

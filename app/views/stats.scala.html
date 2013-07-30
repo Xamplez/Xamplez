@@ -6,12 +6,24 @@
       </div>
     </section>
 
-<div class="home container">
-    <section class="main">
-        <div class="row">
-            <div class="col-12">
-                <div id="tagCloud"></div>
+    <div class="home container">
+        <section class="main">
+            <div class="row">
+                <div class="text-center col-12">
+                    <div class="btn-group" data-toggle="buttons">
+                      <label class="btn btn-default">
+                        <input type="radio" name="tags" id="tags" ng-click="showTags()"> Tags
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="authors" id="authors" ng-click="showAuthors()"> Authors
+                      </label>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
-</div>
+            <div class="row">
+                <div class="col-12">
+                    <div id="bubbleCloud"></div>
+                </div>
+            </div>
+        </section>
+    </div>

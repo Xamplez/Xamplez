@@ -38,6 +38,8 @@ class CustomMessagesPlugin(app: Application) extends MessagesPlugin(app) {
           }.toMap
         }
         case None => Map.empty[String, String]
+      }.recover{
+        case t:Throwable => Map.empty[String, String]
       }
     }.getOrElse( Future(Map.empty) )
   }

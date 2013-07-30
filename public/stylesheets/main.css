@@ -7088,7 +7088,7 @@ select.select2 {
   float: right;
   margin-right: 10px;
 }
-#tagCloud {
+#bubbleCloud {
   overflow: hidden;
   position: relative;
 }
@@ -7687,4 +7687,8 @@ section.main .separator .inner {
 .main .left-about h4,
 .main .left-about p {
   text-align: left;
+}
+.btn-group[data-toggle="buttons"] > .btn > input[type="radio"],
+.btn-group[data-toggle="buttons"] > .btn > input[type="checkbox"] {
+  display: none;
 }

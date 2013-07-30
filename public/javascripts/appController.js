@@ -1,4 +1,4 @@
-app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags', function($scope, $location, Search, GistService, Tags) {
+app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags', 'Authors', function($scope, $location, Search, GistService, Tags, Authors) {
 
   $scope.autocompleteTags = [];
 
@@ -25,6 +25,10 @@ app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags
     }));
 	});
 
+  Authors.query({}).$then(function (e) {
+    $scope.authors = e.data.facets.authors.terms;
+  });
+
   function initAutocomplete (input, value) {
     $scope.autocomplete = input;
     input.value = value;
@@ -35,7 +39,7 @@ app.controller('AppCtrl', ['$scope', '$location', 'Search', 'GistService', 'Tags
     var currentSubword = null;
     var currentMatches = [];
     var currentIndexOfMatch = 0;
-    
+
     $(input).on("keydown", function(e) {
       if (e.which === 0) return; // Android have a bug and we can't make it work due to this...
       switch (e.which) {

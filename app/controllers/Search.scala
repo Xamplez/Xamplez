@@ -51,6 +51,16 @@ object Search extends Controller {
     }
   }
 
+  def authors = Action { request =>
+    Async {
+      S.authors.map(
+        _.fold(
+          err => InternalServerError(err.json \ "error"),
+          r => Ok(r))
+      )
+    }
+  }
+
   def lastCreated = Action { request =>
     Async {
       S.lastCreated.map(
